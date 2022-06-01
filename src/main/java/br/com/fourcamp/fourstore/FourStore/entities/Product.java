@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import java.io.Serializable;
 
@@ -34,21 +32,9 @@ public class Product implements Serializable {
 	@Column(nullable = false)
 	private Double sellPrice;
 
-	public void createSku() {
-		// recebe dados
-
-	}
-
-	/* @Valid
-    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<Stock> stocks;*/
-
-	/* @Valid
-    @ManyToOne(mappedBy = "product", fetch = FetchType.LAZY)
-    private List<Transaction> transactions;*/
-
-
-
+	@JoinColumn
+	@OneToOne(mappedBy = "id", fetch = FetchType.LAZY, orphanRemoval = true)
+	private Stock stock;
 
 	}
 

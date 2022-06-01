@@ -6,15 +6,15 @@ import java.util.Map;
 
 public enum DepartmentEnum {
 
-	CLOTHING(50, "Vestuário"),
-	SHOES(51, "Calçados"),
-	PERFUMERY(52, "Perfumaria"),
-	ACCESSORIES(53, "Acessórios");
+	CLOTHING("50", "Vestuário"),
+	SHOES("51", "Calçados"),
+	PERFUMERY("52", "Perfumaria"),
+	ACCESSORIES("53", "Acessórios");
 
-	public Integer key;
+	public String key;
 	public String description;
 
-	public Integer getKey() {
+	public String getKey() {
 		return key;
 	}
 
@@ -22,19 +22,19 @@ public enum DepartmentEnum {
 		return description;
 	}
 
-	DepartmentEnum(Integer key, String description) {
+	DepartmentEnum(String key, String description) {
 		this.key = key;
 		this.description = description;
 	}
 
-	private static final Map<Integer, DepartmentEnum> Lookup = new HashMap<Integer, DepartmentEnum>();
+	private static final Map<String, DepartmentEnum> Lookup = new HashMap<String, DepartmentEnum>();
 
 	static {
 		for (DepartmentEnum keyValue : EnumSet.allOf(DepartmentEnum.class))
 			Lookup.put(keyValue.getKey(), keyValue);
 	}
 
-	public static DepartmentEnum get(Integer key) {
+	public static DepartmentEnum get(String key) {
 		return Lookup.get(key);
 	}
 
@@ -46,7 +46,7 @@ public enum DepartmentEnum {
 		return null;
 	}
 
-	public static DepartmentEnum getByKey(Integer department) {
+	public static DepartmentEnum getByKey(String department) {
 		for (DepartmentEnum keyValue : EnumSet.allOf(DepartmentEnum.class)) {
 			if (keyValue.getKey().equals(department))
 				return keyValue;

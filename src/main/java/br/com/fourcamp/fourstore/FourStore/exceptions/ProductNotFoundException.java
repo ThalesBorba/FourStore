@@ -8,5 +8,8 @@ public class ProductNotFoundException extends Exception {
         System.err.println("Nenhum produto encontrado com a Sku " + sku);
     }
 
+    public ProductNotFoundException() {
+        System.err.println("Nenhum produto encontrado com a Sku");
+    };
 
 }

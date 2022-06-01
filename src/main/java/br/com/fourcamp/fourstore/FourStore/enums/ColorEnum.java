@@ -6,22 +6,22 @@ import java.util.Map;
 
 public enum ColorEnum {
 
-	RED(50, "Vermelho"),
-	GREEN(51, "Verde"),
-	BLUE(52, "Azul"),
-	WHITE(53, "Branco"),
-	BLACK(54, "Preto"),
-	YELLOW(55, "Amarelo"),
-	BROWN(56, "Marrom"),
-	GREY(57, "Cinza"),
-	PINK(58, "Rosa");
+	RED("50", "Vermelho"),
+	GREEN("51", "Verde"),
+	BLUE("52", "Azul"),
+	WHITE("53", "Branco"),
+	BLACK("54", "Preto"),
+	YELLOW("55", "Amarelo"),
+	BROWN("56", "Marrom"),
+	GREY("57", "Cinza"),
+	PINK("58", "Rosa");
 
-	public Integer key;
+	public String key;
 	public String description;
 
 
 
-	public Integer getKey() {
+	public String getKey() {
 		return key;
 	}
 
@@ -29,12 +29,12 @@ public enum ColorEnum {
 		return description;
 	}
 
-	ColorEnum(Integer key, String description) {
+	ColorEnum(String key, String description) {
 		this.key = key;
 		this.description = description;
 	}
 
-	private static final Map<Integer, ColorEnum> Lookup = new HashMap<Integer, ColorEnum>();
+	private static final Map<String, ColorEnum> Lookup = new HashMap<String, ColorEnum>();
 
 	static {
 		for (ColorEnum keyValue : EnumSet.allOf(ColorEnum.class))
@@ -53,7 +53,7 @@ public enum ColorEnum {
 		return null;
 	}
 
-	public static ColorEnum getByKey(Integer color) {
+	public static ColorEnum getByKey(String color) {
 		for (ColorEnum keyValue : EnumSet.allOf(ColorEnum.class)) {
 			if (keyValue.getKey().equals(color))
 				return keyValue;

@@ -6,15 +6,15 @@ import java.util.Map;
 
 public enum SeasonEnum {
 
-	SUMMER("40", "Verão"),
-	WINTER("41", "Inverno"),
-	FALL("42", "Outono"),
-	SPRING("43", "Primavera");
+	SUMMER(40, "Verão"),
+	WINTER(41, "Inverno"),
+	FALL(42, "Outono"),
+	SPRING(43, "Primavera");
 
-	public String key;
+	public Integer key;
 	public String description;
 
-	public String getKey() {
+	public Integer getKey() {
 		return key;
 	}
 
@@ -22,19 +22,19 @@ public enum SeasonEnum {
 		return description;
 	}
 
-	SeasonEnum(String key, String description) {
+	SeasonEnum(Integer key, String description) {
 		this.key = key;
 		this.description = description;
 	}
 
-	private static final Map<String, SeasonEnum> Lookup = new HashMap<String, SeasonEnum>();
+	private static final Map<Integer, SeasonEnum> Lookup = new HashMap<Integer, SeasonEnum>();
 
 	static {
 		for (SeasonEnum keyValue : EnumSet.allOf(SeasonEnum.class))
 			Lookup.put(keyValue.getKey(), keyValue);
 	}
 
-	public static SeasonEnum get(String key) {
+	public static SeasonEnum get(Integer key) {
 		return Lookup.get(key);
 	}
 
@@ -42,6 +42,14 @@ public enum SeasonEnum {
 		for (SeasonEnum keyValue : EnumSet.allOf(SeasonEnum.class))
 			if (keyValue.getDescription().equals(description))
 				return keyValue;
+		return null;
+	}
+
+	public static SeasonEnum getByKey(Integer seanson) {
+		for (SeasonEnum keyValue : EnumSet.allOf(SeasonEnum.class)) {
+			if (keyValue.getKey().equals(seanson))
+				return keyValue;
+		}
 		return null;
 	}
 }

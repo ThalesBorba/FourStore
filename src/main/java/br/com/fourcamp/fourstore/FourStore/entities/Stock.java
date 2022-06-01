@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 @Entity
@@ -19,10 +20,12 @@ public class Stock implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column
+	@JoinColumn
+	@OneToOne(mappedBy = "sku", fetch = FetchType.LAZY, orphanRemoval = true)
 	private Product product;
 
 	@Column
+	@Min(0)
 	private Integer quantity;
 
 

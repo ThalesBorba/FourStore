@@ -6,15 +6,15 @@ import java.util.Map;
 
 public enum DepartmentEnum {
 
-	CLOTHING("50", "Vestuário"),
-	SHOES("51", "Calçados"),
-	PERFUMERY("52", "Perfumaria"),
-	ACCESSORIES("53", "Acessórios");
+	CLOTHING(50, "Vestuário"),
+	SHOES(51, "Calçados"),
+	PERFUMERY(52, "Perfumaria"),
+	ACCESSORIES(53, "Acessórios");
 
-	public String key;
+	public Integer key;
 	public String description;
 
-	public String getKey() {
+	public Integer getKey() {
 		return key;
 	}
 
@@ -22,25 +22,33 @@ public enum DepartmentEnum {
 		return description;
 	}
 
-	DepartmentEnum(String key, String description) {
+	DepartmentEnum(Integer key, String description) {
 		this.key = key;
 		this.description = description;
 	}
 
-	private static final Map<String, DepartmentEnum> Lookup = new HashMap<String, DepartmentEnum>();
+	private static final Map<Integer, DepartmentEnum> Lookup = new HashMap<Integer, DepartmentEnum>();
 
 	static {
 		for (DepartmentEnum keyValue : EnumSet.allOf(DepartmentEnum.class))
 			Lookup.put(keyValue.getKey(), keyValue);
 	}
 
-	public static DepartmentEnum get(String key) {
+	public static DepartmentEnum get(Integer key) {
 		return Lookup.get(key);
 	}
 
 	public static DepartmentEnum getByDescription(String description) {
 		for (DepartmentEnum keyValue : EnumSet.allOf(DepartmentEnum.class)) {
 			if (keyValue.getDescription().equals(description))
+				return keyValue;
+		}
+		return null;
+	}
+
+	public static DepartmentEnum getByKey(Integer department) {
+		for (DepartmentEnum keyValue : EnumSet.allOf(DepartmentEnum.class)) {
+			if (keyValue.getKey().equals(department))
 				return keyValue;
 		}
 		return null;

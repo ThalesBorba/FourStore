@@ -6,14 +6,14 @@ import java.util.Map;
 
 public enum CategoryEnum {
 
-	MALE("10", "Masculino"),
-	FEMALE("11", "Feminino"),
-	BABY("12", "Moda Bebê");
+	MALE(10, "Masculino"),
+	FEMALE(11, "Feminino"),
+	BABY(12, "Moda Bebê");
 
-	public String key;
+	public Integer key;
 	public String description;
 
-	public String getKey() {
+	public Integer getKey() {
 		return key;
 	}
 
@@ -21,12 +21,12 @@ public enum CategoryEnum {
 		return description;
 	}
 
-	CategoryEnum(String key, String description) {
+	CategoryEnum(Integer key, String description) {
 		this.key = key;
 		this.description = description;
 	}
 
-	private static final Map<String, CategoryEnum> Lookup = new HashMap<String, CategoryEnum>();
+	private static final Map<Integer, CategoryEnum> Lookup = new HashMap<Integer, CategoryEnum>();
 
 	static {
 		for (CategoryEnum keyValue : EnumSet.allOf(CategoryEnum.class))
@@ -42,6 +42,13 @@ public enum CategoryEnum {
 			if (keyValue.getDescription().equals(description))
 				return keyValue;
 		}
+		return null;
+	}
+
+	public static CategoryEnum getByKey(Integer option) {
+		for (CategoryEnum keyValue : EnumSet.allOf(CategoryEnum.class))
+			if (keyValue.getKey().equals(option))
+				return keyValue;
 		return null;
 	}
 }

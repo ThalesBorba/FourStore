@@ -1,42 +1,49 @@
 package br.com.fourcamp.fourstore.FourStore.util;
 
+import br.com.fourcamp.fourstore.FourStore.enums.BrandEnum;
+import br.com.fourcamp.fourstore.FourStore.enums.CategoryEnum;
+import br.com.fourcamp.fourstore.FourStore.enums.ColorEnum;
+import br.com.fourcamp.fourstore.FourStore.enums.DepartmentEnum;
+
 public class Validations {
 
-    public boolean brandValidation(Integer brand) {
-        Boolean validation = (brand >= 1 && brand <= 22);
+    public boolean EnumValidation(Integer brand) {
+        Boolean validation = BrandEnum.getByOption(brand) != null;
         return validation;
     }
 
     public boolean categoryValidation(Integer category) {
-        Boolean validation = (category >= 10 && category <= 12);
-        return true;
+        Boolean validation = CategoryEnum.getByKey(category) != null;
+        return validation;
     }
 
     public boolean colorValidation(Integer color) {
-        Boolean validation = (color >= 50 && color <= 58);
-        return true;
+        Boolean validation = ColorEnum.getByKey(color) != null;
+        return validation;
     }
 
     public boolean departmentValidation(Integer department) {
-        Boolean validation = (department >= 50 && department <= 53);
-        return true;
+        Boolean validation = DepartmentEnum.getByKey(department) != null;
+        return validation;
     }
 
     public boolean paymentMethodValidation(Integer paymentMethod) {
-        Boolean validation = (paymentMethod >= 1 && paymentMethod <= 6);
-        return true;
+        Boolean validation = CategoryEnum.getByKey(paymentMethod) != null;
+        return validation;
     }
 
     public boolean seasonValidation(Integer season) {
-        Boolean validation = (season >= 40 && season <= 43);
-        return true;
+        Boolean validation = CategoryEnum.getByKey(season) != null;
+        return validation;
     }
 
     public boolean sizeValidation(Integer size) {
-        return true;
+        Boolean validation = CategoryEnum.getByKey(size) != null;
+        return validation;
     }
 
     public boolean TypeOfMerchandiseValidation(Integer TypeOfMerchandise) {
-        return true;
+        Boolean validation = CategoryEnum.getByKey(TypeOfMerchandise) != null;
+        return validation;
     }
 }

@@ -19,7 +19,7 @@ public class Transaction implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column
+	@ManyToOne(targetEntity = Client.class)
 	private Client client;
 
 	@Transient

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -19,7 +20,8 @@ public class Product implements Serializable {
 
 	@Id
 	@Column(name = "sku", nullable = false)
-	private Long sku;
+	@NaturalId
+	private String sku;
 
 	@Column(nullable = false)
 	private String description;

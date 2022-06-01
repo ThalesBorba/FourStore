@@ -2,6 +2,7 @@ package br.com.fourcamp.fourstore.FourStore.service;
 
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
+import br.com.fourcamp.fourstore.FourStore.entities.Product;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.repositories.StockRepository;
@@ -44,11 +45,12 @@ public class StockService {
     }
 
     private MessageResponseDTO createMessageResponse(Long id, String s) {
-        return MessageResponseDTO.builder().message(s + "esotque com a id" + id).build();
+        return MessageResponseDTO.builder().message(s + "estoque com a id" + id).build();
     }
 
     private Stock verifyIfExists(Long id) throws ProductNotFoundException {
         //trocar por find by product
+
         return stockRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException());
     }

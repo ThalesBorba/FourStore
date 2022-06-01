@@ -9,7 +9,9 @@ import org.hibernate.validator.constraints.br.CPF;
 import javax.persistence.*;
 import javax.validation.Valid;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,19 +34,7 @@ public class Client implements Serializable {
     @Valid
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, orphanRemoval = false)
     @JoinColumn(name = "transaction")
-    private Set<Transaction> transactions = new LinkedHashSet<>();
-
-    public Set<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(Set<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
-   /* @Valid
-    @OneToOne(mappedBy = "cliente", fetch = FetchType.LAZY)
-    private List<Transaction> transactions;*/
+    private List<Transaction> transactions = new ArrayList<>();
 
 }
 

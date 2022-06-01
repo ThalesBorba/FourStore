@@ -28,6 +28,5 @@ public class Stock implements Serializable {
 	@Min(0)
 	private Integer quantity;
 
-
 }
 

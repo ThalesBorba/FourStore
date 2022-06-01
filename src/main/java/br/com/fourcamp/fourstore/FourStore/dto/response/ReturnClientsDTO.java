@@ -25,6 +25,7 @@ public class ReturnClientsDTO {
     private Long cpf;
     private String nome;
     private String paymentData;
+
     private Set<Transaction> transactions = new LinkedHashSet<>();
 
 

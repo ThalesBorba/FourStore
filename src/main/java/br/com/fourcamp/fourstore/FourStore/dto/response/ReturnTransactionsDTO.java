@@ -13,11 +13,13 @@ import lombok.NoArgsConstructor;
 public class ReturnTransactionsDTO {
 
     private Long id;
+    private String clientName;
     private Long clientCpf;
     private Double profit;
 
     public ReturnTransactionsDTO(Transaction transaction) {
         this.id = transaction.getId();
+        this.clientName = transaction.getClient().getNome();
         this.clientCpf = transaction.getClient().getCpf();
         this.profit = transaction.getProfit();
     }

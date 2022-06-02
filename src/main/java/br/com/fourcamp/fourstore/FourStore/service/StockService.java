@@ -5,6 +5,7 @@ import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Product;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
+import br.com.fourcamp.fourstore.FourStore.exceptions.StockNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class StockService {
         return createMessageResponse(savedStock.getId(), "Criado");
     }
 
-    public MessageResponseDTO updateById(Long id, Stock stock) throws ProductNotFoundException {
+    public MessageResponseDTO updateById(Long id, Stock stock) throws StockNotFoundException {
         //validações
         verifyIfExists(id);
         Stock updatedStock = setStock(stock);
@@ -39,7 +40,7 @@ public class StockService {
         return allStocks;
     }
 
-    public void delete(Long id) throws ProductNotFoundException {
+    public void delete(Long id) throws StockNotFoundException {
         verifyIfExists(id);
         stockRepository.deleteById(id);
     }
@@ -48,18 +49,18 @@ public class StockService {
         return MessageResponseDTO.builder().message(s + "estoque com a id" + id).build();
     }
 
-    private Stock verifyIfExists(Long id) throws ProductNotFoundException {
+    private Stock verifyIfExists(Long id) throws StockNotFoundException {
         //trocar por find by product
 
         return stockRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException());
+                .orElseThrow(() -> new StockNotFoundException(id));
     }
 
     private Stock setStock(Stock stock) {
         return stockRepository.save(stock);
     }
 
-    public Stock findById(Long id) throws ProductNotFoundException {
+    public Stock findById(Long id) throws StockNotFoundException {
         Stock stock = verifyIfExists(id);
         return stock;
     }

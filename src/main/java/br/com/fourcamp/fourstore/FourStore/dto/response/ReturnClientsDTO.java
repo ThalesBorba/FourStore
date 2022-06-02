@@ -12,7 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -26,7 +28,8 @@ public class ReturnClientsDTO {
     private String nome;
     private String paymentData;
 
-    private Set<Transaction> transactions = new LinkedHashSet<>();
+    @JoinColumn()
+    private List<Transaction> transactions = new ArrayList<>();
 
 
 

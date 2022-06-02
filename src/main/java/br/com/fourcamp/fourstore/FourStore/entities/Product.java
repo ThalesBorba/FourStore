@@ -34,8 +34,8 @@ public class Product implements Serializable {
 	@Column(nullable = false)
 	private Double sellPrice;
 
-	@JoinColumn
-	@OneToOne(mappedBy = "id", fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "stock_id", referencedColumnName = "id")
 	private Stock stock;
 
 	}

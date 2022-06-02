@@ -3,6 +3,7 @@ package br.com.fourcamp.fourstore.FourStore.controller;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
+import br.com.fourcamp.fourstore.FourStore.exceptions.StockNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,19 +37,19 @@ public class StockController {
     }
 
     @GetMapping("/{id}")
-    public Stock findById(@PathVariable Long id) throws ProductNotFoundException {
+    public Stock findById(@PathVariable Long id) throws StockNotFoundException {
         return stockService.findById(id);
     }
 
     @PutMapping("/{id}")
-    public MessageResponseDTO updateById(@PathVariable Long id, @RequestBody @Valid Stock cliente)
-            throws ProductNotFoundException {
-        return stockService.updateById(id, cliente);
+    public MessageResponseDTO updateById(@PathVariable Long id, @RequestBody @Valid Stock stock)
+            throws StockNotFoundException {
+        return stockService.updateById(id, stock);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable Long id) throws ProductNotFoundException {
+    public void deleteById(@PathVariable Long id) throws StockNotFoundException {
         stockService.delete(id);
     }
 

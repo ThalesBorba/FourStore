@@ -23,7 +23,7 @@ public class Client implements Serializable {
 
     @Id
     @CPF
-    private Long cpf;
+    private String cpf;
 
     @Column(nullable = false)
     private String nome;
@@ -32,9 +32,8 @@ public class Client implements Serializable {
     private String paymentData;
 
     @Valid
-    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY, orphanRemoval = false)
-    @JoinColumn(name = "transaction")
-    private List<Transaction> transactions = new ArrayList<>();
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, orphanRemoval = false)
+    private List<Transaction> transactions;
 
 }
 

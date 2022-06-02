@@ -21,7 +21,7 @@ public class CreateTransactionDTO {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "cliente")
+    @JoinColumn(name = "client")
     private Client client;
 
     private Double profit;

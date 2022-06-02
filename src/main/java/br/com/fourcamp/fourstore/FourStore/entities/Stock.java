@@ -20,8 +20,8 @@ public class Stock implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@JoinColumn
-	@OneToOne(mappedBy = "sku", fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_sku", referencedColumnName = "sku")
 	private Product product;
 
 	@Column

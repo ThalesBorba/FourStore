@@ -14,7 +14,7 @@ public class ReturnTransactionsDTO {
 
     private Long id;
     private String clientName;
-    private Long clientCpf;
+    private String clientCpf;
     private Double profit;
 
     public ReturnTransactionsDTO(Transaction transaction) {

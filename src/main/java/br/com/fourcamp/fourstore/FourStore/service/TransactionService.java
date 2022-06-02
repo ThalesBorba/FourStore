@@ -27,7 +27,7 @@ public class TransactionService {
     }
 
     public MessageResponseDTO updateById(Long id, Transaction transaction) throws TransactionNotFoundException {
-        //validações
+        //adicionar as validações
         verifyIfExists(id);
         Transaction updatedTransaction = setTransaction(transaction);
         return createMessageResponse(updatedTransaction.getId(), "Updated");
@@ -55,6 +55,8 @@ public class TransactionService {
     }
 
     private Transaction setTransaction(Transaction transaction) {
+        //adicionar as validações
+
         return transactionRepository.save(transaction);
     }
 
@@ -64,7 +66,7 @@ public class TransactionService {
     }
 
     private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) {
-        //validações
+        //criar validações
         return createTransactionDTO;
     }
 

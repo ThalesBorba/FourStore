@@ -24,6 +24,8 @@ public class CreateTransactionDTO {
     @JoinColumn(name = "client")
     private Client client;
 
+    //Cart?
+
     private Double profit;
 
 

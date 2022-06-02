@@ -62,10 +62,10 @@ public enum BrandEnum {
         return Lookup.get(key);
     }
 
-    public static BrandEnum getByDescription(String description) {
+    public static String getDescriptionByKey(String key) {
         for (BrandEnum keyValue : EnumSet.allOf(BrandEnum.class))
-            if (keyValue.getDescription().equals(description))
-                return keyValue;
+            if (keyValue.getKey().equals(key))
+                return keyValue.getDescription();
         return null;
     }
     

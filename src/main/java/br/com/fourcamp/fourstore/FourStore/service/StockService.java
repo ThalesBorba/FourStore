@@ -2,9 +2,7 @@ package br.com.fourcamp.fourstore.FourStore.service;
 
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
-import br.com.fourcamp.fourstore.FourStore.entities.Product;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
-import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.StockNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,6 @@ public class StockService {
     }
 
     public MessageResponseDTO createStock(Stock stock) {
-        //validações
         Stock savedStock = setStock(stock);
         return createMessageResponse(savedStock.getId(), "Criado");
     }
@@ -66,7 +63,7 @@ public class StockService {
     }
 
     private CreateStockDTO validStock(CreateStockDTO createStockDTO) {
-        //validações
+        //verifica se o produto existe nas entries
         return createStockDTO;
     }
 

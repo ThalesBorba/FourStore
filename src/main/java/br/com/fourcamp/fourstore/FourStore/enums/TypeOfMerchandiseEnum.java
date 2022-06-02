@@ -41,10 +41,10 @@ public enum TypeOfMerchandiseEnum {
 		return Lookup.get(key);
 	}
 
-	public static TypeOfMerchandiseEnum getByDescription(String description) {
+	public static String getDescriptionByKey(String key) {
 		for (TypeOfMerchandiseEnum keyValue : EnumSet.allOf(TypeOfMerchandiseEnum.class)) {
-			if (keyValue.getDescription().equals(description))
-				return keyValue;
+			if (keyValue.getKey().equals(key))
+				return keyValue.getDescription();
 		}
 		return null;
 	}

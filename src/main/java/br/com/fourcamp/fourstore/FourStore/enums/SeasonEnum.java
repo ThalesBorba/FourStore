@@ -38,10 +38,10 @@ public enum SeasonEnum {
 		return Lookup.get(key);
 	}
 
-	public static SeasonEnum getByDescription(String description) {
+	public static String getDescriptionByKey(String key) {
 		for (SeasonEnum keyValue : EnumSet.allOf(SeasonEnum.class))
-			if (keyValue.getDescription().equals(description))
-				return keyValue;
+			if (keyValue.getKey().equals(key))
+				return keyValue.getDescription();
 		return null;
 	}
 

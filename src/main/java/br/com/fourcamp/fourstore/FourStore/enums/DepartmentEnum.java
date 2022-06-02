@@ -38,10 +38,10 @@ public enum DepartmentEnum {
 		return Lookup.get(key);
 	}
 
-	public static DepartmentEnum getByDescription(String description) {
+	public static String getDescriptionByKey(String key) {
 		for (DepartmentEnum keyValue : EnumSet.allOf(DepartmentEnum.class)) {
-			if (keyValue.getDescription().equals(description))
-				return keyValue;
+			if (keyValue.getKey().equals(key))
+				return keyValue.getDescription();
 		}
 		return null;
 	}

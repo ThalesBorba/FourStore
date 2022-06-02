@@ -45,10 +45,10 @@ public enum SizeEnum {
 		return Lookup.get(key);
 	}
 
-	public static SizeEnum getByDescription(String description) {
+	public static String getDescriptionByKey(String key) {
 		for (SizeEnum keyValue : EnumSet.allOf(SizeEnum.class))
-			if (keyValue.getDescription().equals(description))
-				return keyValue;
+			if (keyValue.getKey().equals(key))
+				return keyValue.getDescription();
 		return null;
 	}
 

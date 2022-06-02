@@ -20,8 +20,7 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public MessageResponseDTO createStock(Client client) {
-        //validações
+    public MessageResponseDTO createClient(Client client) {
         Client savedClient = setClient(client);
         return createMessageResponse(savedClient.getCpf(), "Criado");
     }
@@ -48,8 +47,6 @@ public class ClientService {
     }
 
     private Client verifyIfExists(String cpf) throws ClientNotFoundException {
-        //trocar por find by product
-
         return clientRepository.findById(cpf)
                 .orElseThrow(() -> new ClientNotFoundException(cpf));
     }
@@ -63,8 +60,8 @@ public class ClientService {
         return client;
     }
 
-    private CreateClientDTO validStock(CreateClientDTO createClientDTO) {
-        //validações
+    public CreateClientDTO validClient(CreateClientDTO createClientDTO) {
+        //valida cpf e forma de pagamento
         return createClientDTO;
     }
 }

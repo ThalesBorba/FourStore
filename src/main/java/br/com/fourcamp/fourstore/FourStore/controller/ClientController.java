@@ -26,8 +26,8 @@ public class ClientController {
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createStock(@RequestBody @Valid Client client) {
-        return clientService.createStock(client);
+    public MessageResponseDTO createClient(@RequestBody @Valid Client client) {
+        return clientService.createClient(client);
     }
 
     @GetMapping

@@ -7,42 +7,42 @@ import java.util.List;
 
 public class Validations {
 
-    public boolean brandValidation(String brand) {
+    public static boolean brandValidation(String brand) {
         Boolean validation = BrandEnum.getByKey(brand) != null;
         return validation;
     }
 
-    public boolean categoryValidation(String category) {
+    public static boolean categoryValidation(String category) {
         Boolean validation = CategoryEnum.getByKey(category) != null;
         return validation;
     }
 
-    public boolean colorValidation(String color) {
+    public static boolean colorValidation(String color) {
         Boolean validation = ColorEnum.getByKey(color) != null;
         return validation;
     }
 
-    public boolean departmentValidation(String department) {
+    public static boolean departmentValidation(String department) {
         Boolean validation = DepartmentEnum.getByKey(department) != null;
         return validation;
     }
 
-    public boolean seasonValidation(String season) {
+    public static boolean seasonValidation(String season) {
         Boolean validation = SeasonEnum.getByKey(season) != null;
         return validation;
     }
 
-    public boolean sizeValidation(String size) {
+    public static boolean sizeValidation(String size) {
         Boolean validation = SizeEnum.getByKey(size) != null;
         return validation;
     }
 
-    public boolean typeOfMerchandiseValidation(String typeOfMerchandise) {
+    public static boolean typeOfMerchandiseValidation(String typeOfMerchandise) {
         Boolean validation = TypeOfMerchandiseEnum.getByKey(typeOfMerchandise) != null;
         return validation;
     }
 
-    public Boolean validateSku(String sku) {
+    public static Boolean validateSku(String sku) {
         List<Boolean> skuValidations = new ArrayList<>();
         skuValidations.add(brandValidation(sku.substring(0, 3)));
         skuValidations.add(sizeValidation(sku.substring(3, 5)));

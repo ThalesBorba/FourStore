@@ -1,7 +1,10 @@
 package br.com.fourcamp.fourstore.FourStore.controller;
 
+import br.com.fourcamp.fourstore.FourStore.dto.request.CreateProductDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Product;
+import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidSellValueException;
+import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidSkuException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +20,15 @@ public class ProductController {
     private final ProductService productService;
 
     @Autowired
-    public ProductController(ProductService stockService) {
-        this.productService = stockService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createStock(@RequestBody @Valid Product product) {
-        return productService.createStock(product);
+    public MessageResponseDTO createProduct(@RequestBody @Valid CreateProductDTO createProductDTO)
+            throws InvalidSellValueException, InvalidSkuException {
+        return productService.createProduct(createProductDTO);
     }
 
     @GetMapping
@@ -38,9 +42,10 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public MessageResponseDTO updateById(@PathVariable String sku, @RequestBody @Valid Product product)
-            throws ProductNotFoundException {
-        return productService.updateById(sku, product);
+    public MessageResponseDTO updateById(@PathVariable String sku, @RequestBody @Valid
+        CreateProductDTO createProductDTO)
+            throws ProductNotFoundException, InvalidSellValueException, InvalidSkuException {
+        return productService.updateById(sku, createProductDTO);
     }
 
     @DeleteMapping("/{id}")

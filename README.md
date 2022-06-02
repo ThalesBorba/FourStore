@@ -7,7 +7,7 @@
 <p align="center">
  <a href="#-sobre-o-projeto">Sobre</a> •
  <a href="#features">Features</a> •  
-@@ -13,11 +13,11 @@
+
 
 ## ✅ Features
 

@@ -8,11 +8,10 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -27,6 +26,11 @@ public class Client implements Serializable {
 
     @Column(nullable = false)
     private String nome;
+
+    @Column(nullable = false)
+    @Min(1)
+    @Max(6)
+    private Character paymentMethod;
 
     @Column(nullable = false)
     private String paymentData;

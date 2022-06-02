@@ -8,7 +8,7 @@ import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidSkuException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.mapper.ProductMapper;
 import br.com.fourcamp.fourstore.FourStore.repositories.ProductRepository;
-import br.com.fourcamp.fourstore.FourStore.util.Validations;
+import br.com.fourcamp.fourstore.FourStore.util.SkuValidations;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -73,7 +73,7 @@ public class ProductService {
         if (createProductDTO.getSellPrice() * 1.25 <= createProductDTO.getBuyPrice() ||
                 createProductDTO.getSellPrice() < 0) {
             throw new InvalidSellValueException();
-        } else if (Validations.validateSku(createProductDTO.getSku()).equals(false)) {
+        } else if (SkuValidations.validateSku(createProductDTO.getSku()).equals(false)) {
             throw new InvalidSkuException();
         } else {
             return createProductDTO;

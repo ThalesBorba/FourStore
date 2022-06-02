@@ -5,7 +5,7 @@ import br.com.fourcamp.fourstore.FourStore.enums.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Validations {
+public class SkuValidations {
 
     public static boolean brandValidation(String brand) {
         Boolean validation = BrandEnum.getByKey(brand) != null;
@@ -59,8 +59,4 @@ public class Validations {
         return true;
     }
 
-    public boolean paymentMethodValidation(String paymentMethod) {
-        Boolean validation = CategoryEnum.getByKey(paymentMethod) != null;
-        return validation;
-    }
 }

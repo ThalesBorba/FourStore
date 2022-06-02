@@ -1,8 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.enums;
 
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 public enum BrandEnum {
 	KOSAIR("KSR", "Kosair", 1),
@@ -37,7 +35,7 @@ public enum BrandEnum {
     	this.description = description;
     	this.option = option;
     }
-    
+
     public String getKey() {
         return key;
     }
@@ -46,29 +44,13 @@ public enum BrandEnum {
         return description;
     }
 
-
-    public Integer getOption() {
-		return option;
-	}
-
-	private static final Map<String, BrandEnum> Lookup = new HashMap<String, BrandEnum>();
-
-    static {
-        for (BrandEnum keyValue : EnumSet.allOf(BrandEnum.class))
-            Lookup.put(keyValue.getKey(), keyValue);
-    }
-
-    public static BrandEnum get(String key) {
-        return Lookup.get(key);
-    }
-
     public static String getDescriptionByKey(String key) {
         for (BrandEnum keyValue : EnumSet.allOf(BrandEnum.class))
             if (keyValue.getKey().equals(key))
                 return keyValue.getDescription();
         return null;
     }
-    
+
     public static BrandEnum getByKey(String brand) {
         for (BrandEnum keyValue : EnumSet.allOf(BrandEnum.class))
             if (keyValue.getKey().equals(brand))

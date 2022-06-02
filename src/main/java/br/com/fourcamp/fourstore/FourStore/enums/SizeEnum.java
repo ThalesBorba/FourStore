@@ -1,8 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.enums;
 
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 public enum SizeEnum {
 
@@ -32,17 +30,6 @@ public enum SizeEnum {
 	SizeEnum(String key, String description) {
 		this.key = key;
 		this.description = description;
-	}
-
-	private static final Map<String, SizeEnum> Lookup = new HashMap<String, SizeEnum>();
-
-	static {
-		for (SizeEnum keyValue : EnumSet.allOf(SizeEnum.class))
-			Lookup.put(keyValue.getKey(), keyValue);
-	}
-
-	public static SizeEnum get(String key) {
-		return Lookup.get(key);
 	}
 
 	public static String getDescriptionByKey(String key) {

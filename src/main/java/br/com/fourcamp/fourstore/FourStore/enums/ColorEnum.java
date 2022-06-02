@@ -1,8 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.enums;
 
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 public enum ColorEnum {
 
@@ -32,17 +30,6 @@ public enum ColorEnum {
 	ColorEnum(String key, String description) {
 		this.key = key;
 		this.description = description;
-	}
-
-	private static final Map<String, ColorEnum> Lookup = new HashMap<String, ColorEnum>();
-
-	static {
-		for (ColorEnum keyValue : EnumSet.allOf(ColorEnum.class))
-			Lookup.put(keyValue.getKey(), keyValue);
-	}
-
-	public static ColorEnum get(String key) {
-		return Lookup.get(key);
 	}
 
 	public static String getDescriptionByKey(String key) {

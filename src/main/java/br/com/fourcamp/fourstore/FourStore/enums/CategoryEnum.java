@@ -1,8 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.enums;
 
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 public enum CategoryEnum {
 
@@ -24,17 +22,6 @@ public enum CategoryEnum {
 	CategoryEnum(String key, String description) {
 		this.key = key;
 		this.description = description;
-	}
-
-	private static final Map<String, CategoryEnum> Lookup = new HashMap<String, CategoryEnum>();
-
-	static {
-		for (CategoryEnum keyValue : EnumSet.allOf(CategoryEnum.class))
-			Lookup.put(keyValue.getKey(), keyValue);
-	}
-
-	public static CategoryEnum get(String key) {
-		return Lookup.get(key);
 	}
 
 	public static String getDescriptionByKey(String key) {

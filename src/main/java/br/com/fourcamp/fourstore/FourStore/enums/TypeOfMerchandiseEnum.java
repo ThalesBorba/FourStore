@@ -1,8 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.enums;
 
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 public enum TypeOfMerchandiseEnum {
 	PANTS("231", "Calça"),
@@ -28,17 +26,6 @@ public enum TypeOfMerchandiseEnum {
 	TypeOfMerchandiseEnum(String key, String description) {
 		this.key = key;
 		this.description = description;
-	}
-
-	private static final Map<String, TypeOfMerchandiseEnum> Lookup = new HashMap<String, TypeOfMerchandiseEnum>();
-
-	static {
-		for (TypeOfMerchandiseEnum keyValue : EnumSet.allOf(TypeOfMerchandiseEnum.class))
-			Lookup.put(keyValue.getKey(), keyValue);
-	}
-
-	public static TypeOfMerchandiseEnum get(String key) {
-		return Lookup.get(key);
 	}
 
 	public static String getDescriptionByKey(String key) {

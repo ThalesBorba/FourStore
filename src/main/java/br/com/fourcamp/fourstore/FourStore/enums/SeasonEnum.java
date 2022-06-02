@@ -1,8 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.enums;
 
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 public enum SeasonEnum {
 
@@ -25,17 +23,6 @@ public enum SeasonEnum {
 	SeasonEnum(String key, String description) {
 		this.key = key;
 		this.description = description;
-	}
-
-	private static final Map<String, SeasonEnum> Lookup = new HashMap<String, SeasonEnum>();
-
-	static {
-		for (SeasonEnum keyValue : EnumSet.allOf(SeasonEnum.class))
-			Lookup.put(keyValue.getKey(), keyValue);
-	}
-
-	public static SeasonEnum get(String key) {
-		return Lookup.get(key);
 	}
 
 	public static String getDescriptionByKey(String key) {

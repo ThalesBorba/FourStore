@@ -1,8 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.enums;
 
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 public enum DepartmentEnum {
 
@@ -25,17 +23,6 @@ public enum DepartmentEnum {
 	DepartmentEnum(String key, String description) {
 		this.key = key;
 		this.description = description;
-	}
-
-	private static final Map<String, DepartmentEnum> Lookup = new HashMap<String, DepartmentEnum>();
-
-	static {
-		for (DepartmentEnum keyValue : EnumSet.allOf(DepartmentEnum.class))
-			Lookup.put(keyValue.getKey(), keyValue);
-	}
-
-	public static DepartmentEnum get(String key) {
-		return Lookup.get(key);
 	}
 
 	public static String getDescriptionByKey(String key) {

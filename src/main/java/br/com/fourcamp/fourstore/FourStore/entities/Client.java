@@ -30,7 +30,7 @@ public class Client implements Serializable {
     @Column(nullable = false)
     @Min(1)
     @Max(6)
-    private Character paymentMethod;
+    private Integer paymentMethod;
 
     @Column(nullable = false)
     private String paymentData;

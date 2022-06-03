@@ -34,13 +34,15 @@ public class ClientService {
 
     public MessageResponseDTO updateById(String cpf, CreateClientDTO createClientDTO) throws ClientNotFoundException,
             InvalidParametersException {
-        //validações
         verifyIfExists(cpf);
-        Client updatedClient = setClient(createClientDTO);
+        CreateClientDTO validClient = validClient(createClientDTO);
+        Client updatedClient = clientMapper.toModel(validClient);
+        clientRepository.save(updatedClient);
         return createMessageResponse(updatedClient.getCpf(), "Updated");
     }
 
     public List<Client> listAll() {
+        //retornarDTO
         List<Client> allClients = clientRepository.findAll();
         return allClients;
     }

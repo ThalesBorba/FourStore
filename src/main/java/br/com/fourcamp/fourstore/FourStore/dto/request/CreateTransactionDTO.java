@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+import java.util.HashMap;
 import java.util.List;
 
 @Data
@@ -24,7 +26,8 @@ public class CreateTransactionDTO {
     @JoinColumn(name = "client")
     private Client client;
 
-    //Cart?
+    @Transient
+    private HashMap<Product, Integer> cart;
 
     private Double profit;
 

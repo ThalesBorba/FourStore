@@ -19,14 +19,15 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @Autowired
-    public TransactionController(TransactionService stockService) {
-        this.transactionService = stockService;
+    public TransactionController(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createStock(@RequestBody @Valid Transaction transaction) {
-        return transactionService.createStock(transaction);
+    public MessageResponseDTO createTransaction(@RequestBody @Valid Transaction transaction) {
+
+        return transactionService.createTransaction(transaction);
     }
 
     @GetMapping

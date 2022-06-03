@@ -1,8 +1,8 @@
 package br.com.fourcamp.fourstore.FourStore.service;
 
-import br.com.fourcamp.fourstore.FourStore.dto.request.CreateStockDTO;
+import br.com.fourcamp.fourstore.FourStore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
-import br.com.fourcamp.fourstore.FourStore.entities.Product;
+import br.com.fourcamp.fourstore.FourStore.entities.Cart;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.StockInsufficientException;
@@ -32,16 +32,27 @@ public class StockService {
         }
     }
 
-    public MessageResponseDTO updateById(String sku, Stock stock) throws StockNotFoundException,
-            StockInsufficientException {
+    public void updateByTransaction(CreateTransactionDTO createTransactionDTO) throws StockNotFoundException,
+            InvalidParametersException, StockInsufficientException {
+        List<Stock> updatedStockList = Cart.updateStock(createTransactionDTO);
+        for (Stock stock : updatedStockList) {
+            Stock stocktoUpdate = findById(stock.getProduct().getSku());
+            Integer newQuantity = stocktoUpdate.getQuantity() - stock.getQuantity();
+            if (newQuantity < 0) {
+                throw new StockInsufficientException();
+            } else {
+                stocktoUpdate.setQuantity(newQuantity);
+                stockRepository.save(stocktoUpdate);
+            }
+        }
+    }
+
+    public MessageResponseDTO updateById(String sku, Stock stock) throws StockNotFoundException
+            {
         verifyIfExists(sku);
         Stock currentStock = findById(sku);
         Integer finalQuantity;
-        if ((currentStock.getQuantity() - stock.getQuantity()) < 0) {
-            throw new StockInsufficientException();
-        } else {
-            finalQuantity = currentStock.getQuantity() + stock.getQuantity();
-        }
+        finalQuantity = currentStock.getQuantity() + stock.getQuantity();
         Stock updatedStock = setStock(new Stock(stock.getProduct(), finalQuantity));
         return createMessageResponse(updatedStock.getId(), "Updated");
     }

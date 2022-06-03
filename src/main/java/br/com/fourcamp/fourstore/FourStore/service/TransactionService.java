@@ -2,7 +2,11 @@ package br.com.fourcamp.fourstore.FourStore.service;
 
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
+import br.com.fourcamp.fourstore.FourStore.entities.Cart;
 import br.com.fourcamp.fourstore.FourStore.entities.Transaction;
+import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
+import br.com.fourcamp.fourstore.FourStore.exceptions.StockInsufficientException;
+import br.com.fourcamp.fourstore.FourStore.exceptions.StockNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.TransactionNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +19,14 @@ public class TransactionService {
 
     private TransactionRepository transactionRepository;
 
+    protected StockService stockService;
+
     @Autowired
     public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
 
-    public MessageResponseDTO createStock(Transaction transaction) {
+    public MessageResponseDTO createTransaction(Transaction transaction) {
         //validações
         Transaction savedTransaction = setTransaction(transaction);
         return createMessageResponse(savedTransaction.getId(), "Criado");
@@ -65,12 +71,11 @@ public class TransactionService {
         return transaction;
     }
 
-    private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) {
-        //importa valid stock e upddate stock
-        //criar validações
-        //AplicarDesconto
-
-
+    private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) throws
+            StockNotFoundException, InvalidParametersException, StockInsufficientException {
+        Integer paymentMethod = createTransactionDTO.getClient().getPaymentMethod();
+        Double lucro = Cart.retornaLucro(createTransactionDTO.getCart(), paymentMethod);
+        stockService.updateByTransaction(createTransactionDTO);
         return createTransactionDTO;
     }
 

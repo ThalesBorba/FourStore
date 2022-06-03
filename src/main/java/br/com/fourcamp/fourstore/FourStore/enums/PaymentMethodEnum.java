@@ -6,12 +6,12 @@ import java.util.Map;
 
 public enum PaymentMethodEnum {
 
-	BILLET("Boleto à vista", 1, 5.0),
+	BILLET("Boleto à vista", 1, 0.05),
 	BILLETINSTALLMENT("Boleto parcelado", 2, 0.0),
 	CREDITCARD("Cartão de crédito", 3, 0.0),
-	DEBITCARD("Cartão de débito", 4, 5.0),
-	PIX("Pix", 5, 10.0),
-	CASH("Dinheiro à vista", 6, 10.0);
+	DEBITCARD("Cartão de débito", 4, 0.05),
+	PIX("Pix", 5, 0.1),
+	CASH("Dinheiro à vista", 6, 0.1);
 
 	private final String paymentMethod;
 	private final Integer paymentMethodId;
@@ -47,10 +47,10 @@ public enum PaymentMethodEnum {
 		return Lookup.get(paymentMethod);
 	}
 
-	public static PaymentMethodEnum getByPaymentMethodId(Integer paymentMethodId) {
+	public static Double getDiscountByPaymentMethodId(Integer paymentMethodId) {
 		for (PaymentMethodEnum keyValue : EnumSet.allOf(PaymentMethodEnum.class))
 			if (keyValue.getPaymentMethodId().equals(paymentMethodId))
-				return keyValue;
+				return keyValue.discount;
 		return null;
 	}
 }

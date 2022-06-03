@@ -35,6 +35,7 @@ public class ProductService {
         verifyIfExists(sku);
         CreateProductDTO validProduct = validProduct(createProductDTO);
         Product updatedProduct = productMapper.toModel(validProduct);
+        productRepository.save(updatedProduct);
         return createMessageResponse(updatedProduct.getSku(), "Updated");
     }
 
@@ -62,6 +63,8 @@ public class ProductService {
         Product productToSave = productMapper.toModel(validProduct);
         return productRepository.save(productToSave);
     }
+
+    //Método para retornar produto com detalhes
 
     public Product findById(String sku) throws ProductNotFoundException {
         Product product = verifyIfExists(sku);

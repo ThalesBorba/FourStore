@@ -28,5 +28,7 @@ public class CreateTransactionDTO {
 
     private Double profit;
 
+    private HashMap<Product, Integer> cart;
+
 
 }

@@ -20,7 +20,7 @@ public class Transaction implements Serializable {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "transaction_id")
+	@JoinColumn(name = "client_id")
 	private Client client;
 
 	@Transient

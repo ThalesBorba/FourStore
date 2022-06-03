@@ -1,9 +1,11 @@
 package br.com.fourcamp.fourstore.FourStore.controller;
 
+import br.com.fourcamp.fourstore.FourStore.dto.request.CreateClientDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Client;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ClientNotFoundException;
+import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.service.ClientService;
 import br.com.fourcamp.fourstore.FourStore.service.StockService;
@@ -26,8 +28,9 @@ public class ClientController {
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createClient(@RequestBody @Valid Client client) {
-        return clientService.createClient(client);
+    public MessageResponseDTO createClient(@RequestBody @Valid CreateClientDTO createClientDTO)
+            throws InvalidParametersException {
+        return clientService.createClient(createClientDTO);
     }
 
     @GetMapping
@@ -41,9 +44,9 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public MessageResponseDTO updateById(@PathVariable String cpf, @RequestBody @Valid Client client)
-            throws ClientNotFoundException {
-        return clientService.updateById(cpf, client);
+    public MessageResponseDTO updateById(@PathVariable String cpf, @RequestBody @Valid CreateClientDTO createClientDTO)
+            throws ClientNotFoundException, InvalidParametersException {
+        return clientService.updateById(cpf, createClientDTO);
     }
 
     @DeleteMapping("/{id}")

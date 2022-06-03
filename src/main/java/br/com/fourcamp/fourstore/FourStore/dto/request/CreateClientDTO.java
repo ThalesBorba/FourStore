@@ -15,6 +15,7 @@ public class CreateClientDTO {
 
     private String nome;
 
+    private String paymentMethod;
     //Aceitar cpf, cnpj, celular ou email
     private String paymentData;
 

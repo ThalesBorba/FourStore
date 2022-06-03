@@ -31,7 +31,7 @@ public class ClientValidations {
     }
 
 
-    public boolean paymentMethodValidation(String paymentMethod, String paymentData) {
+    public static boolean paymentMethodValidation(String paymentMethod, String paymentData) {
         Boolean validation = false;
         switch (paymentMethod) {
             case "1", "2", "6" -> validation = true;

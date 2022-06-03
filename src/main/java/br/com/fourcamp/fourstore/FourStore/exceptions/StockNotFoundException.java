@@ -7,8 +7,8 @@ public class StockNotFoundException extends Exception {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public StockNotFoundException(Long id) {
-        super("Nenhum estoque encontrado com a id " + id);
+    public StockNotFoundException(String sku) {
+        super("Produto com a sku " + sku + " não existe no estoque!");
     }
 
 }

@@ -66,7 +66,11 @@ public class TransactionService {
     }
 
     private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) {
+        //importa valid stock e upddate stock
         //criar validações
+        //AplicarDesconto
+
+
         return createTransactionDTO;
     }
 

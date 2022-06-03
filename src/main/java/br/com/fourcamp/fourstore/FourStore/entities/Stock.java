@@ -20,13 +20,17 @@ public class Stock implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "product_sku", referencedColumnName = "sku")
+	@OneToOne(mappedBy = "stock", cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
 	private Product product;
 
 	@Column
 	@Min(0)
 	private Integer quantity;
+
+	public Product getProduct() {
+		return this.product;
+	}
 
 }
 

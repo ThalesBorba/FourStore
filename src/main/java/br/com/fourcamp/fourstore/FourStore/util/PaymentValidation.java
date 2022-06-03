@@ -29,8 +29,14 @@ public class PaymentValidation {
     }
 
 
-    public boolean paymentMethodValidation(String paymentMethod) {
-        Boolean validation = CategoryEnum.getByKey(paymentMethod) != null;
+    public boolean paymentMethodValidation(String paymentMethod, String paymentData) {
+        Boolean validation = false;
+        switch (paymentMethod) {
+            case "1", "2", "6" -> validation = true;
+            case "3", "4" -> validation = validateCards(paymentData);
+            case "5" -> validation = validatePix(paymentData);
+            default -> validation = false;
+        }
         return validation;
     }
 

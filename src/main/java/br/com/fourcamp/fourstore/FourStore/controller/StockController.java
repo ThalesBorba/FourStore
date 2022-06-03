@@ -37,20 +37,20 @@ public class StockController {
     }
 
     @GetMapping("/{id}")
-    public Stock findById(@PathVariable Long id) throws StockNotFoundException {
-        return stockService.findById(id);
+    public Stock findById(@PathVariable String sku) throws StockNotFoundException {
+        return stockService.findById(sku);
     }
 
     @PutMapping("/{id}")
-    public MessageResponseDTO updateById(@PathVariable Long id, @RequestBody @Valid Stock stock)
+    public MessageResponseDTO updateById(@PathVariable String sku, @RequestBody @Valid Stock stock)
             throws StockNotFoundException {
-        return stockService.updateById(id, stock);
+        return stockService.updateById(sku, stock);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable Long id) throws StockNotFoundException {
-        stockService.delete(id);
+    public void deleteById(@PathVariable String sku) throws StockNotFoundException {
+        stockService.delete(sku);
     }
 
 /*

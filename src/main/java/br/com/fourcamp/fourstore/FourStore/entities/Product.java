@@ -34,8 +34,9 @@ public class Product implements Serializable {
 	@Column(nullable = false)
 	private Double sellPrice;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "stock_id", referencedColumnName = "id")
+	@OneToOne
+	@MapsId
+	@JoinColumn(name = "stock_id")
 	private Stock stock;
 
 	}

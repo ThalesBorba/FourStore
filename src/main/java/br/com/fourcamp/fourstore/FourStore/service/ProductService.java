@@ -2,10 +2,12 @@ package br.com.fourcamp.fourstore.FourStore.service;
 
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateProductDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
+import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnProductDetailsDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Product;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidSellValueException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidSkuException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
+import br.com.fourcamp.fourstore.FourStore.mapper.ProductDetailsMapper;
 import br.com.fourcamp.fourstore.FourStore.mapper.ProductMapper;
 import br.com.fourcamp.fourstore.FourStore.repositories.ProductRepository;
 import br.com.fourcamp.fourstore.FourStore.util.SkuValidations;
@@ -18,6 +20,7 @@ public class ProductService {
     private ProductRepository productRepository;
 
     private final ProductMapper productMapper = ProductMapper.INSTANCE;
+    private final ProductDetailsMapper productDetailsMapper = ProductDetailsMapper.INSTANCE;
 
     @Autowired
     public ProductService(ProductRepository productRepository) {
@@ -64,7 +67,11 @@ public class ProductService {
         return productRepository.save(productToSave);
     }
 
-    //Método para retornar produto com detalhes
+    public ReturnProductDetailsDTO findByIdWithDetails(String sku) throws ProductNotFoundException {
+        Product product = verifyIfExists(sku);
+        ReturnProductDetailsDTO returnProductDetailsDTO = productDetailsMapper.toDTO(product);
+        return returnProductDetailsDTO;
+    }
 
     public Product findById(String sku) throws ProductNotFoundException {
         Product product = verifyIfExists(sku);

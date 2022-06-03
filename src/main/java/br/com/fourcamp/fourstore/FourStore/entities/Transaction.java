@@ -29,5 +29,4 @@ public class Transaction implements Serializable {
 	@Column
 	private Double profit;
 
-
 }

@@ -2,6 +2,7 @@ package br.com.fourcamp.fourstore.FourStore.controller;
 
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateProductDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
+import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnProductDetailsDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Product;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidSellValueException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidSkuException;
@@ -39,6 +40,11 @@ public class ProductController {
     @GetMapping("/{id}")
     public Product findById(@PathVariable String sku) throws ProductNotFoundException {
         return productService.findById(sku);
+    }
+
+    @GetMapping("/{id}/{details}")
+    public ReturnProductDetailsDTO findByIdWithDetails(@PathVariable String sku) throws ProductNotFoundException {
+        return productService.findByIdWithDetails(sku);
     }
 
     @PutMapping("/{id}")

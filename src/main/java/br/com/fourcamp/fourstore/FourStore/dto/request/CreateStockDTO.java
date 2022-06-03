@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateStockDTO {
 
+    private Long id;
+
     private Product product;
 
     private Integer quantity;

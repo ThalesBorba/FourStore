@@ -1,16 +1,13 @@
 package br.com.fourcamp.fourstore.FourStore.service;
 
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateClientDTO;
-import br.com.fourcamp.fourstore.FourStore.dto.request.CreateProductDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Client;
-import br.com.fourcamp.fourstore.FourStore.entities.Product;
-import br.com.fourcamp.fourstore.FourStore.exceptions.*;
+import br.com.fourcamp.fourstore.FourStore.exceptions.ClientNotFoundException;
+import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
 import br.com.fourcamp.fourstore.FourStore.mapper.ClientMapper;
-import br.com.fourcamp.fourstore.FourStore.mapper.ProductMapper;
 import br.com.fourcamp.fourstore.FourStore.repositories.ClientRepository;
 import br.com.fourcamp.fourstore.FourStore.util.ClientValidations;
-import br.com.fourcamp.fourstore.FourStore.util.SkuValidations;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.beans.factory.annotation.Autowired;
 

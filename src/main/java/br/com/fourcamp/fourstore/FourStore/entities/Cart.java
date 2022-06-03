@@ -11,8 +11,6 @@ import java.util.Map;
 
 public class Cart {
 
-
-
     public static HashMap<Product, Integer> cart;
 
     public static List<Stock> updateStock(CreateTransactionDTO transaction) throws InvalidParametersException {

@@ -14,8 +14,6 @@ public interface ProductMapper {
 
         Product toModel(CreateProductDTO createProductDTO);
 
-        //Destrinchar sku Para o return Product Details
-
         ReturnProductDTO toDTO(Product product);
 
 }

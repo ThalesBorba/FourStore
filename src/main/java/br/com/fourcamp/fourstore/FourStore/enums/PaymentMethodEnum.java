@@ -36,17 +36,6 @@ public enum PaymentMethodEnum {
 		return paymentMethodId;
 	}
 
-	private static final Map<String, PaymentMethodEnum> Lookup = new HashMap<String, PaymentMethodEnum>();
-
-	static {
-		for (PaymentMethodEnum keyValue : EnumSet.allOf(PaymentMethodEnum.class))
-			Lookup.put(keyValue.getPaymentMethod(), keyValue);
-	}
-
-	public static PaymentMethodEnum get(String paymentMethod) {
-		return Lookup.get(paymentMethod);
-	}
-
 	public static Double getDiscountByPaymentMethodId(Integer paymentMethodId) {
 		for (PaymentMethodEnum keyValue : EnumSet.allOf(PaymentMethodEnum.class))
 			if (keyValue.getPaymentMethodId().equals(paymentMethodId))

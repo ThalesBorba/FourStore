@@ -26,9 +26,6 @@ public class CreateTransactionDTO {
     @JoinColumn(name = "client")
     private Client client;
 
-    @Transient
-    private HashMap<Product, Integer> cart;
-
     private Double profit;
 
 

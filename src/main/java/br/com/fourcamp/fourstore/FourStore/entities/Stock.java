@@ -31,9 +31,5 @@ public class Stock implements Serializable {
 	public Stock(Product product, Integer finalQuantity) {
 	}
 
-	public Product getProduct() {
-		return this.product;
-	}
-
 }
 

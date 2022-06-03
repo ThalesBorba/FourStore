@@ -38,7 +38,7 @@ public class ClientController {
         return clientService.listAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/{details}")
     public Client findById(@PathVariable String cpf) throws ClientNotFoundException {
         return clientService.findById(cpf);
     }

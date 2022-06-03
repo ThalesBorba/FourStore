@@ -17,6 +17,7 @@ import java.util.List;
 public class ReturnClientDTO {
 
     private Long cpf;
+
     private String nome;
 
     private List<Transaction> transactions = new ArrayList<>();

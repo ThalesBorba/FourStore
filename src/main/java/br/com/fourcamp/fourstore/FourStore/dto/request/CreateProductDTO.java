@@ -22,7 +22,4 @@ public class CreateProductDTO {
     private Double buyPrice;
 
     private Double sellPrice;
-
-    //Trocar por quantidade
-    private Stock stock;
 }

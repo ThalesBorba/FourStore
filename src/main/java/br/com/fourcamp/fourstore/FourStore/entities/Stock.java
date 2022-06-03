@@ -28,6 +28,9 @@ public class Stock implements Serializable {
 	@Min(0)
 	private Integer quantity;
 
+	public Stock(Product product, Integer finalQuantity) {
+	}
+
 	public Product getProduct() {
 		return this.product;
 	}

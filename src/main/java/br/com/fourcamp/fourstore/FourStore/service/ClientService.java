@@ -6,6 +6,7 @@ import br.com.fourcamp.fourstore.FourStore.entities.Client;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ClientNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.repositories.ClientRepository;
+import br.com.fourcamp.fourstore.FourStore.util.ClientValidations;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -61,7 +62,7 @@ public class ClientService {
     }
 
     public CreateClientDTO validClient(CreateClientDTO createClientDTO) {
-        //valida cpf e forma de pagamento
+
         return createClientDTO;
     }
 }

@@ -2,7 +2,9 @@ package br.com.fourcamp.fourstore.FourStore.controller;
 
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
+import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
+import br.com.fourcamp.fourstore.FourStore.exceptions.StockInsufficientException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.StockNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class StockController {
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createStock(@RequestBody @Valid Stock stock) {
+    public MessageResponseDTO createStock(@RequestBody @Valid Stock stock) throws InvalidParametersException {
         return stockService.createStock(stock);
     }
 
@@ -43,7 +45,7 @@ public class StockController {
 
     @PutMapping("/{id}")
     public MessageResponseDTO updateById(@PathVariable String sku, @RequestBody @Valid Stock stock)
-            throws StockNotFoundException {
+            throws StockNotFoundException, StockInsufficientException {
         return stockService.updateById(sku, stock);
     }
 

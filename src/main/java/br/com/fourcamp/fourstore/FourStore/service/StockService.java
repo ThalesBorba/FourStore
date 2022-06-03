@@ -4,6 +4,8 @@ import br.com.fourcamp.fourstore.FourStore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Product;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
+import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
+import br.com.fourcamp.fourstore.FourStore.exceptions.StockInsufficientException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.StockNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +23,26 @@ public class StockService {
         this.stockRepository = stockRepository;
     }
 
-    public MessageResponseDTO createStock(Stock stock) {
-        Stock savedStock = setStock(stock);
-        return createMessageResponse(savedStock.getId(), "Criado");
+    public MessageResponseDTO createStock(Stock stock) throws InvalidParametersException {
+        if (stock.getQuantity() <= 0) {
+            throw new InvalidParametersException();
+        } else {
+            Stock savedStock = setStock(stock);
+            return createMessageResponse(savedStock.getId(), "Criado");
+        }
     }
 
-    public MessageResponseDTO updateById(String sku, Stock stock) throws StockNotFoundException {
-        //validações
+    public MessageResponseDTO updateById(String sku, Stock stock) throws StockNotFoundException,
+            StockInsufficientException {
         verifyIfExists(sku);
-        Stock updatedStock = setStock(stock);
+        Stock currentStock = findById(sku);
+        Integer finalQuantity;
+        if ((currentStock.getQuantity() - stock.getQuantity()) < 0) {
+            throw new StockInsufficientException();
+        } else {
+            finalQuantity = currentStock.getQuantity() + stock.getQuantity();
+        }
+        Stock updatedStock = setStock(new Stock(stock.getProduct(), finalQuantity));
         return createMessageResponse(updatedStock.getId(), "Updated");
     }
 
@@ -48,8 +61,6 @@ public class StockService {
     }
 
     private Stock verifyIfExists(String sku) throws StockNotFoundException {
-        //trocar por find by product
-
         return stockRepository.findById(sku)
                 .orElseThrow(() -> new StockNotFoundException(sku));
     }
@@ -67,10 +78,7 @@ public class StockService {
         }throw new StockNotFoundException(sku);
     }
 
-    private CreateStockDTO validStock(CreateStockDTO createStockDTO) {
-        //verificar se a quantidade pedida é menor que a em estoque
-        return createStockDTO;
-    }
+
 
 
 }

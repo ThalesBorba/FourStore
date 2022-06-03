@@ -1,11 +1,9 @@
 package br.com.fourcamp.fourstore.FourStore.util;
 
-import br.com.fourcamp.fourstore.FourStore.enums.CategoryEnum;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PaymentValidation {
+public class ClientValidations {
 
     public static Boolean validateCards(String card) {
     String regex = "(^4[0-9]{12}(?:[0-9]{3})?$)|(^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|" +
@@ -23,9 +21,13 @@ public class PaymentValidation {
         Pattern cellphone = Pattern.compile("^\\+[1-9]{1}[0-9]{3,14}$");
         Pattern cpfCnpj = Pattern.compile("([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|" +
                 "([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})");
-        if(email.matcher(pix).matches() || cellphone.matcher(pix).matches() ||
-                cpfCnpj.matcher(pix).matches()) return true;
-        else return false;
+        return email.matcher(pix).matches() || cellphone.matcher(pix).matches() ||
+                cpfCnpj.matcher(pix).matches();
+    }
+
+    public static Boolean validateCpf(String cpf) {
+        Pattern cpfPattern = Pattern.compile("^([0-9]{3}\\.?){3}-?[0-9]{2}$");
+        return cpfPattern.matcher(cpf).matches();
     }
 
 

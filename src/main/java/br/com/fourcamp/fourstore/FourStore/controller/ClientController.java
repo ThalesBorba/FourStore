@@ -1,22 +1,19 @@
 package br.com.fourcamp.fourstore.FourStore.controller;
 
-import br.com.fourcamp.fourstore.FourStore.dto.request.CreateClientDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Client;
-import br.com.fourcamp.fourstore.FourStore.entities.Stock;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ClientNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
-import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.service.ClientService;
-import br.com.fourcamp.fourstore.FourStore.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/client")
 public class ClientController {
 
@@ -30,9 +27,9 @@ public class ClientController {
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createClient(@RequestBody @Valid CreateClientDTO createClientDTO)
+    public MessageResponseDTO createClient(@RequestBody @Valid Client client)
             throws InvalidParametersException {
-        return clientService.createClient(createClientDTO);
+        return clientService.createClient(client);
     }
 
     @GetMapping
@@ -46,9 +43,9 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public MessageResponseDTO updateById(@PathVariable String cpf, @RequestBody @Valid CreateClientDTO createClientDTO)
+    public MessageResponseDTO updateById(@PathVariable String cpf, @RequestBody @Valid Client client)
             throws ClientNotFoundException, InvalidParametersException {
-        return clientService.updateById(cpf, createClientDTO);
+        return clientService.updateById(cpf, client);
     }
 
     @DeleteMapping("/{id}")

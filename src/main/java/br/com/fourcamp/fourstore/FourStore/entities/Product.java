@@ -8,6 +8,7 @@ import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -15,28 +16,27 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="products")
 public class Product implements Serializable {
 
 
 	@Id
 	@Column(name = "sku", nullable = false)
-	@NaturalId
 	private String sku;
 
-	@Column(nullable = false)
+	@NotNull
 	private String description;
 
 	@Min(10)
-	@Column(nullable = false)
+	@NotNull
 	private Double buyPrice;
 
 	@Min(10)
-	@Column(nullable = false)
+	@NotNull
 	private Double sellPrice;
 
-	@OneToOne
-	@MapsId
-	@JoinColumn(name = "stock_id")
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "stock_id", nullable = false)
 	private Stock stock;
 
 	}

@@ -14,13 +14,16 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="stocks")
 public class Stock implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne(mappedBy = "stock", cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY,
+			cascade =  CascadeType.ALL,
+			mappedBy = "stock")
 	@PrimaryKeyJoinColumn
 	private Product product;
 

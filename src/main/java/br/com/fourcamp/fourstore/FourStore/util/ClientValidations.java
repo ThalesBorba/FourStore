@@ -12,8 +12,7 @@ public class ClientValidations {
     Pattern cardPattern = Pattern.compile(regex);
     card = card.replaceAll("[-. ]", "");
     Matcher matcher = cardPattern.matcher(card);
-    if(matcher.matches()) return true;
-    else return false;
+        return matcher.matches();
     }
 
     public static Boolean validatePix(String pix) {
@@ -31,12 +30,12 @@ public class ClientValidations {
     }
 
 
-    public static boolean paymentMethodValidation(String paymentMethod, String paymentData) {
+    public static boolean paymentMethodValidation(Integer paymentMethod, String paymentData) {
         Boolean validation = false;
         switch (paymentMethod) {
-            case "1", "2", "6" -> validation = true;
-            case "3", "4" -> validation = validateCards(paymentData);
-            case "5" -> validation = validatePix(paymentData);
+            case 1, 2, 6 -> validation = true;
+            case 3, 4 -> validation = validateCards(paymentData);
+            case 5 -> validation = validatePix(paymentData);
             default -> validation = false;
         }
         return validation;

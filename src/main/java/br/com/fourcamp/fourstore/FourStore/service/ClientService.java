@@ -1,6 +1,5 @@
 package br.com.fourcamp.fourstore.FourStore.service;
 
-import br.com.fourcamp.fourstore.FourStore.dto.request.CreateClientDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Client;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ClientNotFoundException;
@@ -10,9 +9,11 @@ import br.com.fourcamp.fourstore.FourStore.repositories.ClientRepository;
 import br.com.fourcamp.fourstore.FourStore.util.ClientValidations;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ClientService {
 
     private ClientRepository clientRepository;
@@ -24,18 +25,17 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public MessageResponseDTO createClient(CreateClientDTO createClientDTO) throws InvalidParametersException {
-        Client savedClient = setClient(createClientDTO);
+    public MessageResponseDTO createClient(Client client) throws InvalidParametersException {
+        Client savedClient = setClient(client);
         return createMessageResponse(savedClient.getCpf(), "Criado");
     }
 
-    public MessageResponseDTO updateById(String cpf, CreateClientDTO createClientDTO) throws ClientNotFoundException,
+    public MessageResponseDTO updateById(String cpf, Client client) throws ClientNotFoundException,
             InvalidParametersException {
         verifyIfExists(cpf);
-        CreateClientDTO validClient = validClient(createClientDTO);
-        Client updatedClient = clientMapper.toModel(validClient);
-        clientRepository.save(updatedClient);
-        return createMessageResponse(updatedClient.getCpf(), "Updated");
+        Client validClient = validClient(client);
+        clientRepository.save(client);
+        return createMessageResponse(client.getCpf(), "Updated");
     }
 
     public List<Client> listAll() {
@@ -58,10 +58,9 @@ public class ClientService {
                 .orElseThrow(() -> new ClientNotFoundException(cpf));
     }
 
-    private Client setClient(CreateClientDTO createClientDTO) throws InvalidParametersException {
-        CreateClientDTO validClient = validClient(createClientDTO);
-        Client clientToSave = clientMapper.toModel(validClient);
-        return clientRepository.save(clientToSave);
+    private Client setClient(Client client) throws InvalidParametersException {
+        Client validClient = validClient(client);
+        return clientRepository.save(client);
     }
 
     public Client findById(String cpf) throws ClientNotFoundException {
@@ -69,13 +68,13 @@ public class ClientService {
         return client;
     }
 
-    public CreateClientDTO validClient(CreateClientDTO createClientDTO) throws InvalidParametersException {
-        if (!ClientValidations.validateCpf(createClientDTO.getCpf()) ||
-                !ClientValidations.paymentMethodValidation(createClientDTO.getPaymentMethod(),
-                        createClientDTO.getPaymentData())) {
+    public Client validClient(Client client) throws InvalidParametersException {
+        if (!ClientValidations.validateCpf(client.getCpf()) ||
+                !ClientValidations.paymentMethodValidation(client.getPaymentMethod(),
+                        client.getPaymentData())) {
             throw new InvalidParametersException();
         } else {
-        return createClientDTO;
+        return client;
         }
     }
 }

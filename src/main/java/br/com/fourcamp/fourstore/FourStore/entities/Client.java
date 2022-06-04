@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,24 +19,24 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="clients")
 public class Client implements Serializable {
 
     @Id
     @CPF
     private String cpf;
 
-    @Column(nullable = false)
+    @NotNull
     private String nome;
 
-    @Column(nullable = false)
+    @NotNull
     @Min(1)
     @Max(6)
     private Integer paymentMethod;
 
-    @Column(nullable = false)
+    @NotNull
     private String paymentData;
 
-    @Valid
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Transaction> transactions;
 

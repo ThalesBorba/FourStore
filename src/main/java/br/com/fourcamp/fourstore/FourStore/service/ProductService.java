@@ -12,9 +12,11 @@ import br.com.fourcamp.fourstore.FourStore.mapper.ProductMapper;
 import br.com.fourcamp.fourstore.FourStore.repositories.ProductRepository;
 import br.com.fourcamp.fourstore.FourStore.util.SkuValidations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ProductService {
 
     private ProductRepository productRepository;

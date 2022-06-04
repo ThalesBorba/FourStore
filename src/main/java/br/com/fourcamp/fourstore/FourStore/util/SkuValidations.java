@@ -8,38 +8,31 @@ import java.util.List;
 public class SkuValidations {
 
     public static boolean brandValidation(String brand) {
-        Boolean validation = BrandEnum.getByKey(brand) != null;
-        return validation;
+        return BrandEnum.getByKey(brand) != null;
     }
 
     public static boolean categoryValidation(String category) {
-        Boolean validation = CategoryEnum.getByKey(category) != null;
-        return validation;
+        return CategoryEnum.getByKey(category) != null;
     }
 
     public static boolean colorValidation(String color) {
-        Boolean validation = ColorEnum.getByKey(color) != null;
-        return validation;
+        return ColorEnum.getByKey(color) != null;
     }
 
     public static boolean departmentValidation(String department) {
-        Boolean validation = DepartmentEnum.getByKey(department) != null;
-        return validation;
+        return DepartmentEnum.getByKey(department) != null;
     }
 
     public static boolean seasonValidation(String season) {
-        Boolean validation = SeasonEnum.getByKey(season) != null;
-        return validation;
+        return SeasonEnum.getByKey(season) != null;
     }
 
     public static boolean sizeValidation(String size) {
-        Boolean validation = SizeEnum.getByKey(size) != null;
-        return validation;
+        return SizeEnum.getByKey(size) != null;
     }
 
     public static boolean typeOfMerchandiseValidation(String typeOfMerchandise) {
-        Boolean validation = TypeOfMerchandiseEnum.getByKey(typeOfMerchandise) != null;
-        return validation;
+        return TypeOfMerchandiseEnum.getByKey(typeOfMerchandise) != null;
     }
 
     public static Boolean validateSku(String sku) {

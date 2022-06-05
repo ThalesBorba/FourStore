@@ -2,6 +2,7 @@ package br.com.fourcamp.fourstore.FourStore.service;
 
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateClientDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
+import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnClientDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Client;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ClientNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
@@ -12,6 +13,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,10 +41,15 @@ public class ClientService {
         return createMessageResponse(updatedClient.getCpf(), "Updated");
     }
 
-    public List<Client> listAll() {
+    public List<ReturnClientDTO> listAll() {
         //retornarDTO
         List<Client> allClients = clientRepository.findAll();
-        return allClients;
+        List<ReturnClientDTO> returnClientDTOList = new ArrayList<>();
+        for (Client client : allClients) {
+            ReturnClientDTO returnClientDTO = clientMapper.toDTO(client);
+            returnClientDTOList.add(returnClientDTO);
+        }
+        return returnClientDTOList;
     }
 
     public void delete(String cpf) throws ClientNotFoundException {
@@ -65,9 +72,10 @@ public class ClientService {
         return clientRepository.save(clientToSave);
     }
 
-    public Client findById(String cpf) throws ClientNotFoundException {
+    public ReturnClientDTO findById(String cpf) throws ClientNotFoundException {
         Client client = verifyIfExists(cpf);
-        return client;
+        ReturnClientDTO returnClientDTO = clientMapper.toDTO(client);
+        return returnClientDTO;
     }
 
     public CreateClientDTO validClient(CreateClientDTO createClientDTO) throws InvalidParametersException {

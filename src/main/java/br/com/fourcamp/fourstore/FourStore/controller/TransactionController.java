@@ -47,9 +47,5 @@ public class TransactionController {
         return transactionService.updateById(id, transaction);
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable Long id) throws TransactionNotFoundException {
-        transactionService.delete(id);
-    }
+    //Melhor não ter um delete
 }

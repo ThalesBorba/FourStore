@@ -2,6 +2,7 @@ package br.com.fourcamp.fourstore.FourStore.service;
 
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateProductDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
+import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnProductDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnProductDetailsDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Product;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidSellValueException;
@@ -14,6 +15,7 @@ import br.com.fourcamp.fourstore.FourStore.util.SkuValidations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,9 +46,14 @@ public class ProductService {
         return createMessageResponse(updatedProduct.getSku(), "Updated");
     }
 
-    public List<Product> listAll() {
+    public List<ReturnProductDTO> listAll() {
         List<Product> allProducts = productRepository.findAll();
-        return allProducts;
+        List<ReturnProductDTO> returnProductDTOList = new ArrayList<>();
+        for (Product product : allProducts) {
+            ReturnProductDTO returnProductDTO = productMapper.toDTO(product);
+            returnProductDTOList.add(returnProductDTO);
+        }
+        return returnProductDTOList;
     }
 
     public void delete(String sku) throws ProductNotFoundException {
@@ -75,9 +82,10 @@ public class ProductService {
         return returnProductDetailsDTO;
     }
 
-    public Product findById(String sku) throws ProductNotFoundException {
+    public ReturnProductDTO findById(String sku) throws ProductNotFoundException {
         Product product = verifyIfExists(sku);
-        return product;
+        ReturnProductDTO returnProductDTO = productMapper.toDTO(product);
+        return returnProductDTO;
     }
 
     private CreateProductDTO validProduct(CreateProductDTO createProductDTO) throws InvalidSellValueException,

@@ -1,16 +1,20 @@
 package br.com.fourcamp.fourstore.FourStore.service;
 
+import br.com.fourcamp.fourstore.FourStore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
+import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnStockDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Cart;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.StockInsufficientException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.StockNotFoundException;
+import br.com.fourcamp.fourstore.FourStore.mapper.StockMapper;
 import br.com.fourcamp.fourstore.FourStore.repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,16 +22,20 @@ public class StockService {
 
     private StockRepository stockRepository;
 
+    private StockMapper stockMapper;
+
     @Autowired
     public StockService(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
     }
 
-    public MessageResponseDTO createStock(Stock stock) throws InvalidParametersException {
-        if (stock.getQuantity() <= 0) {
+    public MessageResponseDTO createStock(CreateStockDTO createStockDTO) throws InvalidParametersException {
+        if (createStockDTO.getQuantity() <= 0) {
             throw new InvalidParametersException();
+            //verificar se tem em produtos
+            //ver se esse produto já existe no estoque
         } else {
-            Stock savedStock = setStock(stock);
+            Stock savedStock = setStock(createStockDTO);
             return createMessageResponse(savedStock.getId(), "Criado");
         }
     }
@@ -36,30 +44,36 @@ public class StockService {
             InvalidParametersException, StockInsufficientException {
         List<Stock> updatedStockList = Cart.updateStock(createTransactionDTO);
         for (Stock stock : updatedStockList) {
-            Stock stocktoUpdate = findById(stock.getProduct().getSku());
+            ReturnStockDTO stocktoUpdate = findById(stock.getProduct().getSku());
             Integer newQuantity = stocktoUpdate.getQuantity() - stock.getQuantity();
             if (newQuantity < 0) {
                 throw new StockInsufficientException();
             } else {
                 stocktoUpdate.setQuantity(newQuantity);
-                stockRepository.save(stocktoUpdate);
+                Stock stockToSave = stockMapper.toModel(stocktoUpdate);
+                stockRepository.save(stockToSave);
             }
         }
     }
 
-    public MessageResponseDTO updateById(String sku, Stock stock) throws StockNotFoundException
+    public MessageResponseDTO updateById(String sku, CreateStockDTO createStockDTO) throws StockNotFoundException
     {
         verifyIfExists(sku);
-        Stock currentStock = findById(sku);
-        Integer finalQuantity;
-        finalQuantity = currentStock.getQuantity() + stock.getQuantity();
-        Stock updatedStock = setStock(new Stock(stock.getProduct(), finalQuantity));
+        ReturnStockDTO currentStock = findById(sku);
+        Integer finalQuantity = currentStock.getQuantity() + createStockDTO.getQuantity();
+        Stock updatedStock = setStock(new CreateStockDTO(createStockDTO.getProduct(), finalQuantity));
+        stockRepository.save(updatedStock);
         return createMessageResponse(updatedStock.getId(), "Updated");
     }
 
-    public List<Stock> listAll() {
+    public List<ReturnStockDTO> listAll() {
         List<Stock> allStocks = stockRepository.findAll();
-        return allStocks;
+        List<ReturnStockDTO> returnStockDTOList = new ArrayList<>();
+        for (Stock stock : allStocks) {
+            ReturnStockDTO returnStockDTO = stockMapper.toDTO(stock);
+            returnStockDTOList.add(returnStockDTO);
+        }
+        return returnStockDTOList;
     }
 
     public void delete(String sku) throws StockNotFoundException {
@@ -76,15 +90,16 @@ public class StockService {
                 .orElseThrow(() -> new StockNotFoundException(sku));
     }
 
-    private Stock setStock(Stock stock) {
+    private Stock setStock(CreateStockDTO createStockDTO) {
+        Stock stock = stockMapper.toModel(createStockDTO);
         return stockRepository.save(stock);
     }
 
-    public Stock findById(String sku) throws StockNotFoundException {
+    public ReturnStockDTO findById(String sku) throws StockNotFoundException {
         List<Stock> stockList = stockRepository.findAll();
         for(Stock stock : stockList) {
             if (stock.getProduct().getSku().equals(sku)) {
-                return stock;
+                return stockMapper.toDTO(stock);
             }
         }throw new StockNotFoundException(sku);
     }

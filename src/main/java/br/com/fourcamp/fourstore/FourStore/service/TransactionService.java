@@ -44,25 +44,16 @@ public class TransactionService {
         return allTransactions;
     }
 
-    public void delete(Long id) throws TransactionNotFoundException {
-        verifyIfExists(id);
-        transactionRepository.deleteById(id);
-    }
-
     private MessageResponseDTO createMessageResponse(Long id, String s) {
         return MessageResponseDTO.builder().message(s + "estoque com a id" + id).build();
     }
 
     private Transaction verifyIfExists(Long id) throws TransactionNotFoundException {
-        //trocar por find by product
-
         return transactionRepository.findById(id)
                 .orElseThrow(() -> new TransactionNotFoundException(id));
     }
 
     private Transaction setTransaction(Transaction transaction) {
-        //adicionar as validações
-
         return transactionRepository.save(transaction);
     }
 
@@ -74,8 +65,8 @@ public class TransactionService {
     private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) throws
             StockNotFoundException, InvalidParametersException, StockInsufficientException {
         Integer paymentMethod = createTransactionDTO.getClient().getPaymentMethod();
+        //findall do Cliente para ver se ele já está cadastrado
 
-        //
         Double lucro = Cart.retornaLucro(createTransactionDTO.getCart(), paymentMethod);
         stockService.updateByTransaction(createTransactionDTO);
         return createTransactionDTO;

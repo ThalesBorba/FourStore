@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReturnTransactionsDTO {
+public class ReturnTransactionDTO {
 
     private Long id;
     private String clientName;
     private String clientCpf;
     private Double profit;
 
-    public ReturnTransactionsDTO(Transaction transaction) {
+    public ReturnTransactionDTO(Transaction transaction) {
         this.id = transaction.getId();
         this.clientName = transaction.getClient().getNome();
         this.clientCpf = transaction.getClient().getCpf();

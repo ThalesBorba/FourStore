@@ -1,6 +1,8 @@
 package br.com.fourcamp.fourstore.FourStore.controller;
 
+import br.com.fourcamp.fourstore.FourStore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
+import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnStockDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
@@ -29,24 +31,24 @@ public class StockController {
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createStock(@RequestBody @Valid Stock stock) throws InvalidParametersException {
-        return stockService.createStock(stock);
+    public MessageResponseDTO createStock(@RequestBody @Valid CreateStockDTO createStockDTO) throws InvalidParametersException {
+        return stockService.createStock(createStockDTO);
     }
 
     @GetMapping
-    public List<Stock> listAll() {
+    public List<ReturnStockDTO> listAll() {
         return stockService.listAll();
     }
 
     @GetMapping("/{id}")
-    public Stock findById(@PathVariable String sku) throws StockNotFoundException {
+    public ReturnStockDTO findById(@PathVariable String sku) throws StockNotFoundException {
         return stockService.findById(sku);
     }
 
     @PutMapping("/{id}")
-    public MessageResponseDTO updateById(@PathVariable String sku, @RequestBody @Valid Stock stock)
+    public MessageResponseDTO updateById(@PathVariable String sku, @RequestBody @Valid CreateStockDTO createStockDTO)
             throws StockNotFoundException, StockInsufficientException {
-        return stockService.updateById(sku, stock);
+        return stockService.updateById(sku, createStockDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -54,30 +56,4 @@ public class StockController {
     public void deleteById(@PathVariable String sku) throws StockNotFoundException {
         stockService.delete(sku);
     }
-
-/*
-    Métodos JavaFx
-    public void createStock() {
-
-    }
-
-    public void findBySku() {
-
-    }
-
-    public void listStock() {
-
-    }
-
-    public void updateStock() {
-
-    }
-
-    public void returnToMainMenu() {
-
-    }
-
-    */
-
-
 }

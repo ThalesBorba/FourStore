@@ -21,9 +21,7 @@ public class Stock implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToOne(fetch = FetchType.LAZY,
-			cascade =  CascadeType.ALL,
-			mappedBy = "stock")
+	@OneToOne(fetch = FetchType.LAZY, cascade =  CascadeType.ALL, mappedBy = "stock")
 	@PrimaryKeyJoinColumn
 	private Product product;
 

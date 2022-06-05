@@ -1,14 +1,10 @@
 package br.com.fourcamp.fourstore.FourStore.entities;
 
-import br.com.fourcamp.fourstore.FourStore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.FourStore.enums.PaymentMethodEnum;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +16,7 @@ public class Cart {
 
     public static HashMap<Product, Integer> cart;
 
-    public static List<Stock> updateStock(CreateTransactionDTO transaction) throws InvalidParametersException {
+    public static List<Stock> updateStock(Transaction transaction) throws InvalidParametersException {
         List<Stock> stockList = new ArrayList<Stock>();
         HashMap<Product, Integer> cart = Cart.cart;
         for (Map.Entry<Product, Integer> purchases : cart.entrySet()) {

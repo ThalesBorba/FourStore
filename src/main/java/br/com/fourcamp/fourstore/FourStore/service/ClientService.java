@@ -60,7 +60,7 @@ public class ClientService {
 
     private Client setClient(Client client) throws InvalidParametersException {
         Client validClient = validClient(client);
-        return clientRepository.save(client);
+        return clientRepository.save(validClient);
     }
 
     public Client findById(String cpf) throws ClientNotFoundException {

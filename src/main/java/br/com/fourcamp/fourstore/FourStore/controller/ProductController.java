@@ -1,6 +1,5 @@
 package br.com.fourcamp.fourstore.FourStore.controller;
 
-import br.com.fourcamp.fourstore.FourStore.dto.request.CreateProductDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnProductDetailsDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Product;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/product")
 public class ProductController {
 
@@ -30,9 +29,9 @@ public class ProductController {
 
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createProduct(@RequestBody @Valid CreateProductDTO createProductDTO)
+    public MessageResponseDTO createProduct(@RequestBody @Valid Product product)
             throws InvalidSellValueException, InvalidSkuException {
-        return productService.createProduct(createProductDTO);
+        return productService.createProduct(product);
     }
 
     @GetMapping
@@ -52,9 +51,9 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public MessageResponseDTO updateById(@PathVariable String sku, @RequestBody @Valid
-        CreateProductDTO createProductDTO)
+        Product product)
             throws ProductNotFoundException, InvalidSellValueException, InvalidSkuException {
-        return productService.updateById(sku, createProductDTO);
+        return productService.updateById(sku, product);
     }
 
     @DeleteMapping("/{id}")

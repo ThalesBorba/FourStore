@@ -1,5 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.service;
 
+import br.com.fourcamp.fourstore.FourStore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Cart;
 import br.com.fourcamp.fourstore.FourStore.entities.Transaction;
@@ -70,12 +71,14 @@ public class TransactionService {
         return transaction;
     }
 
-    private Transaction validTransaction(Transaction transaction) throws
+    private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) throws
             StockNotFoundException, InvalidParametersException, StockInsufficientException {
-        Integer paymentMethod = transaction.getClient().getPaymentMethod();
-        Double lucro = Cart.retornaLucro(Cart.cart, paymentMethod);
-        stockService.updateByTransaction(transaction);
-        return transaction;
+        Integer paymentMethod = createTransactionDTO.getClient().getPaymentMethod();
+
+        //
+        Double lucro = Cart.retornaLucro(createTransactionDTO.getCart(), paymentMethod);
+        stockService.updateByTransaction(createTransactionDTO);
+        return createTransactionDTO;
     }
 
 }

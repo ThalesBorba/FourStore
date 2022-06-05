@@ -1,5 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.service;
 
+import br.com.fourcamp.fourstore.FourStore.dto.request.CreateProductDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnProductDetailsDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Product;
@@ -28,18 +29,19 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public MessageResponseDTO createProduct(Product product) throws InvalidSellValueException,
+    public MessageResponseDTO createProduct(CreateProductDTO createProductDTO) throws InvalidSellValueException,
             InvalidSkuException {
-        Product savedProduct = setProduct(product);
+        Product savedProduct = setProduct(createProductDTO);
         return createMessageResponse(savedProduct.getSku(), "Criado");
     }
 
-    public MessageResponseDTO updateById(String sku, Product product) throws ProductNotFoundException,
+    public MessageResponseDTO updateById(String sku, CreateProductDTO createProductDTO) throws ProductNotFoundException,
             InvalidSellValueException, InvalidSkuException {
         verifyIfExists(sku);
-        Product validProduct = validProduct(product);
-        productRepository.save(validProduct);
-        return createMessageResponse(validProduct.getSku(), "Updated");
+        CreateProductDTO validProduct = validProduct(createProductDTO);
+        Product updatedProduct = productMapper.toModel(validProduct);
+        productRepository.save(updatedProduct);
+        return createMessageResponse(updatedProduct.getSku(), "Updated");
     }
 
     public List<Product> listAll() {
@@ -61,9 +63,10 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(sku));
     }
 
-    private Product setProduct(Product product) throws InvalidSellValueException, InvalidSkuException {
-        Product validProduct = validProduct(product);
-        return productRepository.save(validProduct);
+    private Product setProduct(CreateProductDTO createProductDTO) throws InvalidSellValueException, InvalidSkuException {
+        CreateProductDTO validProduct = validProduct(createProductDTO);
+        Product productToSave = productMapper.toModel(validProduct);
+        return productRepository.save(productToSave);
     }
 
     public ReturnProductDetailsDTO findByIdWithDetails(String sku) throws ProductNotFoundException {
@@ -77,15 +80,15 @@ public class ProductService {
         return product;
     }
 
-    private Product validProduct(Product product) throws InvalidSellValueException,
+    private CreateProductDTO validProduct(CreateProductDTO createProductDTO) throws InvalidSellValueException,
             InvalidSkuException {
-        if (product.getSellPrice() * 1.25 <= product.getBuyPrice() ||
-                product.getSellPrice() < 0) {
+        if (createProductDTO.getSellPrice() * 1.25 <= createProductDTO.getBuyPrice() ||
+                createProductDTO.getSellPrice() < 0) {
             throw new InvalidSellValueException();
-        } else if (SkuValidations.validateSku(product.getSku()).equals(false)) {
+        } else if (SkuValidations.validateSku(createProductDTO.getSku()).equals(false)) {
             throw new InvalidSkuException();
         } else {
-            return product;
+            return createProductDTO;
         }
     }
 

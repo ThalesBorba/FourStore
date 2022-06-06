@@ -3,15 +3,12 @@ package br.com.fourcamp.fourstore.FourStore.controller;
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnStockDTO;
-import br.com.fourcamp.fourstore.FourStore.entities.Stock;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
-import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.StockInsufficientException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.StockNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

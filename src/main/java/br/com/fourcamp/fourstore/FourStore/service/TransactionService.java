@@ -2,16 +2,18 @@ package br.com.fourcamp.fourstore.FourStore.service;
 
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
-import br.com.fourcamp.fourstore.FourStore.entities.Cart;
+import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnTransactionDTO;
+import br.com.fourcamp.fourstore.FourStore.entities.Client;
 import br.com.fourcamp.fourstore.FourStore.entities.Transaction;
-import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
-import br.com.fourcamp.fourstore.FourStore.exceptions.StockInsufficientException;
-import br.com.fourcamp.fourstore.FourStore.exceptions.StockNotFoundException;
-import br.com.fourcamp.fourstore.FourStore.exceptions.TransactionNotFoundException;
+import br.com.fourcamp.fourstore.FourStore.exceptions.*;
+import br.com.fourcamp.fourstore.FourStore.mapper.TransactionMapper;
+import br.com.fourcamp.fourstore.FourStore.repositories.ClientRepository;
 import br.com.fourcamp.fourstore.FourStore.repositories.TransactionRepository;
+import br.com.fourcamp.fourstore.FourStore.util.CartMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,29 +21,29 @@ public class TransactionService {
 
     private TransactionRepository transactionRepository;
 
-    protected StockService stockService;
+    private StockService stockService;
+    private ClientRepository clientRepository;
+    private TransactionMapper transactionMapper;
 
     @Autowired
     public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
 
-    public MessageResponseDTO createTransaction(Transaction transaction) {
-        //validações
-        Transaction savedTransaction = setTransaction(transaction);
+    public MessageResponseDTO createTransaction(CreateTransactionDTO createTransactionDTO) throws
+            ClientNotFoundException, StockNotFoundException, InvalidParametersException, StockInsufficientException {
+        Transaction savedTransaction = setTransaction(createTransactionDTO);
         return createMessageResponse(savedTransaction.getId(), "Criado");
     }
 
-    public MessageResponseDTO updateById(Long id, Transaction transaction) throws TransactionNotFoundException {
-        //adicionar as validações
-        verifyIfExists(id);
-        Transaction updatedTransaction = setTransaction(transaction);
-        return createMessageResponse(updatedTransaction.getId(), "Updated");
-    }
-
-    public List<Transaction> listAll() {
+    public List<ReturnTransactionDTO> listAll() {
         List<Transaction> allTransactions = transactionRepository.findAll();
-        return allTransactions;
+        List<ReturnTransactionDTO> returnTransactionDTOList = new ArrayList<>();
+        for (Transaction transaction : allTransactions) {
+            ReturnTransactionDTO returnTransactionDTO = transactionMapper.toDTO(transaction);
+            returnTransactionDTOList.add(returnTransactionDTO);
+        }
+        return returnTransactionDTOList;
     }
 
     private MessageResponseDTO createMessageResponse(Long id, String s) {
@@ -53,23 +55,33 @@ public class TransactionService {
                 .orElseThrow(() -> new TransactionNotFoundException(id));
     }
 
-    private Transaction setTransaction(Transaction transaction) {
-        return transactionRepository.save(transaction);
+    private Transaction setTransaction(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException,
+            StockNotFoundException, InvalidParametersException, StockInsufficientException {
+        CreateTransactionDTO validTrasaction = validTransaction(createTransactionDTO);
+        Double profit = calculateProfit(validTrasaction);
+        Transaction transactionToSave = transactionMapper.toModel(validTrasaction);
+        transactionToSave.setProfit(profit);
+        return transactionRepository.save(transactionToSave);
     }
 
-    public Transaction findById(Long id) throws TransactionNotFoundException {
+    public ReturnTransactionDTO findById(Long id) throws TransactionNotFoundException {
         Transaction transaction = verifyIfExists(id);
-        return transaction;
+        return transactionMapper.toDTO(transaction);
     }
 
     private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) throws
-            StockNotFoundException, InvalidParametersException, StockInsufficientException {
-        Integer paymentMethod = createTransactionDTO.getClient().getPaymentMethod();
-        //findall do Cliente para ver se ele já está cadastrado
-
-        Double lucro = Cart.retornaLucro(createTransactionDTO.getCart(), paymentMethod);
+            StockNotFoundException, InvalidParametersException, StockInsufficientException, ClientNotFoundException {
+        List<Client> clients = clientRepository.findAll();
+        if (!clients.contains(createTransactionDTO.getClient())) {
+            throw new ClientNotFoundException(createTransactionDTO.getClient().getCpf());
+        }
         stockService.updateByTransaction(createTransactionDTO);
         return createTransactionDTO;
+    }
+
+    private Double calculateProfit(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException {
+        Integer paymentMethod = createTransactionDTO.getClient().getPaymentMethod();
+        return CartMethods.retornaLucro(createTransactionDTO.getCart(), paymentMethod);
     }
 
 }

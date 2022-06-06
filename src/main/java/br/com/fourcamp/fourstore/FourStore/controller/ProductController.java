@@ -4,14 +4,12 @@ import br.com.fourcamp.fourstore.FourStore.dto.request.CreateProductDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnProductDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnProductDetailsDTO;
-import br.com.fourcamp.fourstore.FourStore.entities.Product;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidSellValueException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidSkuException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

@@ -78,14 +78,12 @@ public class ProductService {
 
     public ReturnProductDetailsDTO findByIdWithDetails(String sku) throws ProductNotFoundException {
         Product product = verifyIfExists(sku);
-        ReturnProductDetailsDTO returnProductDetailsDTO = productDetailsMapper.toDTO(product);
-        return returnProductDetailsDTO;
+        return productDetailsMapper.toDTO(product);
     }
 
     public ReturnProductDTO findById(String sku) throws ProductNotFoundException {
         Product product = verifyIfExists(sku);
-        ReturnProductDTO returnProductDTO = productMapper.toDTO(product);
-        return returnProductDTO;
+        return productMapper.toDTO(product);
     }
 
     private CreateProductDTO validProduct(CreateProductDTO createProductDTO) throws InvalidSellValueException,

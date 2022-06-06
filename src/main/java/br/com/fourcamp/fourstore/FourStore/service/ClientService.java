@@ -42,7 +42,6 @@ public class ClientService {
     }
 
     public List<ReturnClientDTO> listAll() {
-        //retornarDTO
         List<Client> allClients = clientRepository.findAll();
         List<ReturnClientDTO> returnClientDTOList = new ArrayList<>();
         for (Client client : allClients) {
@@ -74,8 +73,7 @@ public class ClientService {
 
     public ReturnClientDTO findById(String cpf) throws ClientNotFoundException {
         Client client = verifyIfExists(cpf);
-        ReturnClientDTO returnClientDTO = clientMapper.toDTO(client);
-        return returnClientDTO;
+        return clientMapper.toDTO(client);
     }
 
     public CreateClientDTO validClient(CreateClientDTO createClientDTO) throws InvalidParametersException {

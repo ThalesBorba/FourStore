@@ -4,7 +4,7 @@ import br.com.fourcamp.fourstore.FourStore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnStockDTO;
-import br.com.fourcamp.fourstore.FourStore.entities.Cart;
+import br.com.fourcamp.fourstore.FourStore.util.CartMethods;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.StockInsufficientException;
@@ -42,7 +42,7 @@ public class StockService {
 
     public void updateByTransaction(CreateTransactionDTO createTransactionDTO) throws StockNotFoundException,
             InvalidParametersException, StockInsufficientException {
-        List<Stock> updatedStockList = Cart.updateStock(createTransactionDTO);
+        List<Stock> updatedStockList = CartMethods.updateStock(createTransactionDTO);
         for (Stock stock : updatedStockList) {
             ReturnStockDTO stocktoUpdate = findById(stock.getProduct().getSku());
             Integer newQuantity = stocktoUpdate.getQuantity() - stock.getQuantity();

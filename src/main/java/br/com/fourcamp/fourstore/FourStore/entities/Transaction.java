@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.HashMap;
 
 @Entity
 @Data
@@ -26,9 +27,12 @@ public class Transaction implements Serializable {
 	private Client client;
 
 	@Transient
-	private Cart cart;
+	private static HashMap<Product, Integer> cart;
 
 	@Column
 	private Double profit;
 
+	public static HashMap<Product, Integer> getCart() {
+		return cart;
+	}
 }

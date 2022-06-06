@@ -14,5 +14,7 @@ public class CreateStockDTO {
 
     private Product product;
 
+    //só sku
+
     private Integer quantity;
 }

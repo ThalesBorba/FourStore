@@ -1,8 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.enums;
 
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
 
 public enum PaymentMethodEnum {
 
@@ -26,10 +24,6 @@ public enum PaymentMethodEnum {
 		this.paymentMethodId = paymentMethodId;
 		this.discount = discount;
 
-	}
-
-	public String getPaymentMethod() {
-		return paymentMethod;
 	}
 
 	public Integer getPaymentMethodId() {

@@ -3,13 +3,11 @@ package br.com.fourcamp.fourstore.FourStore.controller;
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateClientDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnClientDTO;
-import br.com.fourcamp.fourstore.FourStore.entities.Client;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ClientNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
 import br.com.fourcamp.fourstore.FourStore.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

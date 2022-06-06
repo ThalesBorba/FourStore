@@ -29,7 +29,7 @@ public class ClientService {
 
     public MessageResponseDTO createClient(CreateClientDTO createClientDTO) throws InvalidParametersException {
         Client savedClient = setClient(createClientDTO);
-        return createMessageResponse(savedClient.getCpf(), "Criado");
+        return createMessageResponse(savedClient.getCpf(), "Criado ");
     }
 
     public MessageResponseDTO updateById(String cpf, CreateClientDTO createClientDTO) throws ClientNotFoundException,

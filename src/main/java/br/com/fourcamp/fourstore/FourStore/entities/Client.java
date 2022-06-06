@@ -22,7 +22,6 @@ import java.util.List;
 public class Client implements Serializable {
 
     @Id
-    @CPF
     private String cpf;
 
     @NotNull
@@ -33,7 +32,6 @@ public class Client implements Serializable {
     @Max(6)
     private Integer paymentMethod;
 
-    @NotNull
     private String paymentData;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, orphanRemoval = false)

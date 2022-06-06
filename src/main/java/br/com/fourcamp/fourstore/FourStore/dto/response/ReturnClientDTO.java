@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ReturnClientDTO {
 
-    private Long cpf;
+    private String cpf;
 
     private String nome;
 

@@ -37,12 +37,13 @@ public class ClientController {
         return clientService.listAll();
     }
 
-    @GetMapping("/{id}/{details}")
-    public ReturnClientDTO findById(@PathVariable String cpf) throws ClientNotFoundException {
+    @GetMapping("/{cpf}")
+    public ReturnClientDTO findById(@RequestBody @Valid String cpf) throws
+            ClientNotFoundException {
         return clientService.findById(cpf);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{cpf}")
     public MessageResponseDTO updateById(@PathVariable String cpf, @RequestBody @Valid CreateClientDTO createClientDTO)
             throws ClientNotFoundException, InvalidParametersException {
         return clientService.updateById(cpf, createClientDTO);

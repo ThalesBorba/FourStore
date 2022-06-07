@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO createClient(@RequestBody @Valid CreateClientDTO createClientDTO)
             throws InvalidParametersException {
@@ -38,21 +39,24 @@ public class ClientController {
     }
 
     @GetMapping("/{cpf}")
-    public ReturnClientDTO findById(@RequestBody @Valid String cpf) throws
+    public ReturnClientDTO findByCpf(@PathVariable @Valid String cpf) throws
             ClientNotFoundException {
-        return clientService.findById(cpf);
+        return clientService.findByCpf(cpf);
     }
 
     @PutMapping("/{cpf}")
     public MessageResponseDTO updateById(@PathVariable String cpf, @RequestBody @Valid CreateClientDTO createClientDTO)
             throws ClientNotFoundException, InvalidParametersException {
         return clientService.updateById(cpf, createClientDTO);
+        //bloquear a mudança de cpf
     }
 
-    @DeleteMapping("/{id}")
+    @Transactional
+    @DeleteMapping("/{cpf}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable String cpf) throws ClientNotFoundException {
+    public void deleteByCpf(@PathVariable String cpf) throws ClientNotFoundException {
         clientService.delete(cpf);
+        //devolver mensagem
     }
 
 }

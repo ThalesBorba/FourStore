@@ -22,6 +22,7 @@ import java.util.List;
 public class Client implements Serializable {
 
     @Id
+    @Column(name = "cpf")
     private String cpf;
 
     @NotNull

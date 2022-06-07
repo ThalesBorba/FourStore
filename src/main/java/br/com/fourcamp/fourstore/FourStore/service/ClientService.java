@@ -53,7 +53,7 @@ public class ClientService {
 
     public void delete(String cpf) throws ClientNotFoundException {
         verifyIfExists(cpf);
-        clientRepository.deleteById(cpf);
+        clientRepository.deleteByCpf(cpf);
     }
 
     private MessageResponseDTO createMessageResponse(@CPF String cpf, String s) {
@@ -61,9 +61,9 @@ public class ClientService {
     }
 
     private Client verifyIfExists(String cpf) throws ClientNotFoundException {
-        return clientRepository.findById(cpf)
-                .orElseThrow(() -> new ClientNotFoundException(cpf));
-    }
+            return clientRepository.findByCpf(cpf);
+        }
+
 
     private Client setClient(CreateClientDTO createClientDTO) throws InvalidParametersException {
         CreateClientDTO validClient = validClient(createClientDTO);
@@ -71,7 +71,7 @@ public class ClientService {
         return clientRepository.save(clientToSave);
     }
 
-    public ReturnClientDTO findById(String cpf) throws ClientNotFoundException {
+    public ReturnClientDTO findByCpf(String cpf) throws ClientNotFoundException {
         Client client = verifyIfExists(cpf);
         return clientMapper.toDTO(client);
     }

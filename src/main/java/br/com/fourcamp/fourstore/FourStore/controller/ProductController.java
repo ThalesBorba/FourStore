@@ -58,8 +58,8 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable String sku) throws ProductNotFoundException {
-        productService.delete(sku);
+    public MessageResponseDTO deleteById(@PathVariable String sku) throws ProductNotFoundException {
+       return productService.delete(sku);
     }
 
 }

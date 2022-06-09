@@ -48,15 +48,13 @@ public class ClientController {
     public MessageResponseDTO updateById(@PathVariable String cpf, @RequestBody @Valid CreateClientDTO createClientDTO)
             throws ClientNotFoundException, InvalidParametersException {
         return clientService.updateById(cpf, createClientDTO);
-        //bloquear a mudança de cpf
     }
 
     @Transactional
     @DeleteMapping("/{cpf}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteByCpf(@PathVariable String cpf) throws ClientNotFoundException {
-        clientService.delete(cpf);
-        //devolver mensagem
+    public MessageResponseDTO deleteByCpf(@PathVariable String cpf) throws ClientNotFoundException {
+        return clientService.delete(cpf);
     }
 
 }

@@ -33,7 +33,7 @@ public class TransactionService {
     public MessageResponseDTO createTransaction(CreateTransactionDTO createTransactionDTO) throws
             ClientNotFoundException, StockNotFoundException, InvalidParametersException, StockInsufficientException {
         Transaction savedTransaction = setTransaction(createTransactionDTO);
-        return createMessageResponse(savedTransaction.getId(), "Criado");
+        return createMessageResponse(savedTransaction.getId(), "Criado ");
     }
 
     public List<ReturnTransactionDTO> listAll() {
@@ -47,7 +47,7 @@ public class TransactionService {
     }
 
     private MessageResponseDTO createMessageResponse(Long id, String s) {
-        return MessageResponseDTO.builder().message(s + "estoque com a id" + id).build();
+        return MessageResponseDTO.builder().message(s + "estoque com a id " + id).build();
     }
 
     private Transaction verifyIfExists(Long id) throws TransactionNotFoundException {

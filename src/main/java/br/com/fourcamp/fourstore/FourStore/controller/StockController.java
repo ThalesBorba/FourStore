@@ -50,7 +50,7 @@ public class StockController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable String sku) throws StockNotFoundException {
-        stockService.delete(sku);
+    public MessageResponseDTO deleteById(@PathVariable String sku) throws StockNotFoundException {
+       return stockService.delete(sku);
     }
 }

@@ -6,6 +6,7 @@ import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnClientDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Client;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ClientNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
+import br.com.fourcamp.fourstore.FourStore.exceptions.TransactionNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.mapper.ClientMapper;
 import br.com.fourcamp.fourstore.FourStore.repositories.ClientRepository;
 import br.com.fourcamp.fourstore.FourStore.util.ClientValidations;
@@ -37,8 +38,11 @@ public class ClientService {
         verifyIfExists(cpf);
         CreateClientDTO validClient = validClient(createClientDTO);
         Client updatedClient = clientMapper.toModel(validClient);
+        if(!updatedClient.getCpf().equals(cpf)) {
+            throw new InvalidParametersException();
+        }
         clientRepository.save(updatedClient);
-        return createMessageResponse(updatedClient.getCpf(), "Updated");
+        return createMessageResponse(updatedClient.getCpf(), "Atualizado ");
     }
 
     public List<ReturnClientDTO> listAll() {
@@ -51,9 +55,12 @@ public class ClientService {
         return returnClientDTOList;
     }
 
-    public void delete(String cpf) throws ClientNotFoundException {
+    public MessageResponseDTO delete(String cpf) throws ClientNotFoundException {
         verifyIfExists(cpf);
+        Client deletedClient = clientRepository.findByCpf(cpf);
         clientRepository.deleteByCpf(cpf);
+        //todo test
+        return createMessageResponse(deletedClient.getCpf(), "Deletado ");
     }
 
     private MessageResponseDTO createMessageResponse(@CPF String cpf, String s) {
@@ -61,7 +68,11 @@ public class ClientService {
     }
 
     private Client verifyIfExists(String cpf) throws ClientNotFoundException {
+        if (clientRepository.findByCpf(cpf) != null) {
             return clientRepository.findByCpf(cpf);
+        } else {
+            throw new ClientNotFoundException(cpf);
+        }
         }
 
 

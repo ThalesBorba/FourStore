@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface ClientRepository extends JpaRepository<Client, String> {
 
     Client findByCpf(String cpf);
-
     void deleteByCpf(String cpf);
 
 }

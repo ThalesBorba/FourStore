@@ -19,7 +19,7 @@ public class Stock implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade =  CascadeType.ALL, mappedBy = "stock")
 	@PrimaryKeyJoinColumn

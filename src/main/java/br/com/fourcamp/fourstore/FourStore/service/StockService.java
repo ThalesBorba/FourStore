@@ -4,6 +4,8 @@ import br.com.fourcamp.fourstore.FourStore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnStockDTO;
+import br.com.fourcamp.fourstore.FourStore.entities.Product;
+import br.com.fourcamp.fourstore.FourStore.repositories.ProductRepository;
 import br.com.fourcamp.fourstore.FourStore.util.CartMethods;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
@@ -22,6 +24,8 @@ public class StockService {
 
     private StockRepository stockRepository;
 
+    private ProductRepository productRepository;
+
     private StockMapper stockMapper;
 
     @Autowired
@@ -30,40 +34,53 @@ public class StockService {
     }
 
     public MessageResponseDTO createStock(CreateStockDTO createStockDTO) throws InvalidParametersException {
-        if (createStockDTO.getQuantity() <= 0) {
+        if ((createStockDTO.getQuantity() <= 0) || !verifyIfProductExists(createStockDTO.getProduct()) ||
+                !verifyIfProductExists(createStockDTO.getProduct())) {
             throw new InvalidParametersException();
-            //verificar se tem em produtos
-            //ver se esse produto já existe no estoque
         } else {
             Stock savedStock = setStock(createStockDTO);
-            return createMessageResponse(savedStock.getId(), "Criado");
+            return createMessageResponse(savedStock.getId(), "Criado ");
         }
     }
+
+    private Boolean verifyIfProductExists(Product product) {
+        List<Product> allProducts = productRepository.findAll();
+        return allProducts.contains(product);
+    };
+
+    private Boolean verifyIfStockOfProductExists(Product product) {
+        List<Stock> allStocks = stockRepository.findAll();
+        for (Stock stock : allStocks) {
+            if (stock.getProduct().equals(product)) {
+                return false;
+            }
+        }
+        return true;
+    };
 
     public void updateByTransaction(CreateTransactionDTO createTransactionDTO) throws StockNotFoundException,
             InvalidParametersException, StockInsufficientException {
         List<Stock> updatedStockList = CartMethods.updateStock(createTransactionDTO);
         for (Stock stock : updatedStockList) {
-            ReturnStockDTO stocktoUpdate = findById(stock.getProduct().getSku());
-            Integer newQuantity = stocktoUpdate.getQuantity() - stock.getQuantity();
+            ReturnStockDTO stockToUpdate = findById(stock.getProduct().getSku());
+            Integer newQuantity = stockToUpdate.getQuantity() - stock.getQuantity();
             if (newQuantity < 0) {
                 throw new StockInsufficientException();
             } else {
-                stocktoUpdate.setQuantity(newQuantity);
-                Stock stockToSave = stockMapper.toModel(stocktoUpdate);
+                stockToUpdate.setQuantity(newQuantity);
+                Stock stockToSave = stockMapper.toModel(stockToUpdate);
                 stockRepository.save(stockToSave);
             }
         }
     }
 
-    public MessageResponseDTO updateById(String sku, CreateStockDTO createStockDTO) throws StockNotFoundException
-    {
-        verifyIfExists(sku);
+    public MessageResponseDTO updateById(String sku, CreateStockDTO createStockDTO) throws StockNotFoundException {
         ReturnStockDTO currentStock = findById(sku);
         Integer finalQuantity = currentStock.getQuantity() + createStockDTO.getQuantity();
-        Stock updatedStock = setStock(new CreateStockDTO(createStockDTO.getProduct(), finalQuantity));
+        currentStock.setQuantity(finalQuantity);
+        Stock updatedStock = stockMapper.toModel(currentStock);
         stockRepository.save(updatedStock);
-        return createMessageResponse(updatedStock.getId(), "Updated");
+        return createMessageResponse(updatedStock.getId(), "Atualizado ");
     }
 
     public List<ReturnStockDTO> listAll() {
@@ -76,18 +93,30 @@ public class StockService {
         return returnStockDTOList;
     }
 
-    public void delete(String sku) throws StockNotFoundException {
-        verifyIfExists(sku);
-        stockRepository.deleteById(sku);
+    public MessageResponseDTO delete(String sku) throws StockNotFoundException {
+        Stock stockToDelete = verifyIfExists(sku);
+        Integer stockToDeletedId = stockToDelete.getId();
+        Stock deletedStock = stockRepository.deleteByIdReturnStock(stockToDeletedId);
+        return createMessageResponse(deletedStock.getId(), "Deletado ");
     }
 
-    private MessageResponseDTO createMessageResponse(Long id, String s) {
-        return MessageResponseDTO.builder().message(s + "estoque com a id" + id).build();
+    private MessageResponseDTO createMessageResponse(Integer id, String s) {
+        return MessageResponseDTO.builder().message(s + "estoque com a id " + id).build();
     }
 
     private Stock verifyIfExists(String sku) throws StockNotFoundException {
-        return stockRepository.findById(sku)
-                .orElseThrow(() -> new StockNotFoundException(sku));
+        List<Stock> allStocks = stockRepository.findAll();
+        Stock stockToReturn = null;
+        for (Stock stock : allStocks) {
+            if (stock.getProduct().getSku().equals(sku)) {
+                stockToReturn = stock;
+            }
+        }
+        if (stockToReturn != null) {
+            return stockToReturn;
+        } else {
+            throw new StockNotFoundException(sku);
+        }
     }
 
     private Stock setStock(CreateStockDTO createStockDTO) {
@@ -96,15 +125,7 @@ public class StockService {
     }
 
     public ReturnStockDTO findById(String sku) throws StockNotFoundException {
-        List<Stock> stockList = stockRepository.findAll();
-        for(Stock stock : stockList) {
-            if (stock.getProduct().getSku().equals(sku)) {
-                return stockMapper.toDTO(stock);
-            }
-        }throw new StockNotFoundException(sku);
+        Stock stock = verifyIfExists(sku);
+        return stockMapper.toDTO(stock);
     }
-
-
-
-
 }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReturnStockDTO {
 
-    private Long id;
+    private Integer id;
     private String productDescription;
     private String sku;
     private Integer quantity;

@@ -5,6 +5,7 @@ import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnProductDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnProductDetailsDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Product;
+import br.com.fourcamp.fourstore.FourStore.exceptions.ClientNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidSellValueException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidSkuException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ProductNotFoundException;
@@ -56,9 +57,10 @@ public class ProductService {
         return returnProductDTOList;
     }
 
-    public void delete(String sku) throws ProductNotFoundException {
+    public MessageResponseDTO delete(String sku) throws ProductNotFoundException {
         verifyIfExists(sku);
-        productRepository.deleteById(sku);
+        Product deletedProduct = productRepository.deleteBySku(sku);
+        return createMessageResponse(deletedProduct.getSku(), "Deletado ");
     }
 
     private MessageResponseDTO createMessageResponse(String sku, String s) {
@@ -66,8 +68,11 @@ public class ProductService {
     }
 
     private Product verifyIfExists(String sku) throws ProductNotFoundException {
-        return productRepository.findById(sku)
-                .orElseThrow(() -> new ProductNotFoundException(sku));
+        if (productRepository.findBySku(sku) != null) {
+            return productRepository.findBySku(sku);
+        } else {
+            throw new ProductNotFoundException(sku);
+        }
     }
 
     private Product setProduct(CreateProductDTO createProductDTO) throws InvalidSellValueException, InvalidSkuException {

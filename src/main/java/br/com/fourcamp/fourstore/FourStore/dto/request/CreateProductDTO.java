@@ -1,5 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.dto.request;
 
+import br.com.fourcamp.fourstore.FourStore.entities.Stock;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -18,11 +18,14 @@ import java.util.Map;
 @Builder
 public class CartMethods {
 
-    public static List<Stock> updateStock(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException {
-        List<Stock> stockList = new ArrayList<Stock>();
+    public static List<Stock> updateStock(List<Stock> stockList, CreateTransactionDTO createTransactionDTO) throws InvalidParametersException {
         HashMap<Product, Integer> cart = Transaction.getCart();
         for (Map.Entry<Product, Integer> purchases : cart.entrySet()) {
-            stockList.add(new Stock(purchases.getKey(), purchases.getValue()));
+            for (Stock stock : stockList) {
+                if(purchases.getKey().getSku().equals(stock.getProduct().getSku())) {
+                    stock.setQuantity(stock.getQuantity() - purchases.getValue());
+                }
+            }
         }return stockList;
     }
 

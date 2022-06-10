@@ -33,11 +33,4 @@ public class Product implements Serializable {
 	@Min(10)
 	@NotNull
 	private Double sellPrice;
-
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "stock_id", nullable = false)
-	private Stock stock;
-
-	}
-
-
+}

@@ -26,7 +26,7 @@ public class StockController {
         this.stockService = stockService;
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO createStock(@RequestBody @Valid CreateStockDTO createStockDTO) throws InvalidParametersException {
         return stockService.createStock(createStockDTO);
@@ -37,15 +37,15 @@ public class StockController {
         return stockService.listAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{sku}")
     public ReturnStockDTO findById(@PathVariable String sku) throws StockNotFoundException {
-        return stockService.findById(sku);
+        return stockService.findBySku(sku);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{sku}")
     public MessageResponseDTO updateById(@PathVariable String sku, @RequestBody @Valid CreateStockDTO createStockDTO)
             throws StockNotFoundException, StockInsufficientException {
-        return stockService.updateById(sku, createStockDTO);
+        return stockService.updateBySku(sku, createStockDTO);
     }
 
     @DeleteMapping("/{id}")

@@ -12,9 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateStockDTO {
 
+
+
     private Product product;
 
-    //todo só sku
+    //todo só sku usar mapper
 
     private Integer quantity;
 }

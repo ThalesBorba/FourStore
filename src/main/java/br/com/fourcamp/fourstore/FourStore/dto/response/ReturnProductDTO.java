@@ -14,7 +14,7 @@ import javax.validation.constraints.Min;
 @NoArgsConstructor
 public class ReturnProductDTO {
 
-    private Long sku;
+    private String sku;
     private String description;
     private Double buyPrice;
     private Double sellPrice;

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -27,39 +28,19 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createProduct(@RequestBody @Valid CreateProductDTO createProductDTO)
-            throws InvalidSellValueException, InvalidSkuException {
-        return productService.createProduct(createProductDTO);
-    }
-
     @GetMapping
     public List<ReturnProductDTO> listAll() {
         return productService.listAll();
     }
 
-    @GetMapping("/{id}")
-    public ReturnProductDTO findById(@PathVariable String sku) throws ProductNotFoundException {
-        return productService.findById(sku);
+    @GetMapping("/{sku}")
+    public ReturnProductDTO findBySku(@PathVariable String sku) throws ProductNotFoundException {
+        return productService.findBySku(sku);
     }
 
-    @GetMapping("/{id}/{details}")
+    @GetMapping("/{sku}/{details}")
     public ReturnProductDetailsDTO findByIdWithDetails(@PathVariable String sku) throws ProductNotFoundException {
         return productService.findByIdWithDetails(sku);
-    }
-
-    @PutMapping("/{id}")
-    public MessageResponseDTO updateById(@PathVariable String sku, @RequestBody @Valid
-                                         CreateProductDTO createProductDTO)
-            throws ProductNotFoundException, InvalidSellValueException, InvalidSkuException {
-        return productService.updateById(sku, createProductDTO);
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public MessageResponseDTO deleteById(@PathVariable String sku) throws ProductNotFoundException {
-       return productService.delete(sku);
     }
 
 }

@@ -22,7 +22,7 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    private ProductRepository productRepository;
+    protected static ProductRepository productRepository;
 
     private final ProductMapper productMapper = ProductMapper.INSTANCE;
     private final ProductDetailsMapper productDetailsMapper = ProductDetailsMapper.INSTANCE;
@@ -38,7 +38,7 @@ public class ProductService {
         return createMessageResponse(savedProduct.getSku(), "Criado");
     }
 
-    public MessageResponseDTO updateById(String sku, CreateProductDTO createProductDTO) throws ProductNotFoundException,
+    public MessageResponseDTO updateBySku(String sku, CreateProductDTO createProductDTO) throws ProductNotFoundException,
             InvalidSellValueException, InvalidSkuException {
         verifyIfExists(sku);
         CreateProductDTO validProduct = validProduct(createProductDTO);
@@ -55,12 +55,6 @@ public class ProductService {
             returnProductDTOList.add(returnProductDTO);
         }
         return returnProductDTOList;
-    }
-
-    public MessageResponseDTO delete(String sku) throws ProductNotFoundException {
-        verifyIfExists(sku);
-        Product deletedProduct = productRepository.deleteBySku(sku);
-        return createMessageResponse(deletedProduct.getSku(), "Deletado ");
     }
 
     private MessageResponseDTO createMessageResponse(String sku, String s) {
@@ -86,7 +80,7 @@ public class ProductService {
         return productDetailsMapper.toDTO(product);
     }
 
-    public ReturnProductDTO findById(String sku) throws ProductNotFoundException {
+    public ReturnProductDTO findBySku(String sku) throws ProductNotFoundException {
         Product product = verifyIfExists(sku);
         return productMapper.toDTO(product);
     }

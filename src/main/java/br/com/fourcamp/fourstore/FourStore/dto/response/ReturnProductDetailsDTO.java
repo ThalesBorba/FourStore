@@ -2,7 +2,15 @@ package br.com.fourcamp.fourstore.FourStore.dto.response;
 
 import br.com.fourcamp.fourstore.FourStore.entities.Product;
 import br.com.fourcamp.fourstore.FourStore.enums.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReturnProductDetailsDTO {
 
     private String sku;
@@ -16,8 +24,5 @@ public class ReturnProductDetailsDTO {
     private String department;
     private String type;
     private String color;
-    //todo averiguar
-
-
 
 }

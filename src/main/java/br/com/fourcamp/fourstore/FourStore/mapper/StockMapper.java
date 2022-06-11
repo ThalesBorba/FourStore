@@ -13,6 +13,8 @@ public interface StockMapper {
     StockMapper INSTANCE = Mappers.getMapper(StockMapper.class);
     Stock toModel(CreateStockDTO createStockDTO);
 
+    @Mapping(target = "product.description", source = "returnStockDTO.productDescription")
+    @Mapping(target = "product.sku", source = "returnStockDTO.sku")
     Stock toModel(ReturnStockDTO returnStockDTO);
 
     @Mapping(target = "productDescription", source = "stock.product.description")

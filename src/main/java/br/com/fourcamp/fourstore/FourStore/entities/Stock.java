@@ -1,5 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,5 +30,6 @@ public class Stock implements Serializable {
 	@Column
 	@Min(0)
 	private Integer quantity;
+
 }
 

@@ -34,13 +34,8 @@ public class ProductController {
     }
 
     @GetMapping("/{sku}")
-    public ReturnProductDTO findBySku(@PathVariable String sku) throws ProductNotFoundException {
-        return productService.findBySku(sku);
-    }
-
-    @GetMapping("/{sku}/{details}")
-    public ReturnProductDetailsDTO findByIdWithDetails(@PathVariable String sku) throws ProductNotFoundException {
-        return productService.findByIdWithDetails(sku);
+    public ReturnProductDetailsDTO findBySkuWithDetails(@PathVariable String sku) throws ProductNotFoundException {
+        return productService.findBySkuWithDetails(sku);
     }
 
 }

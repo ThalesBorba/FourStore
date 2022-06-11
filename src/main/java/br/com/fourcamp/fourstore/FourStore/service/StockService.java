@@ -124,3 +124,37 @@ public class StockService {
         return stockMapper.toDTO(stock);
     }
 }
+
+/*
+
+    public MessageResponseDTO updateBySku(String sku, CreateProductDTO createProductDTO) throws ProductNotFoundException,
+            InvalidSellValueException, InvalidSkuException {
+        verifyIfExists(sku);
+        CreateProductDTO validProduct = validProduct(createProductDTO);
+        Product updatedProduct = productMapper.toModel(validProduct);
+        productRepository.save(updatedProduct);
+        return createMessageResponse(updatedProduct.getSku(), "Updated");
+    }
+
+    private Product setProduct(CreateProductDTO createProductDTO) throws InvalidSellValueException, InvalidSkuException {
+        CreateProductDTO validProduct = validProduct(createProductDTO);
+        Product productToSave = productMapper.toModel(validProduct);
+        return productRepository.save(productToSave);
+    }
+
+    public ReturnProductDTO findBySku(String sku) throws ProductNotFoundException {
+        Product product = verifyIfExists(sku);
+        return productMapper.toDTO(product);
+    }
+
+    private CreateProductDTO validProduct(CreateProductDTO createProductDTO) throws InvalidSellValueException,
+            InvalidSkuException {
+        if (createProductDTO.getSellPrice() * 1.25 <= createProductDTO.getBuyPrice() ||
+                createProductDTO.getSellPrice() < 0) {
+            throw new InvalidSellValueException();
+        } else if (SkuValidations.validateSku(createProductDTO.getSku()).equals(false)) {
+            throw new InvalidSkuException();
+        } else {
+            return createProductDTO;
+        }
+    } */

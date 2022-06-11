@@ -1,5 +1,7 @@
 package br.com.fourcamp.fourstore.FourStore.entities;
 
+import br.com.fourcamp.fourstore.FourStore.enums.BrandEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,4 +35,25 @@ public class Product implements Serializable {
 	@Min(10)
 	@NotNull
 	private Double sellPrice;
+
+	@JsonIgnore
+	private String brand;
+
+	@JsonIgnore
+	private String size;
+
+	@JsonIgnore
+	private String category;
+
+	@JsonIgnore
+	private String season;
+
+	@JsonIgnore
+	private String department;
+
+	@JsonIgnore
+	private String type;
+
+	@JsonIgnore
+	private String color;
 }

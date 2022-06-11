@@ -44,13 +44,14 @@ public class StockController {
 
     @PutMapping("/{sku}")
     public MessageResponseDTO updateById(@PathVariable String sku, @RequestBody @Valid CreateStockDTO createStockDTO)
-            throws StockNotFoundException, StockInsufficientException {
+            throws StockNotFoundException, StockInsufficientException, InvalidParametersException {
         return stockService.updateBySku(sku, createStockDTO);
     }
+    //todo dto para mudar apenas quantidade, avisar que é soma
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{sku}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public MessageResponseDTO deleteById(@PathVariable String sku) throws StockNotFoundException {
+    public MessageResponseDTO deleteBySku(@PathVariable String sku) throws StockNotFoundException {
        return stockService.delete(sku);
     }
 }

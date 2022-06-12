@@ -75,6 +75,8 @@ public class StockService {
         Integer finalQuantity = currentStock.getQuantity() + createStockDTO.getQuantity();
         currentStock.setQuantity(finalQuantity);
         Stock updatedStock = stockMapper.toModel(currentStock);
+        updatedStock.getProduct().setSellPrice(createStockDTO.getProduct().getSellPrice());
+        updatedStock.getProduct().setBuyPrice(createStockDTO.getProduct().getBuyPrice());
         stockRepository.save(updatedStock);
         return createMessageResponse(updatedStock.getId(), "Atualizado ");
     }

@@ -22,6 +22,7 @@ public class CreateTransactionDTO {
     private Client client;
 
     //Como acha o cliente só com o cpf?
+    //Como ignorar transactions
 
     private HashMap<Product, Integer> cart;
 }

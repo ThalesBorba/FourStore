@@ -38,12 +38,12 @@ public class StockController {
     }
 
     @GetMapping("/{sku}")
-    public ReturnStockDTO findById(@PathVariable String sku) throws StockNotFoundException {
+    public ReturnStockDTO findBySku(@PathVariable String sku) throws StockNotFoundException {
         return stockService.findBySku(sku);
     }
 
     @PutMapping("/{sku}")
-    public MessageResponseDTO updateById(@PathVariable String sku, @RequestBody @Valid CreateStockDTO createStockDTO)
+    public MessageResponseDTO updateBySku(@PathVariable String sku, @RequestBody @Valid CreateStockDTO createStockDTO)
             throws StockNotFoundException, StockInsufficientException, InvalidParametersException {
         return stockService.updateBySku(sku, createStockDTO);
     }

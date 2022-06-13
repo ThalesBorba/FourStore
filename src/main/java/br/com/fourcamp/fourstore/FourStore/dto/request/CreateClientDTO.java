@@ -13,7 +13,7 @@ public class CreateClientDTO {
 
     private String cpf;
 
-    private String nome;
+    private String name;
 
     private Integer paymentMethod;
 

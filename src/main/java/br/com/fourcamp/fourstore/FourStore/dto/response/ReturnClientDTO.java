@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class ReturnClientDTO {
 
     private String cpf;
 
-    private String nome;
+    private String name;
 
     private List<Transaction> transactions = new ArrayList<>();
 

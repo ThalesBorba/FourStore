@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -26,7 +25,7 @@ public class Client implements Serializable {
     private String cpf;
 
     @NotNull
-    private String nome;
+    private String name;
 
     @NotNull
     @Min(1)

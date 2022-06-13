@@ -7,6 +7,7 @@ import br.com.fourcamp.fourstore.FourStore.exceptions.*;
 import br.com.fourcamp.fourstore.FourStore.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ public class TransactionController {
     }
 
     @PostMapping("/{id}")
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO createTransaction(@RequestBody @Valid CreateTransactionDTO createTransactionDTO) throws
             ClientNotFoundException, StockNotFoundException, InvalidParametersException, StockInsufficientException {

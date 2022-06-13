@@ -17,11 +17,4 @@ public class ReturnTransactionDTO {
     private String clientCpf;
     private Double profit;
 
-    public ReturnTransactionDTO(Transaction transaction) {
-        this.id = transaction.getId();
-        this.clientName = transaction.getClient().getNome();
-        this.clientCpf = transaction.getClient().getCpf();
-        this.profit = transaction.getProfit();
-    }
-
 }

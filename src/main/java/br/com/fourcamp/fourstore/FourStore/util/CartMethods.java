@@ -34,7 +34,7 @@ public class CartMethods {
             InvalidParametersException {
         Double lucro = 0.0;
         Double discount = PaymentMethodEnum.getDiscountByPaymentMethodId(paymentMethod);
-        if (discount.isNaN()) { throw new InvalidParametersException();}
+        if (discount == null) { throw new InvalidParametersException();}
         for (Map.Entry<Product,Integer> products : cart.entrySet()) {
             Product product = products.getKey();
             Double lucroIndividual = (product.getSellPrice() * (1 - (discount))) - product.getBuyPrice();

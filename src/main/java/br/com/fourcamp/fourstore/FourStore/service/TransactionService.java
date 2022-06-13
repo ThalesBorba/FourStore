@@ -20,7 +20,6 @@ import java.util.List;
 public class TransactionService {
 
     private TransactionRepository transactionRepository;
-
     private StockService stockService;
     private ClientRepository clientRepository;
     private TransactionMapper transactionMapper;
@@ -61,6 +60,7 @@ public class TransactionService {
         Double profit = calculateProfit(validTrasaction);
         Transaction transactionToSave = transactionMapper.toModel(validTrasaction);
         transactionToSave.setProfit(profit);
+        transactionToSave.setClient(ReturnTransactionClient(createTransactionDTO));
         return transactionRepository.save(transactionToSave);
     }
 
@@ -70,18 +70,24 @@ public class TransactionService {
     }
 
     private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) throws
-            StockNotFoundException, InvalidParametersException, StockInsufficientException, ClientNotFoundException {
-        List<Client> clients = clientRepository.findAll();
-        if (!clients.contains(createTransactionDTO.getClient())) {
-            throw new ClientNotFoundException(createTransactionDTO.getClient().getCpf());
-        }
+            StockNotFoundException, InvalidParametersException, StockInsufficientException {
         stockService.updateByTransaction(createTransactionDTO);
         return createTransactionDTO;
     }
 
-    private Double calculateProfit(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException {
-        Integer paymentMethod = createTransactionDTO.getClient().getPaymentMethod();
+    private Double calculateProfit(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException, ClientNotFoundException {
+        Client client = ReturnTransactionClient(createTransactionDTO);
+        Integer paymentMethod = client.getPaymentMethod();
         return CartMethods.retornaLucro(createTransactionDTO.getCart(), paymentMethod);
+    }
+
+    private Client ReturnTransactionClient(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException {
+        Client client = clientRepository.findByCpf(createTransactionDTO.getClientCpf());
+        if (client != null) {
+            return client;
+        } else {
+            throw new ClientNotFoundException(createTransactionDTO.getClientCpf());
+        }
     }
 
 }

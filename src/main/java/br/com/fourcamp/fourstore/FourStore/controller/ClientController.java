@@ -52,7 +52,7 @@ public class ClientController {
 
     @Transactional
     @DeleteMapping("/{cpf}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public MessageResponseDTO deleteByCpf(@PathVariable String cpf) throws ClientNotFoundException {
         return clientService.delete(cpf);
     }

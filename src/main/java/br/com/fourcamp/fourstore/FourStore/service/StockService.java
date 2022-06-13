@@ -93,8 +93,9 @@ public class StockService {
 
     public MessageResponseDTO delete(String sku) throws StockNotFoundException {
         Stock stockToDelete = verifyIfExists(sku);
+        Integer id = stockToDelete.getId();
         stockRepository.deleteById(stockToDelete.getId());
-        return createMessageResponse(stockToDelete.getId(), "Deletado ");
+        return createMessageResponse(id, "Deletado ");
     }
 
     private MessageResponseDTO createMessageResponse(Integer id, String s) {

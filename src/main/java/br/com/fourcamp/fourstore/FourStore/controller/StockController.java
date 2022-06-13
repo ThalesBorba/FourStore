@@ -50,7 +50,7 @@ public class StockController {
     //todo dto para mudar apenas quantidade, avisar que é soma
 
     @DeleteMapping("/{sku}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public MessageResponseDTO deleteBySku(@PathVariable String sku) throws StockNotFoundException {
        return stockService.delete(sku);
     }

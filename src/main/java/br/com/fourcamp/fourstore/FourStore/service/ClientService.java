@@ -58,9 +58,9 @@ public class ClientService {
     public MessageResponseDTO delete(String cpf) throws ClientNotFoundException {
         verifyIfExists(cpf);
         Client deletedClient = clientRepository.findByCpf(cpf);
+        String cpfOfClientToBeDeleted = deletedClient.getCpf();
         clientRepository.deleteByCpf(cpf);
-        //todo test
-        return createMessageResponse(deletedClient.getCpf(), "Deletado ");
+        return createMessageResponse(cpfOfClientToBeDeleted, "Deletado ");
     }
 
     private MessageResponseDTO createMessageResponse(@CPF String cpf, String s) {

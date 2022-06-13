@@ -17,5 +17,5 @@ public class CreateTransactionDTO {
     private String ClientCpf;
 
 
-    private HashMap<Product, Integer> cart;
+    private HashMap<String, Integer> cart;
 }

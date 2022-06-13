@@ -4,23 +4,29 @@ import br.com.fourcamp.fourstore.FourStore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnTransactionDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Client;
+import br.com.fourcamp.fourstore.FourStore.entities.Product;
 import br.com.fourcamp.fourstore.FourStore.entities.Transaction;
 import br.com.fourcamp.fourstore.FourStore.exceptions.*;
 import br.com.fourcamp.fourstore.FourStore.mapper.TransactionMapper;
 import br.com.fourcamp.fourstore.FourStore.repositories.ClientRepository;
+import br.com.fourcamp.fourstore.FourStore.repositories.ProductRepository;
 import br.com.fourcamp.fourstore.FourStore.repositories.TransactionRepository;
 import br.com.fourcamp.fourstore.FourStore.util.CartMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TransactionService {
 
     private TransactionRepository transactionRepository;
+    @Autowired
     private StockService stockService;
+    private ProductRepository productRepository;
     private ClientRepository clientRepository;
     private TransactionMapper transactionMapper;
 
@@ -78,7 +84,12 @@ public class TransactionService {
     private Double calculateProfit(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException, ClientNotFoundException {
         Client client = ReturnTransactionClient(createTransactionDTO);
         Integer paymentMethod = client.getPaymentMethod();
-        return CartMethods.retornaLucro(createTransactionDTO.getCart(), paymentMethod);
+        HashMap<Product, Integer> cart = new HashMap<>();
+        for (Map.Entry<String,Integer> products : createTransactionDTO.getCart().entrySet()) {
+            Product product = productRepository.findBySku(products.getKey());
+            cart.put(product, products.getValue());
+        }
+        return CartMethods.retornaLucro(cart, paymentMethod);
     }
 
     private Client ReturnTransactionClient(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException {

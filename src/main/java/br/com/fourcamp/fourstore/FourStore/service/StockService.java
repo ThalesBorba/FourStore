@@ -58,17 +58,13 @@ public class StockService {
         List<Stock> stockListToBeUpdated = stockRepository.findAll();
         List<Stock> updatedStockList = CartMethods.updateStock(stockListToBeUpdated, createTransactionDTO);
         for (Stock stock : updatedStockList) {
-            ReturnStockDTO stockToUpdate = findBySku(stock.getProduct().getSku());
-            Integer newQuantity = stockToUpdate.getQuantity() - stock.getQuantity();
-            //estoque tá zerando
-            if (newQuantity < 0) {
+            Stock stockToUpdate = verifyIfExists(stock.getProduct().getSku());
+            if (stockToUpdate.getQuantity() < 0) {
                 throw new StockInsufficientException();
             } else {
-                Stock stockToSave = stockMapper.toModel(stockToUpdate);
-                stockToSave.setQuantity(newQuantity);
-                stockToSave.getProduct().setBuyPrice(stock.getProduct().getBuyPrice());
-                stockToSave.getProduct().setSellPrice(stock.getProduct().getSellPrice());
-                stockRepository.save(stockToSave);
+                stockToUpdate.getProduct().setBuyPrice(stock.getProduct().getBuyPrice());
+                stockToUpdate.getProduct().setSellPrice(stock.getProduct().getSellPrice());
+                stockRepository.save(stockToUpdate);
             }
         }
     }

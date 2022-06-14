@@ -26,8 +26,11 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
     @Autowired
     private StockService stockService;
+    @Autowired
     private ProductRepository productRepository;
+    @Autowired
     private ClientRepository clientRepository;
+    @Autowired
     private TransactionMapper transactionMapper;
 
     @Autowired
@@ -39,6 +42,7 @@ public class TransactionService {
             ClientNotFoundException, StockNotFoundException, InvalidParametersException, StockInsufficientException {
         Transaction savedTransaction = setTransaction(createTransactionDTO);
         return createMessageResponse(savedTransaction.getId(), "Criado ");
+        //está devolvendo a mensagem do estoque
     }
 
     public List<ReturnTransactionDTO> listAll() {

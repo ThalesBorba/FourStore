@@ -60,11 +60,14 @@ public class StockService {
         for (Stock stock : updatedStockList) {
             ReturnStockDTO stockToUpdate = findBySku(stock.getProduct().getSku());
             Integer newQuantity = stockToUpdate.getQuantity() - stock.getQuantity();
+            //estoque tá zerando
             if (newQuantity < 0) {
                 throw new StockInsufficientException();
             } else {
-                stockToUpdate.setQuantity(newQuantity);
                 Stock stockToSave = stockMapper.toModel(stockToUpdate);
+                stockToSave.setQuantity(newQuantity);
+                stockToSave.getProduct().setBuyPrice(stock.getProduct().getBuyPrice());
+                stockToSave.getProduct().setSellPrice(stock.getProduct().getSellPrice());
                 stockRepository.save(stockToSave);
             }
         }

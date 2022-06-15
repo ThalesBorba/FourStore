@@ -3,9 +3,7 @@ package br.com.fourcamp.fourstore.FourStore.controller;
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnStockDTO;
-import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
-import br.com.fourcamp.fourstore.FourStore.exceptions.StockInsufficientException;
-import br.com.fourcamp.fourstore.FourStore.exceptions.StockNotFoundException;
+import br.com.fourcamp.fourstore.FourStore.exceptions.*;
 import br.com.fourcamp.fourstore.FourStore.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +26,8 @@ public class StockController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createStock(@RequestBody @Valid CreateStockDTO createStockDTO) throws InvalidParametersException {
+    public MessageResponseDTO createStock(@RequestBody @Valid CreateStockDTO createStockDTO) throws
+            InvalidParametersException, InvalidSellValueException, InvalidSkuException {
         return stockService.createStock(createStockDTO);
     }
 
@@ -44,7 +43,7 @@ public class StockController {
 
     @PutMapping("/{sku}")
     public MessageResponseDTO updateBySku(@PathVariable String sku, @RequestBody @Valid CreateStockDTO createStockDTO)
-            throws StockNotFoundException, StockInsufficientException, InvalidParametersException {
+            throws StockNotFoundException, StockInsufficientException, InvalidParametersException, InvalidSellValueException, InvalidSkuException {
         return stockService.updateBySku(sku, createStockDTO);
     }
     //todo dto para mudar apenas quantidade, avisar que é soma

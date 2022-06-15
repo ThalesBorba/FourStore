@@ -6,14 +6,13 @@ import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnProductDetailsDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnStockDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Product;
+import br.com.fourcamp.fourstore.FourStore.exceptions.*;
 import br.com.fourcamp.fourstore.FourStore.repositories.ProductRepository;
 import br.com.fourcamp.fourstore.FourStore.util.CartMethods;
 import br.com.fourcamp.fourstore.FourStore.entities.Stock;
-import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
-import br.com.fourcamp.fourstore.FourStore.exceptions.StockInsufficientException;
-import br.com.fourcamp.fourstore.FourStore.exceptions.StockNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.mapper.StockMapper;
 import br.com.fourcamp.fourstore.FourStore.repositories.StockRepository;
+import br.com.fourcamp.fourstore.FourStore.util.SkuValidations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,8 @@ public class StockService {
         this.stockRepository = stockRepository;
     }
 
-    public MessageResponseDTO createStock(CreateStockDTO createStockDTO) throws InvalidParametersException {
+    public MessageResponseDTO createStock(CreateStockDTO createStockDTO) throws InvalidParametersException,
+            InvalidSellValueException, InvalidSkuException {
         if ((createStockDTO.getQuantity() <= 0) || verifyIfStockOfProductExists(createStockDTO.getProduct())) {
             throw new InvalidParametersException();
         } else {
@@ -69,7 +69,8 @@ public class StockService {
         }
     }
 
-    public MessageResponseDTO updateBySku(String sku, CreateStockDTO createStockDTO) throws StockNotFoundException {
+    public MessageResponseDTO updateBySku(String sku, CreateStockDTO createStockDTO) throws StockNotFoundException, InvalidSellValueException, InvalidSkuException {
+        validateStockProduct(createStockDTO);
         ReturnStockDTO currentStock = findBySku(sku);
         Integer finalQuantity = currentStock.getQuantity() + createStockDTO.getQuantity();
         currentStock.setQuantity(finalQuantity);
@@ -116,7 +117,8 @@ public class StockService {
         }
     }
 
-    private Stock setStock(CreateStockDTO createStockDTO) {
+    private Stock setStock(CreateStockDTO createStockDTO) throws InvalidSellValueException, InvalidSkuException {
+        validateStockProduct(createStockDTO);
         Stock stock = stockMapper.toModel(createStockDTO);
         return stockRepository.save(stock);
     }
@@ -125,38 +127,17 @@ public class StockService {
         Stock stock = verifyIfExists(sku);
         return stockMapper.toDTO(stock);
     }
-}
 
-/*
-
-    public MessageResponseDTO updateBySku(String sku, CreateProductDTO createProductDTO) throws ProductNotFoundException,
-            InvalidSellValueException, InvalidSkuException {
-        verifyIfExists(sku);
-        CreateProductDTO validProduct = validProduct(createProductDTO);
-        Product updatedProduct = productMapper.toModel(validProduct);
-        productRepository.save(updatedProduct);
-        return createMessageResponse(updatedProduct.getSku(), "Updated");
-    }
-
-    private Product setProduct(CreateProductDTO createProductDTO) throws InvalidSellValueException, InvalidSkuException {
-        CreateProductDTO validProduct = validProduct(createProductDTO);
-        Product productToSave = productMapper.toModel(validProduct);
-        return productRepository.save(productToSave);
-    }
-
-    public ReturnProductDTO findBySku(String sku) throws ProductNotFoundException {
-        Product product = verifyIfExists(sku);
-        return productMapper.toDTO(product);
-    }
-
-    private CreateProductDTO validProduct(CreateProductDTO createProductDTO) throws InvalidSellValueException,
+    private CreateStockDTO validateStockProduct(CreateStockDTO createStockDTO) throws InvalidSellValueException,
             InvalidSkuException {
-        if (createProductDTO.getSellPrice() * 1.25 <= createProductDTO.getBuyPrice() ||
-                createProductDTO.getSellPrice() < 0) {
+        if (createStockDTO.getProduct().getSellPrice() <= createStockDTO.getProduct().getBuyPrice() * 1.25 ||
+                createStockDTO.getProduct().getSellPrice() < 0) {
             throw new InvalidSellValueException();
-        } else if (SkuValidations.validateSku(createProductDTO.getSku()).equals(false)) {
+        } else if (SkuValidations.validateSku(createStockDTO.getProduct().getSku()).equals(false)) {
             throw new InvalidSkuException();
         } else {
-            return createProductDTO;
+            return createStockDTO;
         }
-    } */
+    }
+
+}

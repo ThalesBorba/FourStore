@@ -7,6 +7,6 @@ public class InvalidParametersException extends Exception {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public InvalidParametersException() {super("Um ou mais parametros informados são inválidos");}
+    public InvalidParametersException() {super("Um ou mais parâmetros informados são inválidos");}
 
 }

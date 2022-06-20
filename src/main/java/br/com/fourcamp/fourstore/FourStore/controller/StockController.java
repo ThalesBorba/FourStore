@@ -43,7 +43,7 @@ public class StockController {
 
     @PutMapping("/{sku}")
     public MessageResponseDTO updateBySku(@PathVariable String sku, @RequestBody @Valid CreateStockDTO createStockDTO)
-            throws StockNotFoundException, StockInsufficientException, InvalidParametersException, InvalidSellValueException, InvalidSkuException {
+            throws StockNotFoundException, InvalidSellValueException, InvalidSkuException {
         return stockService.updateBySku(sku, createStockDTO);
     }
     //todo dto para mudar apenas quantidade, avisar que é soma

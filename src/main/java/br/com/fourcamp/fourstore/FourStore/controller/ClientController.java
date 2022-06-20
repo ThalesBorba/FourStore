@@ -1,7 +1,6 @@
 package br.com.fourcamp.fourstore.FourStore.controller;
 
 import br.com.fourcamp.fourstore.FourStore.dto.request.CreateClientDTO;
-import br.com.fourcamp.fourstore.FourStore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnClientDTO;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ClientNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
@@ -38,35 +37,43 @@ public class ClientController {
         }
     }
 
- /*   @PostMapping("/")
-    @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createClient(@RequestBody @Valid CreateClientDTO createClientDTO)
-            throws InvalidParametersException {
-        return clientService.createClient(createClientDTO);
-    }*/
-
     @GetMapping
     public List<ReturnClientDTO> listAll() {
         return clientService.listAll();
     }
 
     @GetMapping("/{cpf}")
-    public ReturnClientDTO findByCpf(@PathVariable @Valid String cpf) throws
-            ClientNotFoundException {
-        return clientService.findByCpf(cpf);
+    public ResponseEntity<Object> findByCpf(@PathVariable @Valid String cpf) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(clientService.findByCpf(cpf));
+        } catch (ClientNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(HttpStatus.NOT_FOUND,
+                    HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        }
     }
 
     @PutMapping("/{cpf}")
-    public MessageResponseDTO updateById(@PathVariable String cpf, @RequestBody @Valid CreateClientDTO createClientDTO)
-            throws ClientNotFoundException, InvalidParametersException {
-        return clientService.updateById(cpf, createClientDTO);
+    public ResponseEntity<Object> updateById(@PathVariable String cpf, @RequestBody @Valid CreateClientDTO createClientDTO) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(clientService.updateById(cpf, createClientDTO));
+        } catch (ClientNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(HttpStatus.NOT_FOUND,
+                    HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        } catch (InvalidParametersException e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ResponseModel(HttpStatus.NOT_ACCEPTABLE,
+                    HttpStatus.NOT_ACCEPTABLE.value(), e.getMessage()));
+        }
     }
 
     @Transactional
     @DeleteMapping("/{cpf}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public MessageResponseDTO deleteByCpf(@PathVariable String cpf) throws ClientNotFoundException {
-        return clientService.delete(cpf);
+    public ResponseEntity<Object> deleteByCpf(@PathVariable String cpf) {
+        try {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(clientService.delete(cpf));
+        } catch (ClientNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(HttpStatus.NOT_FOUND,
+                    HttpStatus.NOT_FOUND.value(), e.getMessage()));
+        }
     }
 
 }

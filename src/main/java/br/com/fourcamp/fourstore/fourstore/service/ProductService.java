@@ -18,15 +18,14 @@ import java.util.List;
 @Service
 public class ProductService {
 
+    @Autowired
     protected static ProductRepository productRepository;
 
     private static final ProductMapper productMapper = ProductMapper.INSTANCE;
     private static final ProductDetailsMapper productDetailsMapper = ProductDetailsMapper.INSTANCE;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
-
-    }
+    public ProductService(ProductRepository productRepository) { this.productRepository = productRepository; }
 
     public List<ReturnProductDTO> listAll() {
         List<Product> allProducts = productRepository.findAll();

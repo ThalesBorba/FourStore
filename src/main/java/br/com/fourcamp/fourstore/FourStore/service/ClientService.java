@@ -6,7 +6,6 @@ import br.com.fourcamp.fourstore.FourStore.dto.response.ReturnClientDTO;
 import br.com.fourcamp.fourstore.FourStore.entities.Client;
 import br.com.fourcamp.fourstore.FourStore.exceptions.ClientNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.exceptions.InvalidParametersException;
-import br.com.fourcamp.fourstore.FourStore.exceptions.TransactionNotFoundException;
 import br.com.fourcamp.fourstore.FourStore.mapper.ClientMapper;
 import br.com.fourcamp.fourstore.FourStore.repositories.ClientRepository;
 import br.com.fourcamp.fourstore.FourStore.util.ClientValidations;

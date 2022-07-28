@@ -1,9 +1,7 @@
 package br.com.fourcamp.fourstore.fourstore.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
@@ -12,10 +10,13 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,7 +38,20 @@ public class Client implements Serializable {
     //verificação personalizada
     private String paymentData;
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, orphanRemoval = false)
+    @ToString.Exclude
     private List<Transaction> transactions;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Client client = (Client) o;
+        return id != null && Objects.equals(id, client.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
 

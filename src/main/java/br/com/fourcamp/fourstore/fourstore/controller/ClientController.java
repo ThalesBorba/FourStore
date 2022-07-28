@@ -35,8 +35,7 @@ public class ClientController {
 
     @GetMapping
     public List<ReturnClientDTO> listAll() {
-        List<Client> clients = clientService.listAll();
-        return clients.stream().map(toDTO()).toList();
+        return clientService.listAll().stream().map(toDTO()).toList();
     }
 
     @GetMapping("/{cpf}")

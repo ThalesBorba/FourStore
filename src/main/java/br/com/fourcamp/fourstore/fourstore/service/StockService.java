@@ -21,13 +21,11 @@ import java.util.List;
 @Service
 public class StockService {
 
-    private StockRepository stockRepository;
-
-    private ProductRepository productRepository = ProductService.productRepository;
-
-    private StockMapper stockMapper = StockMapper.INSTANCE;
+    private final StockRepository stockRepository;
 
     @Autowired
+    private ProductRepository productRepository;
+
     public StockService(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
     }

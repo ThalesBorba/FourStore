@@ -3,7 +3,6 @@ package br.com.fourcamp.fourstore.fourstore.service;
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.MessageResponseDTO;
-import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnStockDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.entities.Stock;
 import br.com.fourcamp.fourstore.fourstore.exceptions.*;
@@ -47,35 +46,26 @@ public class StockService {
             }
         }
         return false;
-    };
+    }
 
-    public void updateByTransaction(CreateTransactionDTO createTransactionDTO) throws StockNotFoundException,
-            InvalidParametersException, StockInsufficientException {
-        List<Stock> stockListToBeUpdated = stockRepository.findAll();
-        List<Stock> updatedStockList = CartMethods.updateStock(stockListToBeUpdated, createTransactionDTO);
+    public void updateByTransaction(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException, StockInsufficientException {
+        List<Stock> updatedStockList = CartMethods.updateStock(stockRepository.findAll(), createTransactionDTO);
         for (Stock stock : updatedStockList) {
-            Stock stockToUpdate = verifyIfExists(stock.getProduct().getSku());
-            if (stockToUpdate.getQuantity() < 0) {
+            if (stock.getQuantity() < 0) {
                 throw new StockInsufficientException();
             } else {
-                stockToUpdate.getProduct().setBuyPrice(stock.getProduct().getBuyPrice());
-                stockToUpdate.getProduct().setSellPrice(stock.getProduct().getSellPrice());
-                stockRepository.save(stockToUpdate);
+                stockRepository.save(stock);
             }
         }
     }
 
     //trocar por patches
-    public MessageResponseDTO updateBySku(String sku, CreateStockDTO createStockDTO) throws StockNotFoundException, InvalidSellValueException, InvalidSkuException {
-        validateStockProduct(createStockDTO);
-        ReturnStockDTO currentStock = findBySku(sku);
-        Integer finalQuantity = currentStock.getQuantity() + createStockDTO.getQuantity();
-        currentStock.setQuantity(finalQuantity);
-        Stock updatedStock = stockMapper.toModel(currentStock);
-        updatedStock.getProduct().setSellPrice(createStockDTO.getProduct().getSellPrice());
-        updatedStock.getProduct().setBuyPrice(createStockDTO.getProduct().getBuyPrice());
-        stockRepository.save(updatedStock);
-        return createMessageResponse(updatedStock.getId(), "Atualizado ");
+    public MessageResponseDTO updateProductPrice(String sku, Double buyPrice, Double sellPrice) {
+        Stock stock = findBySku(sku);
+        stock.getProduct().setBuyPrice(buyPrice);
+        stock.getProduct().setSellPrice(sellPrice);
+        stockRepository.save(stock);
+        return createMessageResponse(stock.getId(), "Atualizado ");
     }
 
     public List<Stock> listAll() {

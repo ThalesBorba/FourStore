@@ -7,11 +7,11 @@ import br.com.fourcamp.fourstore.fourstore.entities.Client;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.entities.Transaction;
 import br.com.fourcamp.fourstore.fourstore.exceptions.*;
-import br.com.fourcamp.fourstore.fourstore.mapper.TransactionMapper;
 import br.com.fourcamp.fourstore.fourstore.repositories.ClientRepository;
 import br.com.fourcamp.fourstore.fourstore.repositories.ProductRepository;
 import br.com.fourcamp.fourstore.fourstore.repositories.TransactionRepository;
 import br.com.fourcamp.fourstore.fourstore.util.CartMethods;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,19 +19,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 @Service
 public class TransactionService {
 
-    private TransactionRepository transactionRepository;
+    private final TransactionRepository transactionRepository;
     @Autowired
     private StockService stockService;
     @Autowired
     private ProductRepository productRepository;
     @Autowired
     private ClientRepository clientRepository;
-    @Autowired
-    private TransactionMapper transactionMapper;
 
     @Autowired
     public TransactionService(TransactionRepository transactionRepository) {
@@ -42,17 +41,10 @@ public class TransactionService {
             ClientNotFoundException, StockNotFoundException, InvalidParametersException, StockInsufficientException {
         Transaction savedTransaction = setTransaction(createTransactionDTO);
         return createMessageResponse(savedTransaction.getId(), "Criado ");
-        //está devolvendo a mensagem do estoque
     }
 
     public List<ReturnTransactionDTO> listAll() {
-        List<Transaction> allTransactions = transactionRepository.findAll();
-        List<ReturnTransactionDTO> returnTransactionDTOList = new ArrayList<>();
-        for (Transaction transaction : allTransactions) {
-            ReturnTransactionDTO returnTransactionDTO = transactionMapper.toDTO(transaction);
-            returnTransactionDTOList.add(returnTransactionDTO);
-        }
-        return returnTransactionDTOList;
+        return transactionRepository.findAll().stream().map(toDTO()).toList();
     }
 
     private MessageResponseDTO createMessageResponse(Long id, String s) {
@@ -66,27 +58,30 @@ public class TransactionService {
 
     private Transaction setTransaction(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException,
             StockNotFoundException, InvalidParametersException, StockInsufficientException {
-        CreateTransactionDTO validTrasaction = validTransaction(createTransactionDTO);
-        Double profit = calculateProfit(validTrasaction);
-        Transaction transactionToSave = transactionMapper.toModel(validTrasaction);
+        CreateTransactionDTO validTransaction = validTransaction(createTransactionDTO);
+        Double profit = calculateProfit(validTransaction);
+        Transaction transactionToSave = new Transaction();
+        BeanUtils.copyProperties(validTransaction, transactionToSave);
         transactionToSave.setProfit(profit);
-        transactionToSave.setClient(ReturnTransactionClient(createTransactionDTO));
+        transactionToSave.setClient(returnTransactionClient(createTransactionDTO));
         return transactionRepository.save(transactionToSave);
     }
 
     public ReturnTransactionDTO findById(Long id) throws TransactionNotFoundException {
         Transaction transaction = verifyIfExists(id);
-        return transactionMapper.toDTO(transaction);
+        ReturnTransactionDTO transactionDTO = new ReturnTransactionDTO();
+        BeanUtils.copyProperties(transaction, transactionDTO);
+        return transactionDTO;
     }
 
     private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) throws
-            StockNotFoundException, InvalidParametersException, StockInsufficientException {
+            InvalidParametersException, StockInsufficientException {
         stockService.updateByTransaction(createTransactionDTO);
         return createTransactionDTO;
     }
 
     private Double calculateProfit(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException, ClientNotFoundException {
-        Client client = ReturnTransactionClient(createTransactionDTO);
+        Client client = returnTransactionClient(createTransactionDTO);
         Integer paymentMethod = client.getPaymentMethod();
         HashMap<Product, Integer> cart = new HashMap<>();
         for (Map.Entry<String,Integer> products : createTransactionDTO.getCart().entrySet()) {
@@ -96,13 +91,21 @@ public class TransactionService {
         return CartMethods.retornaLucro(cart, paymentMethod);
     }
 
-    private Client ReturnTransactionClient(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException {
+    private Client returnTransactionClient(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException {
         Client client = clientRepository.findByCpf(createTransactionDTO.getClientCpf());
         if (client != null) {
             return client;
         } else {
             throw new ClientNotFoundException(createTransactionDTO.getClientCpf());
         }
+    }
+
+    private Function<Transaction, ReturnTransactionDTO> toDTO() {
+        return transaction -> {
+            var returnTransactionDTO = new ReturnTransactionDTO();
+            BeanUtils.copyProperties(transaction, returnTransactionDTO);
+            return returnTransactionDTO;
+        };
     }
 
 }

@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/transaction")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class TransactionController {
     @Autowired
     private final TransactionService transactionService;
@@ -42,5 +43,4 @@ public class TransactionController {
         return transactionService.findById(id);
     }
 
-    //Como é apenas para fins de registro, melhor não ter update e delete
 }

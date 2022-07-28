@@ -5,17 +5,16 @@ import br.com.fourcamp.fourstore.fourstore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnStockDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
+import br.com.fourcamp.fourstore.fourstore.entities.Stock;
 import br.com.fourcamp.fourstore.fourstore.exceptions.*;
 import br.com.fourcamp.fourstore.fourstore.repositories.ProductRepository;
-import br.com.fourcamp.fourstore.fourstore.util.CartMethods;
-import br.com.fourcamp.fourstore.fourstore.entities.Stock;
-import br.com.fourcamp.fourstore.fourstore.mapper.StockMapper;
 import br.com.fourcamp.fourstore.fourstore.repositories.StockRepository;
+import br.com.fourcamp.fourstore.fourstore.util.CartMethods;
 import br.com.fourcamp.fourstore.fourstore.util.SkuValidations;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,6 +65,7 @@ public class StockService {
         }
     }
 
+    //trocar por patches
     public MessageResponseDTO updateBySku(String sku, CreateStockDTO createStockDTO) throws StockNotFoundException, InvalidSellValueException, InvalidSkuException {
         validateStockProduct(createStockDTO);
         ReturnStockDTO currentStock = findBySku(sku);
@@ -78,20 +78,13 @@ public class StockService {
         return createMessageResponse(updatedStock.getId(), "Atualizado ");
     }
 
-    public List<ReturnStockDTO> listAll() {
-        List<Stock> allStocks = stockRepository.findAll();
-        List<ReturnStockDTO> returnStockDTOList = new ArrayList<>();
-        for (Stock stock : allStocks) {
-            ReturnStockDTO returnStockDTO = stockMapper.toDTO(stock);
-            returnStockDTOList.add(returnStockDTO);
-        }
-        return returnStockDTOList;
+    public List<Stock> listAll() {
+        return stockRepository.findAll();
     }
 
     public MessageResponseDTO delete(String sku) throws StockNotFoundException {
-        Stock stockToDelete = verifyIfExists(sku);
-        Integer id = stockToDelete.getId();
-        stockRepository.deleteById(stockToDelete.getId());
+        Integer id = findBySku(sku).getId();
+        stockRepository.deleteById(id);
         return createMessageResponse(id, "Deletado ");
     }
 
@@ -99,30 +92,16 @@ public class StockService {
         return MessageResponseDTO.builder().message(s + "estoque com a id " + id).build();
     }
 
-    private Stock verifyIfExists(String sku) throws StockNotFoundException {
-        List<Stock> allStocks = stockRepository.findAll();
-        Stock stockToReturn = null;
-        for (Stock stock : allStocks) {
-            if (stock.getProduct().getSku().equals(sku)) {
-                stockToReturn = stock;
-            }
-        }
-        if (stockToReturn != null) {
-            return stockToReturn;
-        } else {
-            throw new StockNotFoundException(sku);
-        }
-    }
-
     private Stock setStock(CreateStockDTO createStockDTO) throws InvalidSellValueException, InvalidSkuException {
         validateStockProduct(createStockDTO);
-        Stock stock = stockMapper.toModel(createStockDTO);
+        Stock stock = new Stock();
+        BeanUtils.copyProperties(createStockDTO, stock);
         return stockRepository.save(stock);
     }
 
-    public ReturnStockDTO findBySku(String sku) throws StockNotFoundException {
-        Stock stock = verifyIfExists(sku);
-        return stockMapper.toDTO(stock);
+    public Stock findBySku(String sku) {
+        Product product = productRepository.findBySku(sku);
+        return stockRepository.findByProduct(product);
     }
 
     private CreateStockDTO validateStockProduct(CreateStockDTO createStockDTO) throws InvalidSellValueException,

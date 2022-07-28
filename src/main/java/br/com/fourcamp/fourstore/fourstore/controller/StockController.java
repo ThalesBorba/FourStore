@@ -37,7 +37,7 @@ public class StockController {
     }
 
     @GetMapping("/{sku}")
-    public ReturnStockDTO findBySku(@PathVariable String sku) throws StockNotFoundException {
+    public ReturnStockDTO findBySku(@PathVariable String sku) {
         return stockService.findBySku(sku);
     }
 

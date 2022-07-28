@@ -15,8 +15,5 @@ public class CreateStockDTO {
 
 
     private Product product;
-
-    //todo só sku usar mapper
-
     private Integer quantity;
 }

@@ -29,13 +29,16 @@ public class StockService {
     }
 
     public MessageResponseDTO createStock(CreateStockDTO createStockDTO) throws InvalidParametersException,
-            InvalidSellValueException, InvalidSkuException {
-        if ((createStockDTO.getQuantity() <= 0) || verifyIfStockOfProductExists(createStockDTO.getProduct())) {
+            InvalidSellValueException, InvalidSkuException, ProductAlreadyInStockException {
+        if (createStockDTO.getQuantity() <= 0) {
             throw new InvalidParametersException();
-        } else {
-            Stock savedStock = setStock(createStockDTO);
-            return createMessageResponse(savedStock.getId(), "Criado ");
         }
+        if (verifyIfStockOfProductExists(createStockDTO.getProduct())) {
+            throw new ProductAlreadyInStockException();
+        }
+        Stock savedStock = setStock(createStockDTO);
+        return createMessageResponse(savedStock.getId(), "Criado ");
+
     }
 
     private Boolean verifyIfStockOfProductExists(Product product) {

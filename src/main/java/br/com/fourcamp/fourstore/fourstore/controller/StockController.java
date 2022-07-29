@@ -1,13 +1,12 @@
 package br.com.fourcamp.fourstore.fourstore.controller;
 
+import br.com.fourcamp.fourstore.fourstore.dto.request.CreateProductDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnStockDTO;
+import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.entities.Stock;
-import br.com.fourcamp.fourstore.fourstore.exceptions.InvalidParametersException;
-import br.com.fourcamp.fourstore.fourstore.exceptions.InvalidSellValueException;
-import br.com.fourcamp.fourstore.fourstore.exceptions.InvalidSkuException;
-import br.com.fourcamp.fourstore.fourstore.exceptions.StockNotFoundException;
+import br.com.fourcamp.fourstore.fourstore.exceptions.*;
 import br.com.fourcamp.fourstore.fourstore.service.StockService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +30,15 @@ public class StockController {
         this.stockService = stockService;
     }
 
-    @PostMapping("/")
+    @PostMapping("/{quantity}")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createStock(@RequestBody @Valid CreateStockDTO createStockDTO) throws
-            InvalidParametersException, InvalidSellValueException, InvalidSkuException {
-        
+    public MessageResponseDTO createStock(@PathVariable Integer quantity, @RequestBody CreateProductDTO createProductDTO) throws
+            InvalidParametersException, InvalidSellValueException, InvalidSkuException, ProductAlreadyInStockException {
+        Product product = new Product();
+        BeanUtils.copyProperties(createProductDTO, product);
+        CreateStockDTO createStockDTO = new CreateStockDTO();
+        createStockDTO.setProduct(product);
+        createStockDTO.setQuantity(quantity);
         return stockService.createStock(createStockDTO);
     }
 
@@ -69,6 +72,7 @@ public class StockController {
             var returnStockDTO = new ReturnStockDTO();
             BeanUtils.copyProperties(stock, returnStockDTO);
             returnStockDTO.setProductDescription(stock.getProduct().getDescription());
+            returnStockDTO.setSku(stock.getProduct().getSku());
             return returnStockDTO;
         };
     }

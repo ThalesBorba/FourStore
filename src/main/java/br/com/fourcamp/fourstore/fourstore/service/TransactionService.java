@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 @Service
 public class TransactionService {
@@ -38,17 +37,33 @@ public class TransactionService {
     }
 
     public MessageResponseDTO createTransaction(CreateTransactionDTO createTransactionDTO) throws
-            ClientNotFoundException, StockNotFoundException, InvalidParametersException, StockInsufficientException {
+            ClientNotFoundException, StockNotFoundException, InvalidParametersException, StockInsufficientException,
+            ProductNotFoundException {
         Transaction savedTransaction = setTransaction(createTransactionDTO);
-        return createMessageResponse(savedTransaction.getId(), "Criado ");
+        return createMessageResponse(savedTransaction.getId(), "Criada ");
+        //está devolvendo a mensagem do estoque
     }
 
     public List<ReturnTransactionDTO> listAll() {
-        return transactionRepository.findAll().stream().map(toDTO()).toList();
+        List<Transaction> allTransactions = transactionRepository.findAll();
+        List<ReturnTransactionDTO> returnTransactionDTOList = new ArrayList<>();
+        for (Transaction transaction : allTransactions) {
+            ReturnTransactionDTO returnTransactionDTO = convertTransactionToDTO(transaction);
+            returnTransactionDTOList.add(returnTransactionDTO);
+        }
+        return returnTransactionDTOList;
+    }
+
+    private ReturnTransactionDTO convertTransactionToDTO(Transaction transaction) {
+        ReturnTransactionDTO returnTransactionDTO = new ReturnTransactionDTO();
+        BeanUtils.copyProperties(transaction, returnTransactionDTO);
+        returnTransactionDTO.setClientCpf(transaction.getClient().getCpf());
+        returnTransactionDTO.setClientName(transaction.getClient().getName());
+        return returnTransactionDTO;
     }
 
     private MessageResponseDTO createMessageResponse(Long id, String s) {
-        return MessageResponseDTO.builder().message(s + "estoque com a id " + id).build();
+        return MessageResponseDTO.builder().message(s + "transação com a id " + id).build();
     }
 
     private Transaction verifyIfExists(Long id) throws TransactionNotFoundException {
@@ -57,11 +72,11 @@ public class TransactionService {
     }
 
     private Transaction setTransaction(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException,
-            StockNotFoundException, InvalidParametersException, StockInsufficientException {
-        CreateTransactionDTO validTransaction = validTransaction(createTransactionDTO);
-        Double profit = calculateProfit(validTransaction);
+            StockNotFoundException, InvalidParametersException, StockInsufficientException, ProductNotFoundException {
+        CreateTransactionDTO validTrasaction = validTransaction(createTransactionDTO);
+        Double profit = calculateProfit(validTrasaction);
         Transaction transactionToSave = new Transaction();
-        BeanUtils.copyProperties(validTransaction, transactionToSave);
+        BeanUtils.copyProperties(validTrasaction, transactionToSave);
         transactionToSave.setProfit(profit);
         transactionToSave.setClient(returnTransactionClient(createTransactionDTO));
         return transactionRepository.save(transactionToSave);
@@ -69,9 +84,7 @@ public class TransactionService {
 
     public ReturnTransactionDTO findById(Long id) throws TransactionNotFoundException {
         Transaction transaction = verifyIfExists(id);
-        ReturnTransactionDTO transactionDTO = new ReturnTransactionDTO();
-        BeanUtils.copyProperties(transaction, transactionDTO);
-        return transactionDTO;
+        return convertTransactionToDTO(transaction);
     }
 
     private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) throws
@@ -80,7 +93,8 @@ public class TransactionService {
         return createTransactionDTO;
     }
 
-    private Double calculateProfit(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException, ClientNotFoundException {
+    private Double calculateProfit(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException,
+            ClientNotFoundException {
         Client client = returnTransactionClient(createTransactionDTO);
         Integer paymentMethod = client.getPaymentMethod();
         HashMap<Product, Integer> cart = new HashMap<>();
@@ -98,14 +112,6 @@ public class TransactionService {
         } else {
             throw new ClientNotFoundException(createTransactionDTO.getClientCpf());
         }
-    }
-
-    private Function<Transaction, ReturnTransactionDTO> toDTO() {
-        return transaction -> {
-            var returnTransactionDTO = new ReturnTransactionDTO();
-            BeanUtils.copyProperties(transaction, returnTransactionDTO);
-            return returnTransactionDTO;
-        };
     }
 
 }

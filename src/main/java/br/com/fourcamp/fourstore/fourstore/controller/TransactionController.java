@@ -10,12 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/transaction")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Transactional
 public class TransactionController {
     @Autowired
     private final TransactionService transactionService;
@@ -25,13 +27,13 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @PostMapping("/{id}")
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO createTransaction(@RequestBody @Valid CreateTransactionDTO createTransactionDTO) throws
-            ClientNotFoundException, StockNotFoundException, InvalidParametersException, StockInsufficientException {
+            ClientNotFoundException, StockNotFoundException, InvalidParametersException, StockInsufficientException, ProductNotFoundException {
         return transactionService.createTransaction(createTransactionDTO);
     }
+
 
     @GetMapping
     public List<ReturnTransactionDTO> listAll() {

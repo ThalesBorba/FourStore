@@ -25,7 +25,7 @@ public class Client implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    private Long id;
     @CPF
     @Column(nullable = false, unique = true)
     private String cpf;
@@ -35,10 +35,8 @@ public class Client implements Serializable {
     @Min(1)
     @Max(6)
     private Integer paymentMethod;
-    //verificação personalizada
     private String paymentData;
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, orphanRemoval = false)
-    @ToString.Exclude
     private List<Transaction> transactions;
 
     @Override

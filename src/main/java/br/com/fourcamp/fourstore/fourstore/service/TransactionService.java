@@ -36,12 +36,10 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    public MessageResponseDTO createTransaction(CreateTransactionDTO createTransactionDTO) throws
+    public Transaction createTransaction(CreateTransactionDTO createTransactionDTO) throws
             ClientNotFoundException, StockNotFoundException, InvalidParametersException, StockInsufficientException,
             ProductNotFoundException {
-        Transaction savedTransaction = setTransaction(createTransactionDTO);
-        return createMessageResponse(savedTransaction.getId(), "Criada ");
-        //está devolvendo a mensagem do estoque
+        return setTransaction(createTransactionDTO);
     }
 
     public List<ReturnTransactionDTO> listAll() {
@@ -62,10 +60,6 @@ public class TransactionService {
         return returnTransactionDTO;
     }
 
-    private MessageResponseDTO createMessageResponse(Long id, String s) {
-        return MessageResponseDTO.builder().message(s + "transação com a id " + id).build();
-    }
-
     private Transaction verifyIfExists(Long id) throws TransactionNotFoundException {
         return transactionRepository.findById(id)
                 .orElseThrow(() -> new TransactionNotFoundException(id));
@@ -83,8 +77,7 @@ public class TransactionService {
     }
 
     public ReturnTransactionDTO findById(Long id) throws TransactionNotFoundException {
-        Transaction transaction = verifyIfExists(id);
-        return convertTransactionToDTO(transaction);
+        return convertTransactionToDTO(verifyIfExists(id));
     }
 
     private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) throws

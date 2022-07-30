@@ -20,7 +20,6 @@ import java.util.List;
 public class StockService {
 
     private final StockRepository stockRepository;
-
     @Autowired
     private ProductRepository productRepository;
 
@@ -33,7 +32,7 @@ public class StockService {
         if (createStockDTO.getQuantity() <= 0) {
             throw new InvalidParametersException();
         }
-        if (verifyIfStockOfProductExists(createStockDTO.getProduct())) {
+        if (Boolean.TRUE.equals(verifyIfStockOfProductExists(createStockDTO.getProduct()))) {
             throw new ProductAlreadyInStockException();
         }
         Stock savedStock = setStock(createStockDTO);
@@ -51,7 +50,8 @@ public class StockService {
         return false;
     }
 
-    public void updateByTransaction(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException, StockInsufficientException {
+    public void updateByTransaction(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException,
+            StockInsufficientException {
         List<Stock> updatedStockList = CartMethods.updateStock(stockRepository.findAll(), createTransactionDTO);
         for (Stock stock : updatedStockList) {
             if (stock.getQuantity() < 0) {
@@ -62,7 +62,14 @@ public class StockService {
         }
     }
 
-    //trocar por patches
+    public MessageResponseDTO addProductsToStock(String sku, Integer quantity) {
+        Stock stock = findBySku(sku);
+        stock.setQuantity(stock.getQuantity() + quantity);
+        stockRepository.save(stock);
+        return createMessageResponse(stock.getId(), "Adicionados produtos ao ");
+    }
+
+
     public MessageResponseDTO updateProductPrice(String sku, Double buyPrice, Double sellPrice) {
         Stock stock = findBySku(sku);
         stock.getProduct().setBuyPrice(buyPrice);
@@ -75,7 +82,7 @@ public class StockService {
         return stockRepository.findAll();
     }
 
-    public MessageResponseDTO delete(String sku) throws StockNotFoundException {
+    public MessageResponseDTO delete(String sku) {
         Integer id = findBySku(sku).getId();
         stockRepository.deleteById(id);
         return createMessageResponse(id, "Deletado ");

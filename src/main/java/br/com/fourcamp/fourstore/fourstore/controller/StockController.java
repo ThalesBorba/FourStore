@@ -50,15 +50,22 @@ public class StockController {
     @GetMapping("/{sku}")
     public ReturnStockDTO findBySku(@PathVariable String sku) {
         var returnStockDTO = new ReturnStockDTO();
-        BeanUtils.copyProperties(stockService.findBySku(sku), returnStockDTO);
-        returnStockDTO.setProductDescription(stockService.findBySku(sku).getProduct().getDescription());
+        Stock stock = stockService.findBySku(sku);
+        BeanUtils.copyProperties(stock, returnStockDTO);
+        returnStockDTO.setProductDescription(stock.getProduct().getDescription());
+        returnStockDTO.setSku(stock.getProduct().getSku());
         return returnStockDTO;
     }
 
-    @PatchMapping("/{sku}")
+    @PatchMapping("/{sku}/{buyPrice}/{sellPrice}")
     public MessageResponseDTO updateProductPrice(@PathVariable String sku, @PathVariable Double buyPrice,
                @PathVariable Double sellPrice) {
         return stockService.updateProductPrice(sku, buyPrice, sellPrice);
+    }
+
+    @PatchMapping("/{sku}/{quantityToAddToStock}")
+    public MessageResponseDTO addProductsToStock(@PathVariable String sku, @PathVariable Integer quantityToAddToStock) {
+        return stockService.addProductsToStock(sku, quantityToAddToStock);
     }
 
     @DeleteMapping("/{sku}")

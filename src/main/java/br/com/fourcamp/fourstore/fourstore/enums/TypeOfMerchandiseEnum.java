@@ -12,8 +12,8 @@ public enum TypeOfMerchandiseEnum {
 	SCARF("239", "Cachecol"),
 	TIE("240", "Gravata");
 
-	public String key;
-	public String description;
+	private String key;
+	private String description;
 
 	public String getKey() {
 		return key;

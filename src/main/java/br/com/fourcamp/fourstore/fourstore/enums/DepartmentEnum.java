@@ -9,8 +9,8 @@ public enum DepartmentEnum {
 	PERFUMERY("52", "Perfumaria"),
 	ACCESSORIES("53", "Acessórios");
 
-	public String key;
-	public String description;
+	private String key;
+	private String description;
 
 	public String getKey() {
 		return key;

@@ -1,10 +1,12 @@
 package br.com.fourcamp.fourstore.fourstore.util;
 
 import br.com.fourcamp.fourstore.fourstore.enums.*;
+import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@UtilityClass
 public class SkuValidations {
 
     public static boolean brandValidation(String brand) {
@@ -46,7 +48,7 @@ public class SkuValidations {
         skuValidations.add(colorValidation(sku.substring(14, 16)));
 
         for (Boolean value : skuValidations) {
-            if (!value)
+            if (Boolean.FALSE.equals(value))
                 return false;
         }
         return true;

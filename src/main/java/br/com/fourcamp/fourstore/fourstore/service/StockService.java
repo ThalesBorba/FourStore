@@ -47,8 +47,7 @@ public class StockService {
         return false;
     }
 
-    public void updateByTransaction(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException,
-            StockInsufficientException {
+    public void updateByTransaction(CreateTransactionDTO createTransactionDTO) throws StockInsufficientException {
         List<Stock> updatedStockList = CartMethods.updateStock(stockRepository.findAll(), createTransactionDTO);
         for (Stock stock : updatedStockList) {
             if (stock.getQuantity() < 0) {

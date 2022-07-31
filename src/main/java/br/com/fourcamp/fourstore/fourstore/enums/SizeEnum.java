@@ -16,8 +16,8 @@ public enum SizeEnum {
 	G2("52", "Tamanho G2"),
 	G3("54", "Tamanho G3");
 
-	public String key;
-	public String description;
+	private String key;
+	private String description;
 
 	public String getKey() {
 		return key;

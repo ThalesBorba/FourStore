@@ -13,7 +13,7 @@ import java.util.HashMap;
 @NoArgsConstructor
 public class CreateTransactionDTO {
 
-    private String ClientCpf;
+    private String clientCpf;
 
     private HashMap<String, Integer> cart;
 }

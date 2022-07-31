@@ -14,8 +14,8 @@ public enum ColorEnum {
 	GREY("57", "Cinza"),
 	PINK("58", "Rosa");
 
-	public String key;
-	public String description;
+	private String key;
+	private String description;
 
 
 

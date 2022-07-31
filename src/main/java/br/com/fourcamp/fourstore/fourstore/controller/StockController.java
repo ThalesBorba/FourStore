@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.function.Function;
 
@@ -65,7 +64,7 @@ public class StockController {
 
     @DeleteMapping("/{sku}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public MessageResponseDTO deleteBySku(@PathVariable String sku) throws StockNotFoundException {
+    public MessageResponseDTO deleteBySku(@PathVariable String sku) {
        return stockService.delete(sku);
     }
 

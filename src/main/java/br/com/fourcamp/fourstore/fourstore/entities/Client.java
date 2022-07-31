@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
 @Getter

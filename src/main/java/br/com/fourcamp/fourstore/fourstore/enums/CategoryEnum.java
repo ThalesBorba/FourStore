@@ -8,8 +8,8 @@ public enum CategoryEnum {
 	FEMALE("11", "Feminino"),
 	BABY("12", "Moda Bebê");
 
-	public String key;
-	public String description;
+	private String key;
+	private String description;
 
 	public String getKey() {
 		return key;

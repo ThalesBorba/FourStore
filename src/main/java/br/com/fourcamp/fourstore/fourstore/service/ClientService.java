@@ -1,9 +1,7 @@
 package br.com.fourcamp.fourstore.fourstore.service;
 
-import br.com.fourcamp.fourstore.fourstore.dto.request.CreateClientDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Client;
-import br.com.fourcamp.fourstore.fourstore.exceptions.InvalidParametersException;
 import br.com.fourcamp.fourstore.fourstore.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

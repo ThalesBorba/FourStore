@@ -1,13 +1,16 @@
 package br.com.fourcamp.fourstore.fourstore.util;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@UtilityClass
 public class ClientValidations {
 
     public static Boolean validateCards(String card) {
-    String regex = "(^4[0-9]{12}(?:[0-9]{3})?$)|(^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|" +
-            "2720)[0-9]{12}$)|(3[47][0-9]{13})|(^3(?:0[0-5]|[68][0-9])[0-9]{11}$)|(^6(?:011|5[0-9]{2})[0-9]{12}$)|" +
+    String regex = "(^4\\d{12}(?:\\d{3})?$)|(^(?:5[1-5]\\d{2}|222[1-9]|22[3-9]\\d|2[3-6]\\d{2}|27[01]\\d|" +
+            "2720)\\d{12}$)|(3[47]\\d{13})|(^3(?:0[0-5]|[68]\\d)\\d{11}$)|(^6(?:011|5\\d{2})\\d{12}$)|" +
             "(^(?:2131|1800|35\\d{3})\\d{11}$)";
     Pattern cardPattern = Pattern.compile(regex);
     card = card.replaceAll("[-. ]", "");
@@ -16,10 +19,9 @@ public class ClientValidations {
     }
 
     public static Boolean validatePix(String pix) {
-        Pattern email = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-        Pattern cellphone = Pattern.compile("^\\+[1-9]{1}[0-9]{3,14}$");
-        Pattern cpfCnpj = Pattern.compile("([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|" +
-                "([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})");
+        Pattern email = Pattern.compile("^[A-Z\\d._%+-]+@[A-Z\\d.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+        Pattern cellphone = Pattern.compile("^\\+[1-9]\\d{3,14}$");
+        Pattern cpfCnpj = Pattern.compile("(\\d{2}[.]?\\d{3}\\.?\\d{3}/?\\d{4}-?\\d{2})|(\\d{3}[.]?\\d{3}[.]?\\d{3}-?\\d{2})");
         return email.matcher(pix).matches() || cellphone.matcher(pix).matches() ||
                 cpfCnpj.matcher(pix).matches();
     }
@@ -31,14 +33,12 @@ public class ClientValidations {
 
 
     public static boolean paymentMethodValidation(Integer paymentMethod, String paymentData) {
-        Boolean validation = false;
-        switch (paymentMethod) {
-            case 1, 2, 6 -> validation = true;
-            case 3, 4 -> validation = validateCards(paymentData);
-            case 5 -> validation = validatePix(paymentData);
-            default -> validation = false;
-        }
-        return validation;
+        return switch (paymentMethod) {
+            case 1, 2, 6 -> true;
+            case 3, 4 -> validateCards(paymentData);
+            case 5 -> validatePix(paymentData);
+            default -> false;
+        };
     }
 
 

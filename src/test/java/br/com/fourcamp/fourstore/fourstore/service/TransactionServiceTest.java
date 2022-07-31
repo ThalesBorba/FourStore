@@ -20,11 +20,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -55,6 +56,7 @@ class TransactionServiceTest {
     private Transaction transaction;
     private Optional<Transaction> optionalTransaction;
     private CreateTransactionDTO createTransactionDTO;
+    private CreateTransactionDTO createTransactionDTO2;
     private ReturnTransactionDTO returnTransactionDTO;
     private Product product;
     private Stock stock;
@@ -64,7 +66,7 @@ class TransactionServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         startTransaction();
-        startCreateTransactionDTO();
+        startCreateTransactionDTOs();
         startReturnTransactionDTO();
         startClient();
     }
@@ -89,7 +91,15 @@ class TransactionServiceTest {
     }
 
     @Test
-    void listAll() {
+    void whenListAllThenReturnAListOfTransactions() {
+        when(transactionRepository.findAll()).thenReturn(List.of(transaction));
+
+        List<ReturnTransactionDTO> response = transactionService.listAll();
+
+        assertNotNull(response);
+        assertEquals(ArrayList.class, response.getClass());
+        assertEquals(ReturnTransactionDTO.class, response.get(INDEX).getClass());
+        assertEquals(ID, response.get(INDEX).getId());
     }
 
     @Test
@@ -107,12 +117,25 @@ class TransactionServiceTest {
         assertEquals(170.0, response.getProfit());
     }
 
-    private void startCreateTransactionDTO () {
+    @Test
+    void whenClientNotFoundShouldThrowClientNotFoundException() {
+        String cpf = "111.111.111-33";
+
+        assertThrows(ClientNotFoundException.class, () -> transactionService.createTransaction(createTransactionDTO2));
+        assertEquals("Nenhum cliente encontrado com o cpf " + cpf, new ClientNotFoundException(cpf).getMessage());
+    }
+
+
+
+
+
+    private void startCreateTransactionDTOs() {
         product = new Product("562.738.720-31", "Camisa teste", 10.0,
                 30.0, null, null, null, null, null, null, null);
         stock = new Stock(1, product, 50);
         map.put("OBT3711415123655", 10);
         createTransactionDTO = new CreateTransactionDTO("562.738.720-31", map);
+        createTransactionDTO2 = new CreateTransactionDTO(null, map);
     }
 
     private void startClient() {

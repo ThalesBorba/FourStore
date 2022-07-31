@@ -77,8 +77,7 @@ public class TransactionService {
         return createTransactionDTO;
     }
 
-    private Double calculateProfit(CreateTransactionDTO createTransactionDTO) throws InvalidParametersException,
-            ClientNotFoundException {
+    private Double calculateProfit(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException {
         Client client = returnTransactionClient(createTransactionDTO);
         Integer paymentMethod = client.getPaymentMethod();
         HashMap<Product, Integer> cart = new HashMap<>();

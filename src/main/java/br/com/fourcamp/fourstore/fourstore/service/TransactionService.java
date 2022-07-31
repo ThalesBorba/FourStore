@@ -1,7 +1,6 @@
 package br.com.fourcamp.fourstore.fourstore.service;
 
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateTransactionDTO;
-import br.com.fourcamp.fourstore.fourstore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnTransactionDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Client;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
@@ -23,7 +22,8 @@ import java.util.Map;
 @Service
 public class TransactionService {
 
-    private final TransactionRepository transactionRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
     @Autowired
     private StockService stockService;
     @Autowired
@@ -31,14 +31,8 @@ public class TransactionService {
     @Autowired
     private ClientRepository clientRepository;
 
-    @Autowired
-    public TransactionService(TransactionRepository transactionRepository) {
-        this.transactionRepository = transactionRepository;
-    }
-
     public Transaction createTransaction(CreateTransactionDTO createTransactionDTO) throws
-            ClientNotFoundException, StockNotFoundException, InvalidParametersException, StockInsufficientException,
-            ProductNotFoundException {
+            ClientNotFoundException, InvalidParametersException, StockInsufficientException {
         return setTransaction(createTransactionDTO);
     }
 
@@ -60,13 +54,8 @@ public class TransactionService {
         return returnTransactionDTO;
     }
 
-    private Transaction verifyIfExists(Long id) throws TransactionNotFoundException {
-        return transactionRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFoundException(id));
-    }
-
     private Transaction setTransaction(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException,
-            StockNotFoundException, InvalidParametersException, StockInsufficientException, ProductNotFoundException {
+            InvalidParametersException, StockInsufficientException {
         CreateTransactionDTO validTrasaction = validTransaction(createTransactionDTO);
         Double profit = calculateProfit(validTrasaction);
         Transaction transactionToSave = new Transaction();
@@ -76,8 +65,10 @@ public class TransactionService {
         return transactionRepository.save(transactionToSave);
     }
 
-    public ReturnTransactionDTO findById(Long id) throws TransactionNotFoundException {
-        return convertTransactionToDTO(verifyIfExists(id));
+    public ReturnTransactionDTO findById(Long id) {
+        Transaction transaction = transactionRepository.findById(id).orElseThrow(
+                () -> new ObjectNotFoundException("Transação não encontrada!"));
+        return convertTransactionToDTO(transaction);
     }
 
     private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) throws

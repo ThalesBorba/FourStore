@@ -19,13 +19,10 @@ import java.util.List;
 @Service
 public class StockService {
 
-    private final StockRepository stockRepository;
+    @Autowired
+    private StockRepository stockRepository;
     @Autowired
     private ProductRepository productRepository;
-
-    public StockService(StockRepository stockRepository) {
-        this.stockRepository = stockRepository;
-    }
 
     public MessageResponseDTO createStock(CreateStockDTO createStockDTO) throws InvalidParametersException,
             InvalidSellValueException, InvalidSkuException, ProductAlreadyInStockException {

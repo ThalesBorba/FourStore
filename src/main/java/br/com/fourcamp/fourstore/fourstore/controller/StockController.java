@@ -23,12 +23,7 @@ import java.util.function.Function;
 public class StockController {
 
     @Autowired
-    private final StockService stockService;
-
-    @Autowired
-    public StockController(StockService stockService) {
-        this.stockService = stockService;
-    }
+    private StockService stockService;
 
     @PostMapping("/{quantity}")
     @ResponseStatus(HttpStatus.CREATED)

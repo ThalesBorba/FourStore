@@ -16,7 +16,7 @@ import java.util.Map;
 @Builder
 public class CartMethods {
 
-    public static List<Stock> updateStock(List<Stock> stockList, CreateTransactionDTO createTransactionDTO) throws InvalidParametersException {
+    public static List<Stock> updateStock(List<Stock> stockList, CreateTransactionDTO createTransactionDTO) {
         HashMap<String, Integer> cart = createTransactionDTO.getCart();
         for (Map.Entry<String, Integer> purchases : cart.entrySet()) {
             for (Stock stock : stockList) {
@@ -28,11 +28,9 @@ public class CartMethods {
     }
 
 
-    public static Double retornaLucro(HashMap<Product, Integer> cart, Integer paymentMethod) throws
-            InvalidParametersException {
+    public static Double retornaLucro(HashMap<Product, Integer> cart, Integer paymentMethod) {
         Double lucro = 0.0;
         Double discount = PaymentMethodEnum.getDiscountByPaymentMethodId(paymentMethod);
-        if (discount == null) { throw new InvalidParametersException();}
         for (Map.Entry<Product,Integer> products : cart.entrySet()) {
             Product product = products.getKey();
             Double lucroIndividual = (product.getSellPrice() * (1 - (discount))) - product.getBuyPrice();

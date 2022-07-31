@@ -20,11 +20,8 @@ import java.util.function.Function;
 @RequestMapping("/client")
 public class ClientController {
 
-    private final ClientService clientService;
-
-    public ClientController(ClientService clientService) {
-        this.clientService = clientService;
-    }
+    @Autowired
+    private ClientService clientService;
 
     @PostMapping("/")
     public ResponseEntity<Object> createClient(@RequestBody @Valid CreateClientDTO createClientDTO) {

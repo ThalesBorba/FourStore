@@ -1,7 +1,5 @@
 package br.com.fourcamp.fourstore.fourstore.exceptions;
 
-import java.io.Serial;
-
 public class TransactionNotFoundException extends RuntimeException {
 
     public TransactionNotFoundException(Long id)  {

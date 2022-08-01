@@ -6,14 +6,12 @@ import br.com.fourcamp.fourstore.fourstore.entities.Client;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.entities.Stock;
 import br.com.fourcamp.fourstore.fourstore.entities.Transaction;
-import br.com.fourcamp.fourstore.fourstore.exceptions.ClientNotFoundException;
-import br.com.fourcamp.fourstore.fourstore.exceptions.InvalidParametersException;
-import br.com.fourcamp.fourstore.fourstore.exceptions.ProductNotFoundException;
-import br.com.fourcamp.fourstore.fourstore.exceptions.StockInsufficientException;
+import br.com.fourcamp.fourstore.fourstore.exceptions.*;
 import br.com.fourcamp.fourstore.fourstore.repositories.ClientRepository;
 import br.com.fourcamp.fourstore.fourstore.repositories.ProductRepository;
 import br.com.fourcamp.fourstore.fourstore.repositories.StockRepository;
 import br.com.fourcamp.fourstore.fourstore.repositories.TransactionRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -128,9 +126,13 @@ class TransactionServiceTest {
         assertEquals("Nenhum cliente encontrado com o cpf " + cpf, new ClientNotFoundException(cpf).getMessage());
     }
 
+    @Test
+    void whenTransactionNotFoundShouldThrowTransactionNotFoundException() {
 
-
-
+        assertThrows(TransactionNotFoundException.class, () -> transactionService.findById(1L));
+        //todo não identifica UTF-8
+        //assertEquals("Nenhuma transação encontrada com a ID " + 1, new TransactionNotFoundException(1L).getMessage());
+    }
 
     private void startCreateTransactionDTOs() {
         product = new Product("562.738.720-31", "Camisa teste", 10.0,

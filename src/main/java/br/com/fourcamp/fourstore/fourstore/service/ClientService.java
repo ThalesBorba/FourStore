@@ -29,7 +29,7 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public MessageResponseDTO delete(String cpf) throws ClientNotFoundException {
+    public MessageResponseDTO delete(String cpf) {
         findByCpf(cpf);
         clientRepository.deleteByCpf(cpf);
         return createMessageResponse(cpf, "Deletado ");
@@ -39,7 +39,7 @@ public class ClientService {
         return MessageResponseDTO.builder().message(s + "cliente com o cpf " + cpf).build();
     }
 
-    public Client findByCpf(String cpf) throws ClientNotFoundException {
+    public Client findByCpf(String cpf) {
         return clientRepository.findByCpf(cpf).orElseThrow(() -> new ClientNotFoundException(cpf));
     }
 }

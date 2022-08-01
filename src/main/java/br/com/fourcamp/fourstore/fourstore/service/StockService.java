@@ -24,8 +24,7 @@ public class StockService {
     @Autowired
     private ProductRepository productRepository;
 
-    public MessageResponseDTO createStock(CreateStockDTO createStockDTO) throws InvalidParametersException,
-            InvalidSellValueException, InvalidSkuException, ProductAlreadyInStockException {
+    public MessageResponseDTO createStock(CreateStockDTO createStockDTO) {
         if (createStockDTO.getQuantity() <= 0) {
             throw new InvalidParametersException();
         }
@@ -47,7 +46,7 @@ public class StockService {
         return false;
     }
 
-    public void updateByTransaction(CreateTransactionDTO createTransactionDTO) throws StockInsufficientException {
+    public void updateByTransaction(CreateTransactionDTO createTransactionDTO) {
         List<Stock> updatedStockList = CartMethods.updateStock(stockRepository.findAll(), createTransactionDTO);
         for (Stock stock : updatedStockList) {
             if (stock.getQuantity() < 0) {
@@ -58,7 +57,7 @@ public class StockService {
         }
     }
 
-    public MessageResponseDTO addProductsToStock(String sku, Integer quantity) throws ProductNotFoundException {
+    public MessageResponseDTO addProductsToStock(String sku, Integer quantity) {
         Stock stock = findBySku(sku);
         stock.setQuantity(stock.getQuantity() + quantity);
         stockRepository.save(stock);
@@ -66,10 +65,14 @@ public class StockService {
     }
 
 
-    public MessageResponseDTO updateProductPrice(String sku, Double buyPrice, Double sellPrice) throws ProductNotFoundException {
+    public MessageResponseDTO updateProductPrice(String sku, Double buyPrice, Double sellPrice) {
         Stock stock = findBySku(sku);
         stock.getProduct().setBuyPrice(buyPrice);
         stock.getProduct().setSellPrice(sellPrice);
+        if (stock.getProduct().getSellPrice() <= stock.getProduct().getBuyPrice() * 1.25 ||
+                stock.getProduct().getSellPrice() < 0) {
+            throw new InvalidSellValueException();
+        }
         stockRepository.save(stock);
         return createMessageResponse(stock.getId(), "Atualizado ");
     }
@@ -78,7 +81,7 @@ public class StockService {
         return stockRepository.findAll();
     }
 
-    public MessageResponseDTO delete(String sku) throws ProductNotFoundException {
+    public MessageResponseDTO delete(String sku) {
         Integer id = findBySku(sku).getId();
         stockRepository.deleteById(id);
         return createMessageResponse(id, "Deletado ");
@@ -88,20 +91,19 @@ public class StockService {
         return MessageResponseDTO.builder().message(s + "estoque com a id " + id).build();
     }
 
-    private Stock setStock(CreateStockDTO createStockDTO) throws InvalidSellValueException, InvalidSkuException {
+    private Stock setStock(CreateStockDTO createStockDTO){
         validateStockProduct(createStockDTO);
         Stock stock = new Stock();
         BeanUtils.copyProperties(createStockDTO, stock);
         return stockRepository.save(stock);
     }
 
-    public Stock findBySku(String sku) throws ProductNotFoundException {
+    public Stock findBySku(String sku) {
         Product product = productRepository.findBySku(sku).orElseThrow(() -> new ProductNotFoundException(sku));
         return stockRepository.findByProduct(product);
     }
 
-    private void validateStockProduct(CreateStockDTO createStockDTO) throws InvalidSellValueException,
-            InvalidSkuException {
+    private void validateStockProduct(CreateStockDTO createStockDTO) {
         if (createStockDTO.getProduct().getSellPrice() <= createStockDTO.getProduct().getBuyPrice() * 1.25 ||
                 createStockDTO.getProduct().getSellPrice() < 0) {
             throw new InvalidSellValueException();

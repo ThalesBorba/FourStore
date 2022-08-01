@@ -31,8 +31,7 @@ public class TransactionService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public Transaction createTransaction(CreateTransactionDTO createTransactionDTO) throws
-            ClientNotFoundException, StockInsufficientException, ProductNotFoundException {
+    public Transaction createTransaction(CreateTransactionDTO createTransactionDTO) {
         return setTransaction(createTransactionDTO);
     }
 
@@ -54,8 +53,7 @@ public class TransactionService {
         return returnTransactionDTO;
     }
 
-    private Transaction setTransaction(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException,
-            StockInsufficientException, ProductNotFoundException {
+    private Transaction setTransaction(CreateTransactionDTO createTransactionDTO) {
         CreateTransactionDTO validTrasaction = validTransaction(createTransactionDTO);
         Double profit = calculateProfit(validTrasaction);
         Transaction transactionToSave = new Transaction();
@@ -67,17 +65,16 @@ public class TransactionService {
 
     public ReturnTransactionDTO findById(Long id) {
         Transaction transaction = transactionRepository.findById(id).orElseThrow(
-                () -> new ObjectNotFoundException("Transação não encontrada!"));
+                () -> new TransactionNotFoundException(id));
         return convertTransactionToDTO(transaction);
     }
 
-    private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) throws
-            StockInsufficientException {
+    private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) {
         stockService.updateByTransaction(createTransactionDTO);
         return createTransactionDTO;
     }
 
-    private Double calculateProfit(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException, ProductNotFoundException {
+    private Double calculateProfit(CreateTransactionDTO createTransactionDTO) {
         Client client = returnTransactionClient(createTransactionDTO);
         Integer paymentMethod = client.getPaymentMethod();
         HashMap<Product, Integer> cart = new HashMap<>();
@@ -89,7 +86,7 @@ public class TransactionService {
         return CartMethods.retornaLucro(cart, paymentMethod);
     }
 
-    private Client returnTransactionClient(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException {
+    private Client returnTransactionClient(CreateTransactionDTO createTransactionDTO) {
         return clientRepository.findByCpf(createTransactionDTO.getClientCpf()).orElseThrow(() ->
                 new ClientNotFoundException(createTransactionDTO.getClientCpf()));
     }

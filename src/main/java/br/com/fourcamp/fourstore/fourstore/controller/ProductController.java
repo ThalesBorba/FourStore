@@ -25,7 +25,7 @@ public class ProductController {
     }
 
     @GetMapping("/{sku}")
-    public Product findBySkuWithDetails(@PathVariable String sku) throws ProductNotFoundException {
+    public Product findBySkuWithDetails(@PathVariable String sku) {
         return productService.findBySkuWithDetails(sku);
     }
 

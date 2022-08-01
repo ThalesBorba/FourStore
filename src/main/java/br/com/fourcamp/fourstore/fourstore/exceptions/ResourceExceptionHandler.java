@@ -11,12 +11,31 @@ import java.time.ZoneId;
 
 @ControllerAdvice
 public class ResourceExceptionHandler{
-    @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException ex, HttpServletRequest request) {
+
+    @ExceptionHandler({ClientNotFoundException.class, ProductNotFoundException.class, StockNotFoundException.class,
+            TransactionNotFoundException.class})
+    public ResponseEntity<StandardError> objectNotFound(Exception ex , HttpServletRequest request) {
         StandardError error =
-                new StandardError(LocalDateTime.now(ZoneId.of("UTC")), HttpStatus.NOT_FOUND.value(), ex.getMessage(), request.getRequestURI());
+                new StandardError(LocalDateTime.now(ZoneId.of("UTC")), HttpStatus.NOT_FOUND.value(),
+                        ex.getLocalizedMessage(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler({InvalidParametersException.class, InvalidPaymentDataException.class, InvalidSellValueException.class,
+    InvalidSkuException.class, StockInsufficientException.class})
+    public ResponseEntity<StandardError> invalidParameters(Exception ex, HttpServletRequest request) {
+        StandardError error =
+                new StandardError(LocalDateTime.now(ZoneId.of("UTC")), HttpStatus.BAD_REQUEST.value(),
+                        ex.getLocalizedMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(ProductAlreadyInStockException.class)
+    public ResponseEntity<StandardError> objectAlreadyPresent(Exception ex, HttpServletRequest request) {
+        StandardError error =
+                new StandardError(LocalDateTime.now(ZoneId.of("UTC")), HttpStatus.CONFLICT.value(),
+                        ex.getLocalizedMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
 
 }

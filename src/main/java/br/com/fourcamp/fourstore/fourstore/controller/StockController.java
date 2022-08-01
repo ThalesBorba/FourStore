@@ -6,7 +6,6 @@ import br.com.fourcamp.fourstore.fourstore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnStockDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.entities.Stock;
-import br.com.fourcamp.fourstore.fourstore.exceptions.*;
 import br.com.fourcamp.fourstore.fourstore.service.StockService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,7 @@ public class StockController {
 
     @PostMapping("/{quantity}")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createStock(@PathVariable Integer quantity, @RequestBody CreateProductDTO createProductDTO) throws
-            InvalidParametersException, InvalidSellValueException, InvalidSkuException, ProductAlreadyInStockException {
+    public MessageResponseDTO createStock(@PathVariable Integer quantity, @RequestBody CreateProductDTO createProductDTO) {
         Product product = new Product();
         BeanUtils.copyProperties(createProductDTO, product);
         CreateStockDTO createStockDTO = new CreateStockDTO();
@@ -42,7 +40,7 @@ public class StockController {
     }
 
     @GetMapping("/{sku}")
-    public ReturnStockDTO findBySku(@PathVariable String sku) throws ProductNotFoundException {
+    public ReturnStockDTO findBySku(@PathVariable String sku) {
         var returnStockDTO = new ReturnStockDTO();
         Stock stock = stockService.findBySku(sku);
         BeanUtils.copyProperties(stock, returnStockDTO);
@@ -53,19 +51,18 @@ public class StockController {
 
     @PatchMapping("/{sku}/{buyPrice}/{sellPrice}")
     public MessageResponseDTO updateProductPrice(@PathVariable String sku, @PathVariable Double buyPrice,
-               @PathVariable Double sellPrice) throws ProductNotFoundException {
+               @PathVariable Double sellPrice) {
         return stockService.updateProductPrice(sku, buyPrice, sellPrice);
     }
 
     @PatchMapping("/{sku}/{quantityToAddToStock}")
-    public MessageResponseDTO addProductsToStock(@PathVariable String sku, @PathVariable Integer quantityToAddToStock)
-            throws ProductNotFoundException {
+    public MessageResponseDTO addProductsToStock(@PathVariable String sku, @PathVariable Integer quantityToAddToStock) {
         return stockService.addProductsToStock(sku, quantityToAddToStock);
     }
 
     @DeleteMapping("/{sku}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public MessageResponseDTO deleteBySku(@PathVariable String sku) throws ProductNotFoundException {
+    public MessageResponseDTO deleteBySku(@PathVariable String sku) {
        return stockService.delete(sku);
     }
 

@@ -19,7 +19,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product findBySkuWithDetails(String sku) throws ProductNotFoundException {
+    public Product findBySkuWithDetails(String sku) {
         Product product = productRepository.findBySku(sku).orElseThrow(() -> new ProductNotFoundException(sku));
         setSkuIntoDetails(product);
         return product;

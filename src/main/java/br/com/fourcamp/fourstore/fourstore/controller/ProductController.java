@@ -2,6 +2,7 @@ package br.com.fourcamp.fourstore.fourstore.controller;
 
 import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnProductDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
+import br.com.fourcamp.fourstore.fourstore.exceptions.ProductNotFoundException;
 import br.com.fourcamp.fourstore.fourstore.service.ProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ProductController {
     }
 
     @GetMapping("/{sku}")
-    public Product findBySkuWithDetails(@PathVariable String sku) {
+    public Product findBySkuWithDetails(@PathVariable String sku) throws ProductNotFoundException {
         return productService.findBySkuWithDetails(sku);
     }
 

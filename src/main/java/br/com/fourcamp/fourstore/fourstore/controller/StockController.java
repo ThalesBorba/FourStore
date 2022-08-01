@@ -42,7 +42,7 @@ public class StockController {
     }
 
     @GetMapping("/{sku}")
-    public ReturnStockDTO findBySku(@PathVariable String sku) {
+    public ReturnStockDTO findBySku(@PathVariable String sku) throws ProductNotFoundException {
         var returnStockDTO = new ReturnStockDTO();
         Stock stock = stockService.findBySku(sku);
         BeanUtils.copyProperties(stock, returnStockDTO);
@@ -53,18 +53,19 @@ public class StockController {
 
     @PatchMapping("/{sku}/{buyPrice}/{sellPrice}")
     public MessageResponseDTO updateProductPrice(@PathVariable String sku, @PathVariable Double buyPrice,
-               @PathVariable Double sellPrice) {
+               @PathVariable Double sellPrice) throws ProductNotFoundException {
         return stockService.updateProductPrice(sku, buyPrice, sellPrice);
     }
 
     @PatchMapping("/{sku}/{quantityToAddToStock}")
-    public MessageResponseDTO addProductsToStock(@PathVariable String sku, @PathVariable Integer quantityToAddToStock) {
+    public MessageResponseDTO addProductsToStock(@PathVariable String sku, @PathVariable Integer quantityToAddToStock)
+            throws ProductNotFoundException {
         return stockService.addProductsToStock(sku, quantityToAddToStock);
     }
 
     @DeleteMapping("/{sku}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public MessageResponseDTO deleteBySku(@PathVariable String sku) {
+    public MessageResponseDTO deleteBySku(@PathVariable String sku) throws ProductNotFoundException {
        return stockService.delete(sku);
     }
 

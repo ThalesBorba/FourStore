@@ -32,7 +32,7 @@ public class TransactionService {
     private ClientRepository clientRepository;
 
     public Transaction createTransaction(CreateTransactionDTO createTransactionDTO) throws
-            ClientNotFoundException, InvalidParametersException, StockInsufficientException {
+            ClientNotFoundException, StockInsufficientException, ProductNotFoundException {
         return setTransaction(createTransactionDTO);
     }
 
@@ -55,7 +55,7 @@ public class TransactionService {
     }
 
     private Transaction setTransaction(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException,
-            InvalidParametersException, StockInsufficientException {
+            StockInsufficientException, ProductNotFoundException {
         CreateTransactionDTO validTrasaction = validTransaction(createTransactionDTO);
         Double profit = calculateProfit(validTrasaction);
         Transaction transactionToSave = new Transaction();
@@ -72,29 +72,26 @@ public class TransactionService {
     }
 
     private CreateTransactionDTO validTransaction(CreateTransactionDTO createTransactionDTO) throws
-            InvalidParametersException, StockInsufficientException {
+            StockInsufficientException {
         stockService.updateByTransaction(createTransactionDTO);
         return createTransactionDTO;
     }
 
-    private Double calculateProfit(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException {
+    private Double calculateProfit(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException, ProductNotFoundException {
         Client client = returnTransactionClient(createTransactionDTO);
         Integer paymentMethod = client.getPaymentMethod();
         HashMap<Product, Integer> cart = new HashMap<>();
         for (Map.Entry<String,Integer> products : createTransactionDTO.getCart().entrySet()) {
-            Product product = productRepository.findBySku(products.getKey());
+            Product product = productRepository.findBySku(products.getKey()).orElseThrow(() ->
+                    new ProductNotFoundException(products.getKey()));
             cart.put(product, products.getValue());
         }
         return CartMethods.retornaLucro(cart, paymentMethod);
     }
 
     private Client returnTransactionClient(CreateTransactionDTO createTransactionDTO) throws ClientNotFoundException {
-        Client client = clientRepository.findByCpf(createTransactionDTO.getClientCpf());
-        if (client != null) {
-            return client;
-        } else {
-            throw new ClientNotFoundException(createTransactionDTO.getClientCpf());
-        }
+        return clientRepository.findByCpf(createTransactionDTO.getClientCpf()).orElseThrow(() ->
+                new ClientNotFoundException(createTransactionDTO.getClientCpf()));
     }
 
 }

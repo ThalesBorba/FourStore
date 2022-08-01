@@ -8,6 +8,7 @@ import br.com.fourcamp.fourstore.fourstore.entities.Stock;
 import br.com.fourcamp.fourstore.fourstore.entities.Transaction;
 import br.com.fourcamp.fourstore.fourstore.exceptions.ClientNotFoundException;
 import br.com.fourcamp.fourstore.fourstore.exceptions.InvalidParametersException;
+import br.com.fourcamp.fourstore.fourstore.exceptions.ProductNotFoundException;
 import br.com.fourcamp.fourstore.fourstore.exceptions.StockInsufficientException;
 import br.com.fourcamp.fourstore.fourstore.repositories.ClientRepository;
 import br.com.fourcamp.fourstore.fourstore.repositories.ProductRepository;
@@ -55,6 +56,8 @@ class TransactionServiceTest {
 
     private Transaction transaction;
     private Optional<Transaction> optionalTransaction;
+    private Optional<Client> optionalClient;
+    private Optional<Product> optionalProduct;
     private CreateTransactionDTO createTransactionDTO;
     private CreateTransactionDTO createTransactionDTO2;
     private ReturnTransactionDTO returnTransactionDTO;
@@ -72,10 +75,10 @@ class TransactionServiceTest {
     }
 
     @Test
-    void shouldCreateATransaction() throws ClientNotFoundException, InvalidParametersException, StockInsufficientException {
+    void shouldCreateATransaction() throws ClientNotFoundException, StockInsufficientException, ProductNotFoundException {
         when(transactionRepository.save(any())).thenReturn(transaction);
-        when(clientRepository.findByCpf("562.738.720-31")).thenReturn(client);
-        when(productRepository.findBySku("OBT3711415123655")).thenReturn(product);
+        when(clientRepository.findByCpf("562.738.720-31")).thenReturn(optionalClient);
+        when(productRepository.findBySku("OBT3711415123655")).thenReturn(optionalProduct);
 
         Transaction response = transactionService.createTransaction(createTransactionDTO);
 
@@ -132,6 +135,7 @@ class TransactionServiceTest {
     private void startCreateTransactionDTOs() {
         product = new Product("562.738.720-31", "Camisa teste", 10.0,
                 30.0, null, null, null, null, null, null, null);
+        optionalProduct = Optional.of(product);
         stock = new Stock(1, product, 50);
         map.put("OBT3711415123655", 10);
         createTransactionDTO = new CreateTransactionDTO("562.738.720-31", map);
@@ -141,6 +145,7 @@ class TransactionServiceTest {
     private void startClient() {
         client = new Client(ID, "562.738.720-31", "Jose", 6,
                 "Cash", null);
+        optionalClient = Optional.of(client);
     }
 
     private void startReturnTransactionDTO () {

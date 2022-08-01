@@ -2,6 +2,7 @@ package br.com.fourcamp.fourstore.fourstore.service;
 
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.enums.*;
+import br.com.fourcamp.fourstore.fourstore.exceptions.ProductNotFoundException;
 import br.com.fourcamp.fourstore.fourstore.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product findBySkuWithDetails(String sku)  {
-        Product product = productRepository.findBySku(sku);
+    public Product findBySkuWithDetails(String sku) throws ProductNotFoundException {
+        Product product = productRepository.findBySku(sku).orElseThrow(() -> new ProductNotFoundException(sku));
         setSkuIntoDetails(product);
         return product;
     }

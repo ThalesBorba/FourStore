@@ -2,6 +2,7 @@ package br.com.fourcamp.fourstore.fourstore.service;
 
 import br.com.fourcamp.fourstore.fourstore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Client;
+import br.com.fourcamp.fourstore.fourstore.exceptions.ClientNotFoundException;
 import br.com.fourcamp.fourstore.fourstore.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,17 +29,17 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public MessageResponseDTO delete(String cpf)  {
-        String cpfToReturn = clientRepository.findByCpf(cpf).getCpf();
+    public MessageResponseDTO delete(String cpf) throws ClientNotFoundException {
+        findByCpf(cpf);
         clientRepository.deleteByCpf(cpf);
-        return createMessageResponse(cpfToReturn, "Deletado ");
+        return createMessageResponse(cpf, "Deletado ");
     }
 
     private MessageResponseDTO createMessageResponse(String cpf, String s) {
         return MessageResponseDTO.builder().message(s + "cliente com o cpf " + cpf).build();
     }
 
-    public Client findByCpf(String cpf) {
-        return clientRepository.findByCpf(cpf);
+    public Client findByCpf(String cpf) throws ClientNotFoundException {
+        return clientRepository.findByCpf(cpf).orElseThrow(() -> new ClientNotFoundException(cpf));
     }
 }

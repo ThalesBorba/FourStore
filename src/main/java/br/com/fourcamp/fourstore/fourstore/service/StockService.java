@@ -58,7 +58,7 @@ public class StockService {
         }
     }
 
-    public MessageResponseDTO addProductsToStock(String sku, Integer quantity) {
+    public MessageResponseDTO addProductsToStock(String sku, Integer quantity) throws ProductNotFoundException {
         Stock stock = findBySku(sku);
         stock.setQuantity(stock.getQuantity() + quantity);
         stockRepository.save(stock);
@@ -66,7 +66,7 @@ public class StockService {
     }
 
 
-    public MessageResponseDTO updateProductPrice(String sku, Double buyPrice, Double sellPrice) {
+    public MessageResponseDTO updateProductPrice(String sku, Double buyPrice, Double sellPrice) throws ProductNotFoundException {
         Stock stock = findBySku(sku);
         stock.getProduct().setBuyPrice(buyPrice);
         stock.getProduct().setSellPrice(sellPrice);
@@ -78,7 +78,7 @@ public class StockService {
         return stockRepository.findAll();
     }
 
-    public MessageResponseDTO delete(String sku) {
+    public MessageResponseDTO delete(String sku) throws ProductNotFoundException {
         Integer id = findBySku(sku).getId();
         stockRepository.deleteById(id);
         return createMessageResponse(id, "Deletado ");
@@ -95,20 +95,18 @@ public class StockService {
         return stockRepository.save(stock);
     }
 
-    public Stock findBySku(String sku) {
-        Product product = productRepository.findBySku(sku);
+    public Stock findBySku(String sku) throws ProductNotFoundException {
+        Product product = productRepository.findBySku(sku).orElseThrow(() -> new ProductNotFoundException(sku));
         return stockRepository.findByProduct(product);
     }
 
-    private CreateStockDTO validateStockProduct(CreateStockDTO createStockDTO) throws InvalidSellValueException,
+    private void validateStockProduct(CreateStockDTO createStockDTO) throws InvalidSellValueException,
             InvalidSkuException {
         if (createStockDTO.getProduct().getSellPrice() <= createStockDTO.getProduct().getBuyPrice() * 1.25 ||
                 createStockDTO.getProduct().getSellPrice() < 0) {
             throw new InvalidSellValueException();
         } else if (SkuValidations.validateSku(createStockDTO.getProduct().getSku()).equals(false)) {
             throw new InvalidSkuException();
-        } else {
-            return createStockDTO;
         }
     }
 

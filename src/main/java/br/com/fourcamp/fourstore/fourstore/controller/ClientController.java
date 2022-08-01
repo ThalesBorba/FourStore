@@ -3,6 +3,7 @@ package br.com.fourcamp.fourstore.fourstore.controller;
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateClientDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnClientDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Client;
+import br.com.fourcamp.fourstore.fourstore.exceptions.ClientNotFoundException;
 import br.com.fourcamp.fourstore.fourstore.service.ClientService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +37,12 @@ public class ClientController {
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<Object> findByCpf(@PathVariable @Valid String cpf) {
+    public ResponseEntity<Object> findByCpf(@PathVariable @Valid String cpf) throws ClientNotFoundException {
         var returnClientDTO = new ReturnClientDTO();
         BeanUtils.copyProperties(clientService.findByCpf(cpf), returnClientDTO);
         return ResponseEntity.status(HttpStatus.OK).body(returnClientDTO);
     }
 
-    //transformar em patch
     @PutMapping("/{cpf}")
     public ResponseEntity<Object> updateById(@RequestBody @Valid CreateClientDTO createClientDTO) {
         var client = new Client();
@@ -52,7 +52,7 @@ public class ClientController {
 
     @Transactional
     @DeleteMapping("/{cpf}")
-    public ResponseEntity<Object> deleteByCpf(@PathVariable String cpf) {
+    public ResponseEntity<Object> deleteByCpf(@PathVariable String cpf) throws ClientNotFoundException {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(clientService.delete(cpf));
     }
 

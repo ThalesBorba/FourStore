@@ -4,7 +4,6 @@ import br.com.fourcamp.fourstore.fourstore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnTransactionDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Client;
 import br.com.fourcamp.fourstore.fourstore.entities.Transaction;
-import br.com.fourcamp.fourstore.fourstore.exceptions.*;
 import br.com.fourcamp.fourstore.fourstore.service.TransactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,11 +14,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class TransactionControllerTest {
@@ -46,8 +48,7 @@ class TransactionControllerTest {
     }
 
     @Test
-    void whenCreateTransactionThenReturnCreated() throws ClientNotFoundException, StockNotFoundException,
-            InvalidParametersException, ProductNotFoundException, StockInsufficientException {
+    void whenCreateTransactionThenReturnCreated() {
         when(transactionService.createTransaction(createTransactionDTO)).thenReturn(transaction);
 
         ResponseEntity<String> response = transactionController.createTransaction(createTransactionDTO);
@@ -57,6 +58,7 @@ class TransactionControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(String.class, response.getBody().getClass());
+        assertEquals("Transação criada!", response.getBody());
     }
 
     @Test

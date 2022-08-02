@@ -37,8 +37,8 @@ public class StockController {
     }
 
     @GetMapping
-    public List<ReturnStockDTO> listAll() {
-        return stockService.listAll().stream().map(toDTO()).toList();
+    public ResponseEntity<List<ReturnStockDTO>> listAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(stockService.listAll().stream().map(toDTO()).toList());
     }
 
     @GetMapping("/{sku}")

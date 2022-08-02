@@ -2,7 +2,6 @@ package br.com.fourcamp.fourstore.fourstore.service;
 
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateTransactionDTO;
-import br.com.fourcamp.fourstore.fourstore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.entities.Stock;
 import br.com.fourcamp.fourstore.fourstore.exceptions.*;
@@ -24,15 +23,14 @@ public class StockService {
     @Autowired
     private ProductRepository productRepository;
 
-    public MessageResponseDTO createStock(CreateStockDTO createStockDTO) {
+    public Stock createStock(CreateStockDTO createStockDTO) {
         if (createStockDTO.getQuantity() <= 0) {
             throw new InvalidParametersException();
         }
         if (Boolean.TRUE.equals(verifyIfStockOfProductExists(createStockDTO.getProduct()))) {
             throw new ProductAlreadyInStockException();
         }
-        Stock savedStock = setStock(createStockDTO);
-        return createMessageResponse(savedStock.getId(), "Criado ");
+        return setStock(createStockDTO);
 
     }
 
@@ -57,15 +55,14 @@ public class StockService {
         }
     }
 
-    public MessageResponseDTO addProductsToStock(String sku, Integer quantity) {
+    public void addProductsToStock(String sku, Integer quantity) {
         Stock stock = findBySku(sku);
         stock.setQuantity(stock.getQuantity() + quantity);
         stockRepository.save(stock);
-        return createMessageResponse(stock.getId(), "Adicionados produtos ao ");
     }
 
 
-    public MessageResponseDTO updateProductPrice(String sku, Double buyPrice, Double sellPrice) {
+    public void updateProductPrice(String sku, Double buyPrice, Double sellPrice) {
         Stock stock = findBySku(sku);
         stock.getProduct().setBuyPrice(buyPrice);
         stock.getProduct().setSellPrice(sellPrice);
@@ -74,21 +71,15 @@ public class StockService {
             throw new InvalidSellValueException();
         }
         stockRepository.save(stock);
-        return createMessageResponse(stock.getId(), "Atualizado ");
     }
 
     public List<Stock> listAll() {
         return stockRepository.findAll();
     }
 
-    public MessageResponseDTO delete(String sku) {
+    public void delete(String sku) {
         Integer id = findBySku(sku).getId();
         stockRepository.deleteById(id);
-        return createMessageResponse(id, "Deletado ");
-    }
-
-    private MessageResponseDTO createMessageResponse(Integer id, String s) {
-        return MessageResponseDTO.builder().message(s + "estoque com a id " + id).build();
     }
 
     private Stock setStock(CreateStockDTO createStockDTO){

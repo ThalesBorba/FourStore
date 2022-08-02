@@ -10,6 +10,7 @@ import br.com.fourcamp.fourstore.fourstore.service.StockService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,13 +26,14 @@ public class StockController {
 
     @PostMapping("/{quantity}")
     @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponseDTO createStock(@PathVariable Integer quantity, @RequestBody CreateProductDTO createProductDTO) {
+    public ResponseEntity<String> createStock(@PathVariable Integer quantity, @RequestBody CreateProductDTO createProductDTO) {
         Product product = new Product();
         BeanUtils.copyProperties(createProductDTO, product);
         CreateStockDTO createStockDTO = new CreateStockDTO();
         createStockDTO.setProduct(product);
         createStockDTO.setQuantity(quantity);
-        return stockService.createStock(createStockDTO);
+        stockService.createStock(createStockDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Estoque criado");
     }
 
     @GetMapping
@@ -40,30 +42,33 @@ public class StockController {
     }
 
     @GetMapping("/{sku}")
-    public ReturnStockDTO findBySku(@PathVariable String sku) {
+    public ResponseEntity<ReturnStockDTO> findBySku(@PathVariable String sku) {
         var returnStockDTO = new ReturnStockDTO();
         Stock stock = stockService.findBySku(sku);
         BeanUtils.copyProperties(stock, returnStockDTO);
         returnStockDTO.setProductDescription(stock.getProduct().getDescription());
         returnStockDTO.setSku(stock.getProduct().getSku());
-        return returnStockDTO;
+        return ResponseEntity.status(HttpStatus.OK).body(returnStockDTO);
     }
 
     @PatchMapping("/{sku}/{buyPrice}/{sellPrice}")
-    public MessageResponseDTO updateProductPrice(@PathVariable String sku, @PathVariable Double buyPrice,
-               @PathVariable Double sellPrice) {
-        return stockService.updateProductPrice(sku, buyPrice, sellPrice);
+    public ResponseEntity<String> updateProductPrice(@PathVariable String sku, @PathVariable Double buyPrice,
+                                                     @PathVariable Double sellPrice) {
+        stockService.updateProductPrice(sku, buyPrice, sellPrice);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Estoque atualizado");
     }
 
     @PatchMapping("/{sku}/{quantityToAddToStock}")
-    public MessageResponseDTO addProductsToStock(@PathVariable String sku, @PathVariable Integer quantityToAddToStock) {
-        return stockService.addProductsToStock(sku, quantityToAddToStock);
+    public ResponseEntity<String> addProductsToStock(@PathVariable String sku, @PathVariable Integer quantityToAddToStock) {
+        stockService.addProductsToStock(sku, quantityToAddToStock);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Estoque atualizado");
     }
 
     @DeleteMapping("/{sku}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public MessageResponseDTO deleteBySku(@PathVariable String sku) {
-       return stockService.delete(sku);
+    public ResponseEntity<String> deleteBySku(@PathVariable String sku) {
+        stockService.delete(sku);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Estoque removido");
     }
 
     private Function<Stock, ReturnStockDTO> toDTO() {

@@ -28,6 +28,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class StockServiceTest {
 
+
     @InjectMocks
     StockService stockService;
 
@@ -36,7 +37,7 @@ class StockServiceTest {
 
     @Mock
     ProductRepository productRepository;
-
+    public static final String SKU = "KSR1010405023150";
     public static final Integer ID = 1;
     public static final Integer INDEX = 0;
 
@@ -115,37 +116,37 @@ class StockServiceTest {
     @Test
     void whenFindBySkuThenReturnAStockOfProducts() {
         when(stockRepository.findByProduct(product)).thenReturn(stock);
-        when(productRepository.findBySku("KSR1010405023150")).thenReturn(optionalProduct);
+        when(productRepository.findBySku(SKU)).thenReturn(optionalProduct);
 
-        Stock response = stockService.findBySku("KSR1010405023150");
+        Stock response = stockService.findBySku(SKU);
 
         assertNotNull(response);
         assertEquals(Stock.class, response.getClass());
         assertEquals(ID, response.getId());
         assertEquals(product, response.getProduct());
-        assertEquals("KSR1010405023150", response.getProduct().getSku());
+        assertEquals(SKU, response.getProduct().getSku());
         assertEquals(50, response.getQuantity());
     }
 
     private void startStock () {
-        product = new Product("KSR1010405023150", "Calça Teste", 10.0, 30.0,
+        product = new Product(SKU, "Calça Teste", 10.0, 30.0,
                 "Kosair", "Tamanho RN", "Masculino", "Verão", "Vestuário", "Calça", "Vermelho");
         optionalProduct = Optional.of(product);
         stock = new Stock(ID, product, 50);
     }
 
     private void startCreateStockDTO () {
-        product = new Product("KSR1010405023150", "Calça Teste", 10.0, 30.0,
+        product = new Product(SKU, "Calça Teste", 10.0, 30.0,
                 "Kosair", "Tamanho RN", "Masculino", "Verão", "Vestuário", "Calça", "Vermelho");
         createStockDTO = new CreateStockDTO(product, 50);
     }
 
     private void startCreateProductDTO () {
-        createProductDTO = new CreateProductDTO("KSR1010405023150", "Calça Teste", 10.0, 30.0);
+        createProductDTO = new CreateProductDTO(SKU, "Calça Teste", 10.0, 30.0);
     }
 
     private void startCreateTransactionDTO () {
-        map.put("KSR1010405023150", 10);
+        map.put(SKU, 10);
         createTransactionDTO = new CreateTransactionDTO("562.738.720-31", map);
     }
 }

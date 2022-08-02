@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
+@SpringBootTest
 class StockControllerTest {
 
     public static final String SKU = "KSR1010405023150";
@@ -64,21 +66,20 @@ class StockControllerTest {
     }
 
     @Test
-    void listAll() {
-        when(stockService.listAll()).thenReturn(new ArrayList<>(List.of(stock)));
+    void whenListAllThenReturnAListOfReturnStockDTO() {
+        when(stockService.listAll()).thenReturn(List.of(stock));
 
         ResponseEntity<List<ReturnStockDTO>> response = stockController.listAll();
 
         assertNotNull(response);
         assertNotNull(response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(ArrayList.class, response.getBody().getClass());
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(ReturnStockDTO.class, response.getBody().get(INDEX).getClass());
     }
 
     @Test
-    void whenFindBySkuThen() {
+    void whenFindBySkuThenReturnAReturnStockDTO() {
         when(stockService.findBySku(SKU)).thenReturn(stock);
 
         ResponseEntity<ReturnStockDTO> response = stockController.findBySku(SKU);

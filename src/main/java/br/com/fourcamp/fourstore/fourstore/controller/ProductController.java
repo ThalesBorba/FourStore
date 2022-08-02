@@ -5,6 +5,8 @@ import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.service.ProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,13 +21,13 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public List<ReturnProductDTO> listAll() {
-        return productService.listAll().stream().map(toDTO()).toList();
+    public ResponseEntity<List<ReturnProductDTO>> listAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.listAll().stream().map(toDTO()).toList());
     }
 
     @GetMapping("/{sku}")
-    public Product findBySkuWithDetails(@PathVariable String sku) {
-        return productService.findBySkuWithDetails(sku);
+    public ResponseEntity<Product> findBySkuWithDetails(@PathVariable String sku) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.findBySkuWithDetails(sku));
     }
 
     private Function<Product, ReturnProductDTO> toDTO() {

@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 class StockControllerTest {
@@ -59,6 +60,7 @@ class StockControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(String.class, response.getBody().getClass());
+        assertEquals("Estoque criado", response.getBody());
     }
 
     @Test
@@ -93,15 +95,42 @@ class StockControllerTest {
     }
 
     @Test
-    void updateProductPrice() {
+    void WhenUpdateProductPriceShouldReturnAcceptedResponse() {
+
+        ResponseEntity<String> response = stockController.updateProductPrice(SKU, 10.0, 30.0);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(String.class, response.getBody().getClass());
+        assertEquals("Estoque atualizado", response.getBody());
     }
 
     @Test
-    void addProductsToStock() {
+    void WhenAddProductsToStockThenReturnAcceptedResponse() {
+
+        ResponseEntity<String> response = stockController.addProductsToStock(SKU, 10);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(String.class, response.getBody().getClass());
+        assertEquals("Estoque atualizado", response.getBody());
     }
 
     @Test
     void deleteBySku() {
+        ResponseEntity<String> response = stockController.deleteBySku(SKU);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(String.class, response.getBody().getClass());
+        assertEquals("Estoque removido", response.getBody());
+
     }
 
     private void startCreateProductDTO () {

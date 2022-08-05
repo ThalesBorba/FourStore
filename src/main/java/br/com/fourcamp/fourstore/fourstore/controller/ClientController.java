@@ -1,6 +1,7 @@
 package br.com.fourcamp.fourstore.fourstore.controller;
 
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateClientDTO;
+import br.com.fourcamp.fourstore.fourstore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnClientDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Client;
 import br.com.fourcamp.fourstore.fourstore.service.ClientService;
@@ -24,34 +25,33 @@ public class ClientController {
     private ClientService clientService;
 
     @PostMapping("/")
-    public ResponseEntity<Object> createClient(@RequestBody @Valid CreateClientDTO createClientDTO) {
+    public ResponseEntity<MessageResponseDTO> createClient(@RequestBody @Valid CreateClientDTO createClientDTO) {
         var client = new Client();
         BeanUtils.copyProperties(createClientDTO, client);
         return ResponseEntity.status(HttpStatus.CREATED).body(clientService.createClient(client));
     }
 
     @GetMapping("/")
-    public List<ReturnClientDTO> listAll() {
-        return clientService.listAll().stream().map(toDTO()).toList();
+    public ResponseEntity<List<ReturnClientDTO>> listAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(clientService.listAll().stream().map(toDTO()).toList());
     }
 
     @GetMapping("/{cpf}")
-    public ResponseEntity<Object> findByCpf(@PathVariable @Valid String cpf) {
+    public ResponseEntity<ReturnClientDTO> findByCpf(@PathVariable @Valid String cpf) {
         var returnClientDTO = new ReturnClientDTO();
         BeanUtils.copyProperties(clientService.findByCpf(cpf), returnClientDTO);
         return ResponseEntity.status(HttpStatus.OK).body(returnClientDTO);
     }
 
-    @PutMapping("/{cpf}/{paymentMethod}/{paymentData}")
-    public ResponseEntity<Object> updateByCpf(@PathVariable @Valid String cpf, @PathVariable @Valid Integer paymentMethod,
-                                              @PathVariable @Valid String paymentData) {
-
-        return ResponseEntity.status(HttpStatus.OK).body(clientService.updateByCpf(cpf, paymentMethod, paymentData));
+    @PatchMapping("/{cpf}/{paymentMethod}/{paymentData}")
+    public ResponseEntity<MessageResponseDTO> updatePaymentInfoByCpf(@PathVariable @Valid String cpf, @PathVariable @Valid
+            Integer paymentMethod, @PathVariable @Valid String paymentData) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(clientService.updateByCpf(cpf, paymentMethod, paymentData));
     }
 
     @Transactional
     @DeleteMapping("/{cpf}")
-    public ResponseEntity<Object> deleteByCpf(@PathVariable String cpf) {
+    public ResponseEntity<MessageResponseDTO> deleteByCpf(@PathVariable String cpf) {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(clientService.delete(cpf));
     }
 

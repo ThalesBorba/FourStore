@@ -3,7 +3,6 @@ package br.com.fourcamp.fourstore.fourstore.controller;
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateProductDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnStockDTO;
-import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnTransactionDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.entities.Stock;
 import br.com.fourcamp.fourstore.fourstore.service.StockService;
@@ -16,12 +15,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doNothing;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest

@@ -55,9 +55,6 @@ class TransactionServiceTest {
     HashMap<String, Integer> map = new HashMap<>();
 
     private Transaction transaction;
-    private Optional<Transaction> optionalTransaction;
-    private Optional<Client> optionalClient;
-    private Optional<Product> optionalProduct;
     private CreateTransactionDTO createTransactionDTO;
     private CreateTransactionDTO createTransactionDTO2;
     private ReturnTransactionDTO returnTransactionDTO;
@@ -77,8 +74,8 @@ class TransactionServiceTest {
     @Test
     void shouldCreateATransaction() throws ClientNotFoundException, StockInsufficientException, ProductNotFoundException {
         when(transactionRepository.save(any())).thenReturn(transaction);
-        when(clientRepository.findByCpf("562.738.720-31")).thenReturn(optionalClient);
-        when(productRepository.findBySku("OBT3711415123655")).thenReturn(optionalProduct);
+        when(clientRepository.findByCpf("562.738.720-31")).thenReturn(Optional.ofNullable(client));
+        when(productRepository.findBySku("OBT3711415123655")).thenReturn(Optional.ofNullable(product));
 
         Transaction response = transactionService.createTransaction(createTransactionDTO);
 
@@ -107,7 +104,7 @@ class TransactionServiceTest {
 
     @Test
     void whenFindByIdThenReturnSuccess() {
-        when(transactionRepository.findById(ID)).thenReturn(optionalTransaction);
+        when(transactionRepository.findById(ID)).thenReturn(Optional.ofNullable(transaction));
 
 
         ReturnTransactionDTO response = transactionService.findById(ID);
@@ -139,7 +136,6 @@ class TransactionServiceTest {
     private void startCreateTransactionDTOs() {
         product = new Product("KSR1010405023150", "Camisa teste", 10.0,
                 30.0, null, null, null, null, null, null, null);
-        optionalProduct = Optional.of(product);
         stock = new Stock(1, product, 50);
         map.put("OBT3711415123655", 10);
         createTransactionDTO = new CreateTransactionDTO("562.738.720-31", map);
@@ -149,7 +145,6 @@ class TransactionServiceTest {
     private void startClient() {
         client = new Client(ID, "562.738.720-31", "Jose", 6,
                 "Cash", null);
-        optionalClient = Optional.of(client);
     }
 
     private void startReturnTransactionDTO () {
@@ -159,6 +154,5 @@ class TransactionServiceTest {
     private void startTransaction() {
         transaction = new Transaction(ID, new Client(ID, "562.738.720-31", "Jose", 6,
                 "Cash", null), 170.0);
-        optionalTransaction = Optional.of(transaction);
     }
 }

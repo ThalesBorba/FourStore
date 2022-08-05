@@ -1,7 +1,6 @@
 package br.com.fourcamp.fourstore.fourstore.service;
 
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
-import br.com.fourcamp.fourstore.fourstore.entities.Stock;
 import br.com.fourcamp.fourstore.fourstore.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -30,7 +30,6 @@ class ProductServiceTest {
     public static final Integer INDEX = 0;
 
     private Product product;
-    private Optional<Product> optionalProduct;
 
     @BeforeEach
     void setUp() {
@@ -53,7 +52,7 @@ class ProductServiceTest {
 
     @Test
     void whenFindBySkuWithDetailsShouldReturnDetailedProduct() {
-        when(productRepository.findBySku(SKU)).thenReturn(optionalProduct);
+        when(productRepository.findBySku(SKU)).thenReturn(Optional.ofNullable(product));
 
         Product response = productService.findBySkuWithDetails(SKU);
         assertNotNull(response);
@@ -74,6 +73,5 @@ class ProductServiceTest {
     private void startProduct () {
         product = new Product(SKU, "Calça Teste", 10.0, 30.0,
                 "Kosair", "Tamanho RN", "Masculino", "Verão", "Vestuário", "Calça", "Vermelho");
-        optionalProduct = Optional.of(product);
     }
 }

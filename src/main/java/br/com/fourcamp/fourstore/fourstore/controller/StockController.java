@@ -2,7 +2,6 @@ package br.com.fourcamp.fourstore.fourstore.controller;
 
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateProductDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateStockDTO;
-import br.com.fourcamp.fourstore.fourstore.dto.response.MessageResponseDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnStockDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.entities.Stock;
@@ -54,21 +53,21 @@ public class StockController {
     @PatchMapping("/{sku}/{buyPrice}/{sellPrice}")
     public ResponseEntity<String> updateProductPrice(@PathVariable String sku, @PathVariable Double buyPrice,
                                                      @PathVariable Double sellPrice) {
-        stockService.updateProductPrice(sku, buyPrice, sellPrice);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Estoque atualizado");
+        String response = stockService.updateProductPrice(sku, buyPrice, sellPrice);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
     }
 
     @PatchMapping("/{sku}/{quantityToAddToStock}")
     public ResponseEntity<String> addProductsToStock(@PathVariable String sku, @PathVariable Integer quantityToAddToStock) {
-        stockService.addProductsToStock(sku, quantityToAddToStock);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Estoque atualizado");
+        String response = stockService.addProductsToStock(sku, quantityToAddToStock);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
     }
 
     @DeleteMapping("/{sku}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<String> deleteBySku(@PathVariable String sku) {
-        stockService.delete(sku);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Estoque removido");
+        String response = stockService.delete(sku);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
     }
 
     private Function<Stock, ReturnStockDTO> toDTO() {

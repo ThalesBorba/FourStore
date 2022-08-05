@@ -31,7 +31,6 @@ class TransactionControllerTest {
     private ReturnTransactionDTO returnTransactionDTO;
     private CreateTransactionDTO createTransactionDTO;
     private Transaction transaction;
-    private Optional<ReturnTransactionDTO> optionalReturnTransactionDTO;
 
     @InjectMocks
     private TransactionController transactionController;
@@ -97,7 +96,6 @@ class TransactionControllerTest {
 
     private void startReturnTransactionDTO () {
         returnTransactionDTO = new ReturnTransactionDTO(ID, "Jose", "562.738.720-31", 170.0);
-        optionalReturnTransactionDTO = Optional.of(returnTransactionDTO);
     }
 
     private void startTransaction() {

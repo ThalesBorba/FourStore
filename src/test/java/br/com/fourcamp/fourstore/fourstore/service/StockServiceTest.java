@@ -3,7 +3,6 @@ package br.com.fourcamp.fourstore.fourstore.service;
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateProductDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateStockDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateTransactionDTO;
-import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnTransactionDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.entities.Stock;
 import br.com.fourcamp.fourstore.fourstore.repositories.ProductRepository;
@@ -23,7 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class StockServiceTest {
@@ -47,7 +46,6 @@ class StockServiceTest {
     private CreateProductDTO createProductDTO;
     private CreateTransactionDTO createTransactionDTO;
     HashMap<String, Integer> map = new HashMap<>();
-    Optional<Product> optionalProduct;
 
     @BeforeEach
     void setUp() {
@@ -86,15 +84,32 @@ class StockServiceTest {
         assertEquals(ID, response.getId());
         assertEquals(product, response.getProduct());
         assertEquals(Product.class, response.getProduct().getClass());
-        //assertEquals(40, response.getQuantity());
+        //assertEquals(40, stock.getQuantity());
     }
 
     @Test
-    void addProductsToStock() {
+    void shouldAddProductsToStockThenReturnMessage() {
+        when(productRepository.findBySku(SKU)).thenReturn(Optional.ofNullable(product));
+        when(stockService.findBySku(SKU)).thenReturn(stock);
+
+        String response = stockService.addProductsToStock(SKU, 10);
+
+        assertNotNull(response);
+        assertEquals(String.class, response.getClass());
+        assertEquals("O produto com a sku " + SKU + " agora possui " + 60 + " unidades no estoque", response);
     }
 
     @Test
-    void updateProductPrice() {
+    void ShouldUpdateProductPricesThenReturnMessage() {
+        when(productRepository.findBySku(SKU)).thenReturn(Optional.ofNullable(product));
+        when(stockService.findBySku(SKU)).thenReturn(stock);
+
+        String response = stockService.updateProductPrice(SKU, 15.0, 45.0);
+
+        assertNotNull(response);
+        assertEquals(String.class, response.getClass());
+        assertEquals("Preços do produto com a sku " + SKU + " atualizados. Novos preços: compra: " + 15.0
+                + ", venda: " + 45.0, response);
     }
 
     @Test
@@ -110,13 +125,21 @@ class StockServiceTest {
     }
 
     @Test
-    void delete() {
+    void shouldDeleteStockThenReturnSuccessMessage() {
+        when(productRepository.findBySku(SKU)).thenReturn(Optional.ofNullable(product));
+        when(stockService.findBySku(SKU)).thenReturn(stock);
+
+        String response = stockService.delete(SKU);
+
+        assertNotNull(response);
+        assertEquals(String.class, response.getClass());
+        assertEquals( "Estoque do produto com a sku " + SKU + "removido", response);
     }
 
     @Test
     void whenFindBySkuThenReturnAStockOfProducts() {
         when(stockRepository.findByProduct(product)).thenReturn(stock);
-        when(productRepository.findBySku(SKU)).thenReturn(optionalProduct);
+        when(productRepository.findBySku(SKU)).thenReturn(Optional.ofNullable(product));
 
         Stock response = stockService.findBySku(SKU);
 
@@ -131,7 +154,6 @@ class StockServiceTest {
     private void startStock () {
         product = new Product(SKU, "Calça Teste", 10.0, 30.0,
                 "Kosair", "Tamanho RN", "Masculino", "Verão", "Vestuário", "Calça", "Vermelho");
-        optionalProduct = Optional.of(product);
         stock = new Stock(ID, product, 50);
     }
 

@@ -55,14 +55,15 @@ public class StockService {
         }
     }
 
-    public void addProductsToStock(String sku, Integer quantity) {
+    public String addProductsToStock(String sku, Integer quantity) {
         Stock stock = findBySku(sku);
         stock.setQuantity(stock.getQuantity() + quantity);
         stockRepository.save(stock);
+        return "O produto com a sku " + sku + " agora possui " + stock.getQuantity() + " unidades no estoque";
     }
 
 
-    public void updateProductPrice(String sku, Double buyPrice, Double sellPrice) {
+    public String updateProductPrice(String sku, Double buyPrice, Double sellPrice) {
         Stock stock = findBySku(sku);
         stock.getProduct().setBuyPrice(buyPrice);
         stock.getProduct().setSellPrice(sellPrice);
@@ -71,15 +72,17 @@ public class StockService {
             throw new InvalidSellValueException();
         }
         stockRepository.save(stock);
+        return "Preços do produto com a sku " + sku + " atualizados. Novos preços: compra: " + stock.getProduct()
+                .getBuyPrice() + ", venda: " + stock.getProduct().getSellPrice();
     }
 
     public List<Stock> listAll() {
         return stockRepository.findAll();
     }
 
-    public void delete(String sku) {
-        Integer id = findBySku(sku).getId();
-        stockRepository.deleteById(id);
+    public String delete(String sku) {
+        stockRepository.deleteById(findBySku(sku).getId());
+        return "Estoque do produto com a sku " + sku + "removido";
     }
 
     private Stock setStock(CreateStockDTO createStockDTO){

@@ -64,7 +64,6 @@ public class StockController {
     }
 
     @DeleteMapping("/{sku}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<String> deleteBySku(@PathVariable String sku) {
         String response = stockService.delete(sku);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);

@@ -16,4 +16,9 @@ public class ReturnTransactionDTO {
     private String clientCpf;
     private Double profit;
 
+    public void setNameAndCpf(String name, String cpf) {
+        this.clientName = name;
+        this.clientCpf = cpf;
+    }
+
 }

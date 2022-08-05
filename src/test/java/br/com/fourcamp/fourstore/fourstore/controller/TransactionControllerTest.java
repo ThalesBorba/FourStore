@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import static br.com.fourcamp.fourstore.fourstore.constants.Constants.INDEX;
+import static br.com.fourcamp.fourstore.fourstore.constants.Constants.LONG_ID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -26,8 +28,6 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class TransactionControllerTest {
 
-    public static final Long ID = 1L;
-    public static final Integer INDEX = 0;
     private ReturnTransactionDTO returnTransactionDTO;
     private CreateTransactionDTO createTransactionDTO;
     private Transaction transaction;
@@ -77,9 +77,9 @@ class TransactionControllerTest {
 
     @Test
     void WhenFindByIdThenReturnATransaction() {
-        when(transactionService.findById(ID)).thenReturn(returnTransactionDTO);
+        when(transactionService.findById(LONG_ID)).thenReturn(returnTransactionDTO);
 
-        ResponseEntity<ReturnTransactionDTO> response = transactionController.findById(ID);
+        ResponseEntity<ReturnTransactionDTO> response = transactionController.findById(LONG_ID);
 
         assertNotNull(response);
         assertNotNull(response.getBody());
@@ -95,11 +95,11 @@ class TransactionControllerTest {
     }
 
     private void startReturnTransactionDTO () {
-        returnTransactionDTO = new ReturnTransactionDTO(ID, "Jose", "562.738.720-31", 170.0);
+        returnTransactionDTO = new ReturnTransactionDTO(LONG_ID, "Jose", "562.738.720-31", 170.0);
     }
 
     private void startTransaction() {
-        transaction = new Transaction(ID, new Client(ID, "562.738.720-31", "Jose", 6,
+        transaction = new Transaction(LONG_ID, new Client(LONG_ID, "562.738.720-31", "Jose", 6,
                 "Cash", null), 170.0);
     }
 

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import static br.com.fourcamp.fourstore.fourstore.constants.Constants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,9 +37,6 @@ class StockServiceTest {
 
     @Mock
     ProductRepository productRepository;
-    public static final String SKU = "KSR1010405023150";
-    public static final Integer ID = 1;
-    public static final Integer INDEX = 0;
 
     private Stock stock;
     private Product product;
@@ -65,7 +63,7 @@ class StockServiceTest {
 
         assertNotNull(response);
         assertEquals(Stock.class, response.getClass());
-        assertEquals(ID, response.getId());
+        assertEquals(INTEGER_ID, response.getId());
         assertEquals(product, response.getProduct());
         assertEquals(Product.class, response.getProduct().getClass());
         assertEquals(50, response.getQuantity());
@@ -81,10 +79,10 @@ class StockServiceTest {
 
         assertNotNull(response);
         assertEquals(Stock.class, response.getClass());
-        assertEquals(ID, response.getId());
+        assertEquals(INTEGER_ID, response.getId());
         assertEquals(product, response.getProduct());
         assertEquals(Product.class, response.getProduct().getClass());
-        //assertEquals(40, stock.getQuantity());
+        //generate log for each product, then create test
     }
 
     @Test
@@ -121,7 +119,7 @@ class StockServiceTest {
         assertNotNull(response);
         assertEquals(ArrayList.class, response.getClass());
         assertEquals(Stock.class, response.get(INDEX).getClass());
-        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(INTEGER_ID, response.get(INDEX).getId());
     }
 
     @Test
@@ -145,7 +143,7 @@ class StockServiceTest {
 
         assertNotNull(response);
         assertEquals(Stock.class, response.getClass());
-        assertEquals(ID, response.getId());
+        assertEquals(INTEGER_ID, response.getId());
         assertEquals(product, response.getProduct());
         assertEquals(SKU, response.getProduct().getSku());
         assertEquals(50, response.getQuantity());
@@ -154,7 +152,7 @@ class StockServiceTest {
     private void startStock () {
         product = new Product(SKU, "Calça Teste", 10.0, 30.0,
                 "Kosair", "Tamanho RN", "Masculino", "Verão", "Vestuário", "Calça", "Vermelho");
-        stock = new Stock(ID, product, 50);
+        stock = new Stock(INTEGER_ID, product, 50);
     }
 
     private void startCreateStockDTO () {

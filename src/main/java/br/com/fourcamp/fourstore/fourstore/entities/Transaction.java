@@ -32,6 +32,11 @@ public class Transaction implements Serializable {
 	@Column
 	private Double profit;
 
+	public void setClientAndProfit(Client client, Double profit) {
+		this.client = client;
+		this.profit = profit;
+	}
+
 	public static Map<Product, Integer> getCart() {
 		return cart;
 	}

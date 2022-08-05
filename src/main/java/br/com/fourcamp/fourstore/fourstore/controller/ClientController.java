@@ -42,11 +42,11 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.OK).body(returnClientDTO);
     }
 
-    @PutMapping("/{cpf}")
-    public ResponseEntity<Object> updateById(@RequestBody @Valid CreateClientDTO createClientDTO) {
-        var client = new Client();
-        BeanUtils.copyProperties(createClientDTO, client);
-        return ResponseEntity.status(HttpStatus.OK).body(clientService.updateById(client));
+    @PutMapping("/{cpf}/{paymentMethod}/{paymentData}")
+    public ResponseEntity<Object> updateByCpf(@PathVariable @Valid String cpf, @PathVariable @Valid Integer paymentMethod,
+                                              @PathVariable @Valid String paymentData) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(clientService.updateByCpf(cpf, paymentMethod, paymentData));
     }
 
     @Transactional

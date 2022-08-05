@@ -38,6 +38,11 @@ public class Client implements Serializable {
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Transaction> transactions;
 
+    public void updatePaymentInfo(Integer paymentMethod, String paymentData) {
+        this.paymentMethod = paymentMethod;
+        this.paymentData = paymentData;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

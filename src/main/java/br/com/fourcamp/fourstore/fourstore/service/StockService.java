@@ -65,8 +65,7 @@ public class StockService {
 
     public String updateProductPrice(String sku, Double buyPrice, Double sellPrice) {
         Stock stock = findBySku(sku);
-        stock.getProduct().setBuyPrice(buyPrice);
-        stock.getProduct().setSellPrice(sellPrice);
+        stock.getProduct().updatePrices(buyPrice, sellPrice);
         if (stock.getProduct().getSellPrice() <= stock.getProduct().getBuyPrice() * 1.25 ||
                 stock.getProduct().getSellPrice() < 0) {
             throw new InvalidSellValueException();

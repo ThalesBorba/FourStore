@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
+import static br.com.fourcamp.fourstore.fourstore.constants.Constants.INTEGER_ID;
+import static br.com.fourcamp.fourstore.fourstore.constants.Constants.INDEX;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -30,9 +32,6 @@ class StockControllerTest {
 
     @Mock
     StockService stockService;
-
-    public static final Integer ID = 1;
-    public static final Integer INDEX = 0;
 
     private CreateProductDTO createProductDTO;
     private CreateStockDTO createStockDTO;
@@ -87,26 +86,31 @@ class StockControllerTest {
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(ReturnStockDTO.class, response.getBody().getClass());
         assertEquals(SKU, response.getBody().getSku());
-        assertEquals(ID, response.getBody().getId());
+        assertEquals(INTEGER_ID, response.getBody().getId());
         assertEquals(50, response.getBody().getQuantity());
         assertEquals("Calça Teste", response.getBody().getProductDescription());
     }
 
     @Test
-    void WhenUpdateProductPriceShouldReturnAcceptedResponse() {
+    void WhenUpdateProductPricesShouldReturnAcceptedResponse() {
+        when(stockService.updateProductPrice(SKU, 15.0, 45.0)).thenReturn("Preços do produto com a sku "
+                + SKU + " atualizados. Novos preços: compra: " + 15.0 + ", venda: " + 45.0);
 
-        ResponseEntity<String> response = stockController.updateProductPrice(SKU, 10.0, 30.0);
+        ResponseEntity<String> response = stockController.updateProductPrice(SKU, 15.0, 45.0);
 
         assertNotNull(response);
         assertNotNull(response.getBody());
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(String.class, response.getBody().getClass());
-        assertEquals("Estoque atualizado", response.getBody());
+        assertEquals("Preços do produto com a sku " + SKU + " atualizados. Novos preços: compra: " + 15.0 +
+                ", venda: " + 45.0, response.getBody());
     }
 
     @Test
     void WhenAddProductsToStockThenReturnAcceptedResponse() {
+        when(stockService.addProductsToStock(SKU, 10)).thenReturn("O produto com a sku " + SKU +
+                " agora possui " + 60 + " unidades no estoque");
 
         ResponseEntity<String> response = stockController.addProductsToStock(SKU, 10);
 
@@ -115,11 +119,14 @@ class StockControllerTest {
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(String.class, response.getBody().getClass());
-        assertEquals("Estoque atualizado", response.getBody());
+        assertEquals("O produto com a sku " + SKU + " agora possui " + 60 + " unidades no estoque",
+                response.getBody());
     }
 
     @Test
-    void deleteBySku() {
+    void shouldDeleteBySkuThenReturnMessage() {
+        when(stockService.delete(SKU)).thenReturn("Estoque do produto com a sku " + SKU + "removido");
+
         ResponseEntity<String> response = stockController.deleteBySku(SKU);
 
         assertNotNull(response);
@@ -127,7 +134,7 @@ class StockControllerTest {
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(String.class, response.getBody().getClass());
-        assertEquals("Estoque removido", response.getBody());
+        assertEquals("Estoque do produto com a sku " + SKU + "removido", response.getBody());
 
     }
 
@@ -145,10 +152,10 @@ class StockControllerTest {
         product = new Product(SKU, "Calça Teste", 10.0, 30.0,
                 "Kosair", "Tamanho RN", "Masculino", "Verão", "Vestuário", "Calça", "Vermelho");
         createStockDTO = new CreateStockDTO(product, 50);
-        stock = new Stock(ID, product, 50);
+        stock = new Stock(INTEGER_ID, product, 50);
     }
 
     private void startReturnStockDTO () {
-        returnStockDTO = new ReturnStockDTO(ID, "Calça Teste", SKU, 50);
+        returnStockDTO = new ReturnStockDTO(INTEGER_ID, "Calça Teste", SKU, 50);
     }
 }

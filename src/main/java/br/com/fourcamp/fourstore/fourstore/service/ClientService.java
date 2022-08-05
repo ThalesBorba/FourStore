@@ -20,7 +20,9 @@ public class ClientService {
         return createMessageResponse(client.getCpf(), "Criado ");
     }
 
-    public MessageResponseDTO updateById(Client client) {
+    public MessageResponseDTO updateByCpf(String cpf, Integer paymentMethod, String paymentData) {
+        Client client = clientRepository.findByCpf(cpf).orElseThrow(() -> new ClientNotFoundException(cpf));
+        client.updatePaymentInfo(paymentMethod, paymentData);
         clientRepository.save(client);
         return createMessageResponse(client.getCpf(), "Atualizado ");
     }

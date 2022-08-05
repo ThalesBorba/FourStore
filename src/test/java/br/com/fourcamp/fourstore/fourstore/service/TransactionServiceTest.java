@@ -26,15 +26,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import static br.com.fourcamp.fourstore.fourstore.constants.Constants.INDEX;
+import static br.com.fourcamp.fourstore.fourstore.constants.Constants.LONG_ID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class TransactionServiceTest {
-
-    public static final Long ID = 1L;
-    public static final Integer INDEX = 0;
 
     @InjectMocks
     TransactionService transactionService;
@@ -81,8 +80,8 @@ class TransactionServiceTest {
 
         assertNotNull(response);
         assertEquals(Transaction.class, response.getClass());
-        assertEquals(ID, response.getId());
-        assertEquals(ID, response.getClient().getId());
+        assertEquals(LONG_ID, response.getId());
+        assertEquals(LONG_ID, response.getClient().getId());
         assertEquals("Jose", response.getClient().getName());
         assertEquals("562.738.720-31", response.getClient().getCpf());
         assertEquals(6, response.getClient().getPaymentMethod());
@@ -99,19 +98,19 @@ class TransactionServiceTest {
         assertNotNull(response);
         assertEquals(ArrayList.class, response.getClass());
         assertEquals(ReturnTransactionDTO.class, response.get(INDEX).getClass());
-        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(LONG_ID, response.get(INDEX).getId());
     }
 
     @Test
     void whenFindByIdThenReturnSuccess() {
-        when(transactionRepository.findById(ID)).thenReturn(Optional.ofNullable(transaction));
+        when(transactionRepository.findById(LONG_ID)).thenReturn(Optional.ofNullable(transaction));
 
 
-        ReturnTransactionDTO response = transactionService.findById(ID);
+        ReturnTransactionDTO response = transactionService.findById(LONG_ID);
 
         assertNotNull(response);
         assertEquals(ReturnTransactionDTO.class, response.getClass());
-        assertEquals(ID, response.getId());
+        assertEquals(LONG_ID, response.getId());
         assertEquals("Jose", response.getClientName());
         assertEquals("562.738.720-31", response.getClientCpf());
         assertEquals(170.0, response.getProfit());
@@ -143,16 +142,16 @@ class TransactionServiceTest {
     }
 
     private void startClient() {
-        client = new Client(ID, "562.738.720-31", "Jose", 6,
+        client = new Client(LONG_ID, "562.738.720-31", "Jose", 6,
                 "Cash", null);
     }
 
     private void startReturnTransactionDTO () {
-        returnTransactionDTO = new ReturnTransactionDTO(ID, "Jose", "562.738.720-31", 170.0);
+        returnTransactionDTO = new ReturnTransactionDTO(LONG_ID, "Jose", "562.738.720-31", 170.0);
     }
 
     private void startTransaction() {
-        transaction = new Transaction(ID, new Client(ID, "562.738.720-31", "Jose", 6,
+        transaction = new Transaction(LONG_ID, new Client(LONG_ID, "562.738.720-31", "Jose", 6,
                 "Cash", null), 170.0);
     }
 }

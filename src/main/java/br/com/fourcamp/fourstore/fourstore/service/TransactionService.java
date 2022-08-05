@@ -48,18 +48,15 @@ public class TransactionService {
     private ReturnTransactionDTO convertTransactionToDTO(Transaction transaction) {
         ReturnTransactionDTO returnTransactionDTO = new ReturnTransactionDTO();
         BeanUtils.copyProperties(transaction, returnTransactionDTO);
-        returnTransactionDTO.setClientCpf(transaction.getClient().getCpf());
-        returnTransactionDTO.setClientName(transaction.getClient().getName());
+        returnTransactionDTO.setNameAndCpf(transaction.getClient().getName(), transaction.getClient().getCpf());
         return returnTransactionDTO;
     }
 
     private Transaction setTransaction(CreateTransactionDTO createTransactionDTO) {
         CreateTransactionDTO validTrasaction = validTransaction(createTransactionDTO);
-        Double profit = calculateProfit(validTrasaction);
         Transaction transactionToSave = new Transaction();
         BeanUtils.copyProperties(validTrasaction, transactionToSave);
-        transactionToSave.setProfit(profit);
-        transactionToSave.setClient(returnTransactionClient(createTransactionDTO));
+        transactionToSave.setClientAndProfit(returnTransactionClient(createTransactionDTO), calculateProfit(validTrasaction));
         return transactionRepository.save(transactionToSave);
     }
 

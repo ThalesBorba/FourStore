@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static br.com.fourcamp.fourstore.fourstore.constants.Constants.INDEX;
+import static br.com.fourcamp.fourstore.fourstore.constants.Constants.SKU;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -25,9 +27,6 @@ class ProductServiceTest {
 
     @Mock
     ProductRepository productRepository;
-
-    public static final String SKU = "KSR1010405023150";
-    public static final Integer INDEX = 0;
 
     private Product product;
 

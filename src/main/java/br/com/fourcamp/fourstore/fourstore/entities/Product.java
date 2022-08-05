@@ -42,6 +42,11 @@ public class Product implements Serializable {
 	private String type;
 	private String color;
 
+	public void updatePrices(Double buyPrice, Double sellPrice) {
+		this.buyPrice = buyPrice;
+		this.sellPrice = sellPrice;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

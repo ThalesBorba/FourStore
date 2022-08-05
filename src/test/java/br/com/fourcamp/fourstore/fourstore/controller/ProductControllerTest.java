@@ -1,5 +1,6 @@
 package br.com.fourcamp.fourstore.fourstore.controller;
 
+import br.com.fourcamp.fourstore.fourstore.constants.Constants;
 import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnProductDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.service.ProductService;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
+import static br.com.fourcamp.fourstore.fourstore.constants.Constants.SKU;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
@@ -27,16 +29,12 @@ class ProductControllerTest {
     @Mock
     ProductService productService;
     private Product product;
-    public static final String SKU = "KSR1010405023150";
-    public static final Integer INDEX = 0;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         startProduct();
     }
-
-
 
     @Test
     void whenListAllThenReturnAListOfProducts() {
@@ -48,7 +46,7 @@ class ProductControllerTest {
         assertNotNull(response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(ResponseEntity.class, response.getClass());
-        assertEquals(ReturnProductDTO.class, response.getBody().get(INDEX).getClass());
+        assertEquals(ReturnProductDTO.class, response.getBody().get(Constants.INDEX).getClass());
     }
 
     @Test

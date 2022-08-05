@@ -6,5 +6,6 @@ public class Constants {
     public static final Integer INTEGER_ID = 1;
     public static final Long LONG_ID = 1L;
     public static final String CPF = "562.738.720-31";
+    public static final String PIX = "+5521987654321";
 
 }

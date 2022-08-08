@@ -80,7 +80,7 @@ public class TransactionService {
                     new ProductNotFoundException(products.getKey()));
             cart.put(product, products.getValue());
         }
-        return CartMethods.retornaLucro(cart, paymentMethod);
+        return CartMethods.returnProfit(cart, paymentMethod);
     }
 
     private Client returnTransactionClient(CreateTransactionDTO createTransactionDTO) {

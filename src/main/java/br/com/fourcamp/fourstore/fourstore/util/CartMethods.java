@@ -29,7 +29,7 @@ public class CartMethods {
     }
 
 
-    public static Double retornaLucro(Map<Product, Integer> cart, Integer paymentMethod) {
+    public static Double returnProfit(Map<Product, Integer> cart, Integer paymentMethod) {
         Double lucro = 0.0;
         Double discount = PaymentMethodEnum.getDiscountByPaymentMethodId(paymentMethod);
         for (Map.Entry<Product,Integer> products : cart.entrySet()) {

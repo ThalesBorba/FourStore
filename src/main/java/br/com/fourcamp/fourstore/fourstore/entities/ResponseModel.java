@@ -1,4 +1,4 @@
-package br.com.fourcamp.fourstore.fourstore.util;
+package br.com.fourcamp.fourstore.fourstore.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

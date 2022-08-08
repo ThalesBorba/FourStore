@@ -22,12 +22,12 @@ public class ResourceExceptionHandler{
     }
 
     @ExceptionHandler({InvalidParametersException.class, InvalidPaymentDataException.class, InvalidSellValueException.class,
-    InvalidSkuException.class, StockInsufficientException.class})
+    InvalidSkuException.class, StockInsufficientException.class, NullPointerException.class})
     public ResponseEntity<StandardError> invalidParameters(Exception ex, HttpServletRequest request) {
         StandardError error =
                 new StandardError(LocalDateTime.now(ZoneId.of("UTC")), HttpStatus.BAD_REQUEST.value(),
                         ex.getLocalizedMessage(), request.getRequestURI());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(ProductAlreadyInStockException.class)

@@ -57,7 +57,7 @@ class TransactionControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(ResponseEntity.class, response.getClass());
         assertEquals(String.class, response.getBody().getClass());
-        assertEquals("Transação criada!", response.getBody());
+        assertEquals("Transação com a id " + transaction.getId() + " criada!", response.getBody());
     }
 
     @Test

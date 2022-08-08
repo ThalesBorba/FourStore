@@ -27,7 +27,7 @@ public class ClientValidations {
     }
 
     public static Boolean validateCpf(String cpf) {
-        Pattern cpfPattern = Pattern.compile("^([0-9]{3}\\.?){3}-?[0-9]{2}$");
+        Pattern cpfPattern = Pattern.compile("^(\\d{3}\\.?){3}-?\\d{2}$");
         return cpfPattern.matcher(cpf).matches();
     }
 

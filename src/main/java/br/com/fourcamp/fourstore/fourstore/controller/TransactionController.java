@@ -2,6 +2,7 @@ package br.com.fourcamp.fourstore.fourstore.controller;
 
 import br.com.fourcamp.fourstore.fourstore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.fourstore.dto.response.ReturnTransactionDTO;
+import br.com.fourcamp.fourstore.fourstore.entities.Transaction;
 import br.com.fourcamp.fourstore.fourstore.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,8 @@ public class TransactionController {
 
     @PostMapping("/")
     public ResponseEntity<String> createTransaction(@RequestBody @Valid CreateTransactionDTO createTransactionDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body("Transação criada!");
+        Transaction transaction = transactionService.createTransaction(createTransactionDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Transação com a id " + transaction.getId() + " criada!");
     }
 
 

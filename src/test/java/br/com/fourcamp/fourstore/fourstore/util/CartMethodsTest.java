@@ -4,12 +4,16 @@ import br.com.fourcamp.fourstore.fourstore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.entities.Stock;
 import br.com.fourcamp.fourstore.fourstore.enums.PaymentMethodEnum;
+import br.com.fourcamp.fourstore.fourstore.exceptions.StockInsufficientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +27,8 @@ class CartMethodsTest {
     private CreateTransactionDTO createTransactionDTO;
     private Stock stock;
     private Product product;
-    private HashMap<String, Integer> skuMap = new HashMap<>();
-    private HashMap<Product, Integer> productMap = new HashMap<>();
+    private final HashMap<String, Integer> skuMap = new HashMap<>();
+    private final HashMap<Product, Integer> productMap = new HashMap<>();
 
     @BeforeEach
     void setUp() {
@@ -78,6 +82,18 @@ class CartMethodsTest {
         assertEquals(170.0, pixResponse);
         assertEquals(170.0, cashResponse);
     }
+
+    @Test
+    void shouldReturnNullPointerExceptionWithWrongPaymentMethod () {
+        assertThrows(NullPointerException.class, () -> CartMethods.returnProfit(productMap, 7));
+    }
+
+    @Test
+    void testConstructorIsPrivate() throws NoSuchMethodException {
+        Constructor<CartMethods> constructor = CartMethods.class.getDeclaredConstructor();
+        assertTrue(Modifier.isPrivate(constructor.getModifiers()));
+    }
+
 
     private void startCreateTransactionDTO () {
         skuMap.put(SKU, 10);

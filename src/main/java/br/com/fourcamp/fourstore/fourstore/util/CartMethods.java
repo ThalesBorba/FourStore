@@ -4,16 +4,12 @@ import br.com.fourcamp.fourstore.fourstore.dto.request.CreateTransactionDTO;
 import br.com.fourcamp.fourstore.fourstore.entities.Product;
 import br.com.fourcamp.fourstore.fourstore.entities.Stock;
 import br.com.fourcamp.fourstore.fourstore.enums.PaymentMethodEnum;
-import lombok.Builder;
-import lombok.Data;
 import lombok.experimental.UtilityClass;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Data
-@Builder
 @UtilityClass
 public class CartMethods {
 

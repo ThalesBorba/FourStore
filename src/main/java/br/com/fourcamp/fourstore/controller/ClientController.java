@@ -36,7 +36,6 @@ public class ClientController {
         return ResponseEntity.status(HttpStatus.OK).body(clientService.listAll().stream().map(toDTO()).toList());
     }
 
-    //todo retornar pelo usuário
     @GetMapping("/{cpf}")
     public ResponseEntity<ReturnClientDTO> findByCpf(@PathVariable @Valid String cpf) {
         var returnClientDTO = new ReturnClientDTO();
